@@ -694,11 +694,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\DataLouis\\Programming\\QuantumCircuitTransformation\\QuantumCircuitTransformation\\QuantumCircuitTransformation.csproj",
+      "projectUniqueName": "C:\\Users\\User\\Documents\\GitHub\\QuantumCircuitTransformation\\QuantumCircuitTransformation\\QuantumCircuitTransformation.csproj",
       "projectName": "QuantumCircuitTransformation",
-      "projectPath": "C:\\DataLouis\\Programming\\QuantumCircuitTransformation\\QuantumCircuitTransformation\\QuantumCircuitTransformation.csproj",
+      "projectPath": "C:\\Users\\User\\Documents\\GitHub\\QuantumCircuitTransformation\\QuantumCircuitTransformation\\QuantumCircuitTransformation.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\DataLouis\\Programming\\QuantumCircuitTransformation\\QuantumCircuitTransformation\\obj\\",
+      "outputPath": "C:\\Users\\User\\Documents\\GitHub\\QuantumCircuitTransformation\\QuantumCircuitTransformation\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
