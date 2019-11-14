@@ -33,7 +33,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         /// </returns>
         protected override int ComputeCNOTDistance(int from, int to, int shortestPathLength)
         {
-            // TODO nog iets van direction ofso
+            // TODO path toevoegen zodat je eventuele +4 kan toevoegen (CNOT omdraaien)
             return 7 * (shortestPathLength - 1);
         }
     }
