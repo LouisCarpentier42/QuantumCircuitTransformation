@@ -4,7 +4,7 @@ using System.Text;
 
 namespace QuantumCircuitTransformation.QuantumCircuitComponents
 {
-    public class UndirectedArchitecture : ArchitectureGraph
+    public class UndirectedArchitecture //: ArchitectureGraph
     {
     }
 }
