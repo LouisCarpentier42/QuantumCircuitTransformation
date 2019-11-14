@@ -30,7 +30,7 @@ namespace QuantumCircuitTransformation
             {
                 Console.Write(Length[i, 0]);
                 for (int j = 1; j < NbNodes; j++)
-                {
+                { 
                     Console.Write(" - " + Length[i, j]);
                 }
                 Console.WriteLine();
