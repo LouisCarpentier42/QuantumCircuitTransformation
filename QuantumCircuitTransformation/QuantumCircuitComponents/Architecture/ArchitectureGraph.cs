@@ -10,7 +10,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
     ///    An abstract class for the architecture graph of some quantum device.
     ///    
     /// @Author:   Louis Carpentier
-    /// @Version:  1.2
+    /// @Version:  1.3
     /// 
     /// </summary>
     public abstract class ArchitectureGraph
@@ -59,11 +59,33 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
             return CNOTDistance[controlQubit, targetQubit];
         }
 
-        
+        /// <summary>
+        /// Normalise all the edges in this architecture graph. This is making 
+        /// sure that all no nodes are skipped (and thus never used) while some
+        /// greater ID's are used. 
+        /// </summary>
+        /// <remarks>
+        /// The edges are normalised by first getting all the different ID's and 
+        /// sort them. Next can all ID's be replaced by their index in the sorted
+        /// array. This makes sure that the order of the different ID's remains 
+        /// the same. 
+        /// </remarks>
         private void NormaliseEdges()
         {
+            HashSet<int> allNodeIDs = new HashSet<int>();
+            allNodeIDs.UnionWith(Edges.Select(x => x.Item1));
+            allNodeIDs.UnionWith(Edges.Select(x => x.Item2));
 
-            throw new NotImplementedException();
+            List<int> sortedNodeIDs = allNodeIDs.ToList();
+            sortedNodeIDs.Sort();
+
+            for (int i = 0; i < Edges.Count(); i++)
+            {
+                Edges[i] = new Tuple<int, int>(
+                    sortedNodeIDs.IndexOf(Edges[i].Item1),
+                    sortedNodeIDs.IndexOf(Edges[i].Item2)
+                );
+            }
         }
 
         /// <summary>
