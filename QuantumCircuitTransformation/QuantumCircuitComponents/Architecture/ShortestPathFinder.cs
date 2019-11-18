@@ -78,7 +78,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
             SetUp(nbNodes);
             while (Source > 0)
             {
-                // Set up the source and it's related parameters. 
+                // Set up the source and it's related variables. 
                 SetSource();
                 while (PathFound.Contains(false))
                 {

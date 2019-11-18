@@ -24,14 +24,14 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         }
 
         /// <summary>
-        /// See <see cref="ArchitectureGraph.ComputeCNOTDistance(int, int, int)"/>.
+        /// See <see cref="ArchitectureGraph.ComputeCNOTDistance(int)"/>.
         /// </summary>
         /// <returns>
-        /// For every SWAP operations are three seven extra gates needed (cause the architecture is
+        /// For every SWAP operations are seven extra gates needed (cause the architecture is
         /// directed). The number of SWAP gates to add equals to the length of the shortest path
         /// minus one. 
         /// </returns>
-        protected override int ComputeCNOTDistance(int from, int to, int shortestPathLength)
+        protected override int ComputeCNOTDistance(int shortestPathLength)
         {
             // TODO path toevoegen zodat je eventuele +4 kan toevoegen (CNOT omdraaien)
             return 7 * (shortestPathLength - 1);

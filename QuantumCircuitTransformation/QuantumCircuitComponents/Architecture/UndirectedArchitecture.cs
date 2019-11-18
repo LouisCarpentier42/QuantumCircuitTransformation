@@ -26,13 +26,13 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
 
 
         /// <summary>
-        /// See <see cref="ArchitectureGraph.ComputeCNOTDistance(int, int, int)"/>.
+        /// See <see cref="ArchitectureGraph.ComputeCNOTDistance(int)"/>.
         /// </summary>
         /// <returns>
         /// For every SWAP operation are three extra gates needed cause the graph is undirected. 
         /// The number of SWAP gates to add equals to the length of the shortest path minus one. 
         /// </returns>
-        protected override int ComputeCNOTDistance(int from, int to, int shortestPathLength)
+        protected override int ComputeCNOTDistance(int shortestPathLength)
         {
             return 3 * (shortestPathLength - 1);
         }

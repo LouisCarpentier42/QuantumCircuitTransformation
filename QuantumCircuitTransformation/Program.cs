@@ -22,25 +22,41 @@ namespace QuantumCircuitTransformation
             };
 
 
+            (int a, string b) = Test();
 
-            
+
+            Console.WriteLine(a);
+            Console.WriteLine(b);
+
             int[,] Length = ShortestPathFinder.Dijkstra(NbNodes, Edges);
 
-            for (int i = 0; i < NbNodes; i++)
-            {
-                Console.Write(Length[i, 0]);
-                for (int j = 1; j < NbNodes; j++)
-                { 
-                    Console.Write(" - " + Length[i, j]);
-                }
-                Console.WriteLine();
-            }
+            //for (int i = 0; i < NbNodes; i++)
+            //{
+            //    Console.Write(Length[i, 0]);
+            //    for (int j = 1; j < NbNodes; j++)
+            //    { 
+            //        Console.Write(" - " + Length[i, j]);
+            //    }
+            //    Console.WriteLine();
+            //}
             
 
 
             Console.ReadLine();
         } 
+
+
+
+
+        private static (int, string) Test()
+        {
+            return (5, "test");
+        }
     }
+
+
+
+    
 }
 
 
