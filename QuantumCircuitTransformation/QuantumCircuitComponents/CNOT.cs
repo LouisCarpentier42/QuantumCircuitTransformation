@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
+namespace QuantumCircuitTransformation.QuantumCircuitComponents
 {
     /// <summary>
     /// 

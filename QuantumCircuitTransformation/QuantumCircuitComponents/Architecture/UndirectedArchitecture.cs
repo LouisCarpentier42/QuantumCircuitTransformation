@@ -1,36 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace QuantumCircuitTransformation.QuantumCircuitComponents
+namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
 {
+    /// <summary>
+    /// 
+    /// UndirectedArchitecture
+    ///    A class for undirected architecture graphs of physical quantum devices. 
+    ///    In an undirected architecture can a CNOT gate be executed on any pair
+    ///    of qubits that are connected, where both qubits can be the control qubit. 
+    ///    
+    /// @author:   Louis Carpentier
+    /// @version:  1.0
+    /// 
+    /// </summary>
     public class UndirectedArchitecture : ArchitectureGraph
     {
-
-        public UndirectedArchitecture(int nbQubits, List<Tuple<int, int>> connections) : base(nbQubits, connections) { }
-
+        /// <summary>
+        /// See <see cref="ArchitectureGraph(List{Tuple{int, int}})"/>
+        /// </summary>
+        public UndirectedArchitecture(List<Tuple<int, int>> connections) 
+            : base(connections) { }
 
         /// <summary>
-        /// See <see cref="ArchitectureGraph.CanExecuteCNOT(int, int)"/>.
+        /// See <see cref="ArchitectureGraph.CanExecuteCNOT(CNOT)"/>.
         /// </summary>
         /// <returns>
-        /// True if and only if there exists an edge which connectes the given 
-        /// control and target qubit in any direction. In all other cases is 
-        /// false returned. 
+        /// True if and only if there exists an edge which connectes the control  
+        /// and target qubit of the given CNOT gate in any direction. In all other 
+        /// cases is false returned. 
         /// </returns>
-        public override bool CanExecuteCNOT(int control, int target)
+        public override bool CanExecuteCNOT(CNOT cnot)
         {
-            return Edges.Contains(new Tuple<int, int>(control, target)) ||
-                   Edges.Contains(new Tuple<int, int>(target, control));
+            return Edges.Contains(new Tuple<int, int>(cnot.ControlQubit, cnot.TargetQubit)) ||
+                   Edges.Contains(new Tuple<int, int>(cnot.TargetQubit, cnot.ControlQubit));
         }
-
 
         /// <summary>
         /// See <see cref="ArchitectureGraph.ComputeCNOTDistance(int)"/>.
         /// </summary>
         /// <returns>
-        /// For every SWAP operation are three extra gates needed cause the graph is undirected. 
-        /// The number of SWAP gates to add equals to the length of the shortest path minus one. 
+        /// For every SWAP operation are three extra gates needed cause the graph is 
+        /// undirected. The number of SWAP gates to add equals to the length of the 
+        /// shortest path minus one. 
         /// </returns>
         protected override int ComputeCNOTDistance(int shortestPathLength)
         {

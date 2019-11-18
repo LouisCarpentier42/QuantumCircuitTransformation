@@ -1,50 +1,93 @@
-﻿using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
-
-namespace QuantumCircuitTransformation.QuantumCircuitComponents
+namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
 {
     /// <summary>
     /// 
     /// ArchitectureGraph:
-    ///    An abstract class for the architecture graph of some quantum computer.
+    ///    An abstract class for the architecture graph of some quantum device.
     ///    
     /// @Author:   Louis Carpentier
-    /// @Version:  1.0
+    /// @Version:  1.2
     /// 
     /// </summary>
     public abstract class ArchitectureGraph
     {
-        protected readonly int NbNodes; 
+        /// <summary>
+        /// The edges between the different nodes in this architecture. 
+        /// </summary>
         protected readonly List<Tuple<int,int>> Edges;
-        protected readonly int[,] CNOTDistance;
+        /// <summary>
+        /// The number of nodes in this architecture. 
+        /// </summary>
+        private int NbNodes;
+        /// <summary>
+        /// The CNOT distance between all pairs of nodes in this architecture.  
+        /// </summary>
+        /// <remarks>
+        /// The CNOT distance between two qubuts is the number of gates that should be 
+        /// added to make sure that a CNOT gate can be executed from the first to the 
+        /// second qubit. 
+        /// </remarks>
+        private int[,] CNOTDistance;
 
-
-        public ArchitectureGraph(int nbQubits, List<Tuple<int, int>> connections)
+        /// <summary>
+        /// Initialise a new architecture graph of a quantum device.
+        /// </summary>
+        /// <param name="connections"> The connections in this architecture graph. </param>
+        /// <remarks>
+        /// First, the edges are normalised (see <see cref="NormaliseEdges"/>), then the
+        /// number of nodes is set and the CNOT distances are computed. 
+        /// </remarks>
+        public ArchitectureGraph(List<Tuple<int, int>> connections)
         {
-            NbNodes = nbQubits;
             Edges = connections;
-            
-            CNOTDistance = new int[nbQubits, nbQubits];
-            int[,] pathLength = ShortestPathFinder.Dijkstra(nbQubits, connections);
-            for (int from = 0; from < nbQubits; from++)
-                for (int to = 0; to < nbQubits; to++)
-                    CNOTDistance[from, to] = ComputeCNOTDistance(pathLength[from, to]);
+            NormaliseEdges();
+            SetNbNodes();
+            SetCNOTDistance();
         }
 
-
-        public int GetCNOTDistance(int from, int to)
+        /// <summary>
+        /// Get the CNOT distance between the given control and target qubit. 
+        /// </summary>
+        /// <param name="controlQubit"> The ID of the control qubit. </param>
+        /// <param name="targetQubit"> The ID of the target qubit. </param>
+        public int GetCNOTDistance(int controlQubit, int targetQubit)
         {
-            return CNOTDistance[from, to];
+            return CNOTDistance[controlQubit, targetQubit];
         }
+
         
-        public static bool IsValidNbQubitsAndConnections(int nbQubits, List<Tuple<int, int>> connections)
+        private void NormaliseEdges()
         {
+
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Set the number of nodes to the highest used ID in <see cref="Edges"/> added with one. 
+        /// </summary>
+        /// <remarks> 
+        /// The edges should be normalised first (see <see cref="NormaliseEdges"/>). 
+        /// </remarks>
+        private void SetNbNodes()
+        {
+            NbNodes = Edges.Max(x => Math.Max(x.Item1, x.Item2)) + 1;
+        }
+
+        /// <summary>
+        /// Computes all the CNOT distances and set them in <see cref="CNOTDistance"/>.
+        /// </summary>
+        private void SetCNOTDistance()
+        {
+            CNOTDistance = new int[NbNodes, NbNodes];
+            int[,] pathLength = ShortestPathFinder.Dijkstra(NbNodes, Edges);
+            for (int from = 0; from < NbNodes; from++)
+                for (int to = 0; to < NbNodes; to++)
+                    CNOTDistance[from, to] = ComputeCNOTDistance(pathLength[from, to]);
+        }
 
         /// <summary>
         /// Check whether or not a CNOT gate with given control and target qubit 

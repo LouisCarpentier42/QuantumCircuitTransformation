@@ -1,9 +1,8 @@
-﻿using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuantumCircuitTransformation.QuantumCircuitComponents
+namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
 {
     /// <summary>
     /// 
