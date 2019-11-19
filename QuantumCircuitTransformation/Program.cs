@@ -9,15 +9,33 @@ namespace QuantumCircuitTransformation
     {
         static void Main(string[] args)
         {
-            string Result = ""; 
-            for (int i = 0; i < 20; i++)
+
+
+            List<Tuple<int, int>> e = new List<Tuple<int, int>>
             {
-                Result += QuantumDevices.IBM_Q20.GetCNOTDistance(i, 0).ToString();
-                for (int j = 1; j < 20; j++)
-                    Result += " - " + QuantumDevices.IBM_Q20.GetCNOTDistance(i, j);
+                new Tuple<int, int>(0,1),
+                new Tuple<int, int>(1,2),
+                new Tuple<int, int>(3,2),
+                new Tuple<int, int>(0,3),
+                new Tuple<int, int>(1,3),
+            };
+
+
+
+            int NbNodes = 16;
+            ArchitectureGraph a = QuantumDevices.IBM_QX5;
+           
+            
+            string Result = ""; 
+            for (int i = 0; i < NbNodes; i++)
+            {
+                Result += a.GetCNOTDistance(i, 0).ToString();
+                for (int j = 1; j < NbNodes; j++)
+                    Result += " - " + a.GetCNOTDistance(i, j);
                 Result += "\n";
             }
             Console.WriteLine(Result);
+            
 
 
 
