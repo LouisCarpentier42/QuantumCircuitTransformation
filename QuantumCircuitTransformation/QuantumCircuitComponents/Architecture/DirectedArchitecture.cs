@@ -35,30 +35,10 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
             return Edges.Contains(new Tuple<int, int>(cnot.ControlQubit, cnot.TargetQubit));
         }
 
-        /// <summary>
-        /// See <see cref="ArchitectureGraph.ComputeCNOTDistance(int, int, int)"/>.
-        /// </summary>
-        /// <returns>
-        /// For every SWAP operations are seven extra gates needed (cause the architecture 
-        /// is directed). The number of SWAP gates to add equals to the length of the 
-        /// shortest path minus one. If the control and target qubit are next to each other
-        /// and could be executed as a CNOT gate, then there are no extra gates needed. If 
-        /// they lay next to eachother but can't be executed, then 4 Hadamard gates are 
-        /// needed to switch the control and target qubit. 
-        /// </returns>
-        protected override int ComputeCNOTDistance(int control, int target, int source)
+
+        protected override int ComputeCNOTDistance(int pathLength)
         {
-            if (control == target)
-                return 0;
-
-            if (source == control && Edges.Contains(new Tuple<int, int>(control, target)))
-                return 0;
-
-            if (source == control && Edges.Contains(new Tuple<int, int>(target, control)))
-                return 4;
-
-            else
-                return 7;
+            return Math.Max(0, 7 * (pathLength - 1));
         }
     }
 }
