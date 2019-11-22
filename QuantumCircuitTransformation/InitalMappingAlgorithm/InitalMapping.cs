@@ -45,7 +45,10 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
             return Enumerable.Range(0, NbNodes).OrderBy(i => Guid.NewGuid()).ToArray();
         }
 
-
+        /// <summary>
+        /// Give a description of the algorithm and it's parameters. 
+        /// </summary>
+        public abstract override string ToString();
 
 
 
