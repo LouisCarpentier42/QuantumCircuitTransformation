@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 using System.Linq;
+using QuantumCircuitTransformation.QuantumCircuitComponents;
+using QuantumCircuitTransformation.InitalMappingAlgorithm;
 
 namespace QuantumCircuitTransformation
 {
@@ -9,7 +11,20 @@ namespace QuantumCircuitTransformation
     {
         static void Main(string[] args)
         {
+            SimulatedAnnealing sa = new SimulatedAnnealing(100, 1, 0.95, 100);
 
+            for (int i = 0; i < 10; i++)
+            {
+                Console.WriteLine("------------------ITERATION {0}------------------", i);
+                QuantumCircuit c = GetRandomCircuit(1000, 10);
+                sa.Execute(QuantumDevices.IBM_Q20, c);
+            }
+            
+
+
+
+
+            /*
 
             List<Tuple<int, int>> e = new List<Tuple<int, int>>
             {
@@ -36,18 +51,32 @@ namespace QuantumCircuitTransformation
             }
             Console.WriteLine(Result);
             
-
+            */
 
 
             Console.ReadLine();
         } 
 
+
+
+
+        private static QuantumCircuit GetRandomCircuit(int NbGates, int NbQubits)
+        {
+            QuantumCircuit circuit = new QuantumCircuit();
+
+            for (int i = 0; i < NbGates; i++)
+            {
+                int x = Globals.Random.Next(NbQubits);
+                int y;
+                do
+                {
+                    y = Globals.Random.Next(NbQubits);
+                } while (x == y);
+                circuit.AddGate(new CNOT(x, y));
+            }
+
+            return circuit;
+        }
+
     }
-
-
-
-    
 }
-
-
-

@@ -22,7 +22,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
         /// <summary>
         /// The number of nodes in this architecture. 
         /// </summary>
-        private int NbNodes;
+        public int NbNodes { get; private set; }
         /// <summary>
         /// The CNOT distance between all pairs of nodes in this architecture.  
         /// </summary>

@@ -12,7 +12,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
     ///    for a class which can represent a physical circuit.
     ///    
     /// @author:   Louis Carpentier
-    /// @version:  1.0
+    /// @version:  1.2
     /// 
     /// </summary>
     public class QuantumCircuit
@@ -50,6 +50,23 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         {
             Gates.Add(cnot);
             NbQubits = Math.Max(Math.Max(cnot.ControlQubit, cnot.TargetQubit), NbQubits);
+        }
+
+        /// <summary>
+        /// Get the number of gates in this quantum circuit. 
+        /// </summary>
+        public int GetNbGates()
+        {
+            return Gates.Count;
+        }
+
+        /// <summary>
+        /// Get the gate at the given index.
+        /// </summary>
+        /// <param name="index"> The index of the gate to return. </param>
+        public CNOT GetGateAt(int index)
+        {
+            return Gates[index];
         }
 
         /// <summary>
