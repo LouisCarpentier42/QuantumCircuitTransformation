@@ -23,18 +23,19 @@ namespace QuantumCircuitTransformation
 
             
             InitalMapping sa = new SimulatedAnnealing(100, 1, 0.95, 100);
-            InitalMapping ts = new TabuSearch();
-            QuantumCircuit c = CircuitGenerator.RandomCircuit(1000, 20);
+            InitalMapping ts = new TabuSearch(50,5,1000);
+            QuantumCircuit c = CircuitGenerator.RandomCircuit(10000, 20);
+            ArchitectureGraph a = QuantumDevices.IBM_Q20;
 
             Timer.Start();
-            sa.Execute(QuantumDevices.IBM_Q20, c);
+            sa.Execute(a, c);
             Timer.Stop();
             Console.WriteLine("In total are {0} milliseconds taken", Timer.ElapsedMilliseconds);
 
-            Timer.Start();
-            ts.Execute(QuantumDevices.IBM_Q20, c);
-            Timer.Stop();
-            Console.WriteLine("In total are {0} milliseconds taken", Timer.ElapsedMilliseconds);
+            //Timer.Start();
+            //ts.Execute(a, c);
+            //Timer.Stop();
+            //Console.WriteLine("In total are {0} milliseconds taken", Timer.ElapsedMilliseconds);
 
 
 
@@ -81,7 +82,7 @@ namespace QuantumCircuitTransformation
             */
 
 
-            Console.ReadLine();
+            //Console.ReadLine();
         } 
 
 

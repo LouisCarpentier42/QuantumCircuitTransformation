@@ -26,12 +26,15 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         /// set of gates in quantum computing. Since single qubit gates are not of 
         /// interest in quantum circuit transformation are only the CNOT gates needed.
         /// </remarks>
-        private List<CNOT> Gates;
+        public List<CNOT> Gates { get; private set; }
+        /// <summary>
+        /// Variable referring to the number of gates in this quantum circuit. 
+        /// </summary>
+        public int NbGates { get; private set; }
         /// <summary>
         /// A variable to keep track of the number of qubits used in this circuit.
         /// </summary>
         private int NbQubits;
-
 
         /// <summary>
         /// Initialise a new Quantum circuit without any gates. 
@@ -39,6 +42,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         public QuantumCircuit()
         {
             Gates = new List<CNOT>();
+            NbGates = 0;
             NbQubits = 0;
         }
 
@@ -49,24 +53,8 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         public virtual void AddGate(CNOT cnot)
         {
             Gates.Add(cnot);
+            NbGates++;
             NbQubits = Math.Max(Math.Max(cnot.ControlQubit, cnot.TargetQubit), NbQubits);
-        }
-
-        /// <summary>
-        /// Get the number of gates in this quantum circuit. 
-        /// </summary>
-        public int GetNbGates()
-        {
-            return Gates.Count;
-        }
-
-        /// <summary>
-        /// Get the gate at the given index.
-        /// </summary>
-        /// <param name="index"> The index of the gate to return. </param>
-        public CNOT GetGateAt(int index)
-        {
-            return Gates[index];
         }
 
         /// <summary>

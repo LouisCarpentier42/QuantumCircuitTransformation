@@ -10,7 +10,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
     ///    An abstract class for the architecture graph of some quantum device.
     ///    
     /// @Author:   Louis Carpentier
-    /// @Version:  2.1
+    /// @Version:  2.2
     /// 
     /// </summary>
     public abstract class ArchitectureGraph
@@ -31,7 +31,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
         /// added to make sure that a CNOT gate can be executed from the first to the 
         /// second qubit. 
         /// </remarks>
-        private int[,] CNOTDistance;
+        public int[,] CNOTDistance { get; private set; }
 
         /// <summary>
         /// Initialise a new architecture graph of a quantum device.
@@ -47,16 +47,6 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
             NormaliseEdges();
             SetNbNodes();
             SetCNOTDistance();
-        }
-
-        /// <summary>
-        /// Get the CNOT distance between the given control and target qubit. 
-        /// </summary>
-        /// <param name="controlQubit"> The ID of the control qubit. </param>
-        /// <param name="targetQubit"> The ID of the target qubit. </param>
-        public int GetCNOTDistance(int controlQubit, int targetQubit)
-        {
-            return CNOTDistance[controlQubit, targetQubit];
         }
 
         /// <summary>
@@ -108,6 +98,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
                 for (int j = 0; j < NbNodes; j++)
                     CNOTDistance[i, j] = ComputeCNOTDistance(pathLength[i, j]);
         }
+
 
         /// <summary>
         /// Check whether or not a CNOT gate with given control and target qubit 

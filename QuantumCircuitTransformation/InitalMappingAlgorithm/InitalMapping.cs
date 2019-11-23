@@ -75,10 +75,10 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
             double weight;
             double param = 1;
 
-            for (int i = 0; i < circuit.GetNbGates(); i++)
+            for (int i = 0; i < circuit.NbGates; i++)
             {
-                weight = (-param / circuit.GetNbGates()) * i + param;
-                cost += (weight * architecture.GetCNOTDistance(mapping[circuit.GetGateAt(i).ControlQubit], mapping[circuit.GetGateAt(i).TargetQubit]));
+                weight = (-param / circuit.NbGates) * i + param;
+                cost += (weight * architecture.CNOTDistance[mapping[circuit.Gates[i].ControlQubit], mapping[circuit.Gates[i].TargetQubit]]);
             }
 
             return cost;

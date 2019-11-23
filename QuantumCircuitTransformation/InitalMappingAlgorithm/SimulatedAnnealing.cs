@@ -94,13 +94,13 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
                         bestCost = newCost;
                         bestMapping = newMapping;
                     }
-                    
+
                     if (newCost < cost)
                     {
                         cost = newCost;
                         mapping = newMapping;
                     }
-                    else if (Globals.Random.NextDouble() < Math.Exp((cost - newCost) / t))
+                    else if (DoDownhillMove(cost, newCost, t))
                     {
                         cost = newCost;
                         mapping = newMapping;
@@ -110,6 +110,11 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
             }
             Console.WriteLine("Best: {0}", bestCost);
             return new Mapping(bestMapping);
+        }
+
+        private bool DoDownhillMove(double cost, double newCost, double temperature)
+        {
+            return Globals.Random.NextDouble() < Math.Exp((cost - newCost) / temperature);
         }
     }
 }
