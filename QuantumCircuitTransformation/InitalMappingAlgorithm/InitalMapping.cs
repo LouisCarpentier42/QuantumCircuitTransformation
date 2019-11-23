@@ -60,10 +60,7 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
 
             int x = Globals.Random.Next(mapping.Length);
             int y;
-            do
-            {
-                y = Globals.Random.Next(mapping.Length);
-            } while (x == y);
+            do y = Globals.Random.Next(mapping.Length); while (x == y);
 
             int temp = perturbation[x];
             perturbation[x] = perturbation[y];

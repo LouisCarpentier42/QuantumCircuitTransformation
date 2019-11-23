@@ -4,25 +4,49 @@ using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 using System.Linq;
 using QuantumCircuitTransformation.QuantumCircuitComponents;
 using QuantumCircuitTransformation.InitalMappingAlgorithm;
+using System.Timers;
+using System.Diagnostics;
 
 namespace QuantumCircuitTransformation
 {
     class Program
     {
+        private static readonly Stopwatch Timer = new Stopwatch();
+
+
+
         static void Main(string[] args)
         {
 
+            
 
 
-            SimulatedAnnealing sa = new SimulatedAnnealing(100, 1, 0.95, 100);
+            
+            InitalMapping sa = new SimulatedAnnealing(100, 1, 0.95, 100);
+            InitalMapping ts = new TabuSearch();
+            QuantumCircuit c = CircuitGenerator.RandomCircuit(1000, 20);
 
+            Timer.Start();
+            sa.Execute(QuantumDevices.IBM_Q20, c);
+            Timer.Stop();
+            Console.WriteLine("In total are {0} milliseconds taken", Timer.ElapsedMilliseconds);
+
+            Timer.Start();
+            ts.Execute(QuantumDevices.IBM_Q20, c);
+            Timer.Stop();
+            Console.WriteLine("In total are {0} milliseconds taken", Timer.ElapsedMilliseconds);
+
+
+
+            /*
             for (int i = 0; i < 10; i++)
             {
                 Console.WriteLine("------------------ITERATION {0}------------------", i);
                 QuantumCircuit c = CircuitGenerator.RandomCircuit(1000, 10);
                 sa.Execute(QuantumDevices.IBM_Q20, c);
             }
-            
+            */
+
 
 
 
