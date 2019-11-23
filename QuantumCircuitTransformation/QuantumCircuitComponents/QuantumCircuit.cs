@@ -67,9 +67,13 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         /// </returns>
         public override string ToString()
         {
-            string codeRepresenation = "qreg q[" + NbQubits + "];\n\n";
+            string codeRepresenation =
+                "OPENQASM 2.0;\n" +
+                "include \"qelib1.inc\";\n\n" +
+                "qreg q[" + NbQubits + "];\n" +
+                "creg q[" + NbQubits + "];\n"; ;
             for (int i = 0; i < Gates.Count; i++)
-                codeRepresenation += Gates[i] + "\n";
+                codeRepresenation += "\n" + Gates[i];
             return codeRepresenation;
         }
     }

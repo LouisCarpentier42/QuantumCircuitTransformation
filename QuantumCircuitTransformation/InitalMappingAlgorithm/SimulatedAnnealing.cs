@@ -8,7 +8,7 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
     /// 
     /// SimulatedAnnealing:
     ///    A class for finding an initial mapping of logical qubits on a given
-    ///    physical architecture. (See <see cref="InitalMapping"/>).
+    ///    physical architecture. (See <see cref="InitialMapping"/>).
     ///    Simmulated Annealing tries to find a solution with minimal cost. This
     ///    is done by generating a new mapping from a some mapping. If this new 
     ///    mapping is better, it is chosen. To escape from local a local optima, 
@@ -20,7 +20,7 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
     /// @version:  1.0
     /// 
     /// </summary>
-    public class SimulatedAnnealing : InitalMapping
+    public class SimulatedAnnealing : InitialMapping
     {
         /// <summary>
         /// Variable referring to the maximum temperature during the algorithm. 
@@ -55,30 +55,43 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
         }
 
         /// <summary>
-        /// See <see cref="InitalMapping.ToString"/>.
+        /// See <see cref="InitialMapping.GetName"/>.
         /// </summary>
-        public override string ToString()
+        public override string GetName()
+        {
+            return "Simulated Annealing";
+        }
+
+        /// <summary>
+        /// See <see cref="InitialMapping.GetParameters"/>.
+        /// </summary>
+        public override string GetParameters()
         {
             return 
-                "---SIMULATED ANNEALING---\n" +
-                "> The maximum temperature: " + MaxTemperature + 
-                "> The minimum temperature: " + MinTemperature +
-                "> The cooling factor: " + CoolingFactor +
-                "> The number of repetitions for given temperature: " + NbRepetitions;
+                " > The maximum temperature: " + MaxTemperature + '\n' +
+                " > The minimum temperature: " + MinTemperature + '\n' +
+                " > The cooling factor: " + CoolingFactor + '\n' +
+                " > The number of repetitions for given temperature: " + NbRepetitions;
         }
+
+
+
+
+
 
         /// <summary>
         /// Execute simulated annealing to find a mapping for the given circuit, which
         /// fits on the given architecture. 
-        /// (See <see cref="InitalMapping.Execute(ArchitectureGraph, QuantumCircuit)"/>)
+        /// (See <see cref="InitialMapping.Execute(ArchitectureGraph, QuantumCircuit)"/>)
         /// </summary>
         public override Mapping Execute(ArchitectureGraph architecure, QuantumCircuit circuit)
         {
+            // SetGates(architecure, circuit);
             int[] bestMapping = GetRandomMapping(architecure.NbNodes);
             int[] mapping = new int[bestMapping.Length];
             Array.Copy(bestMapping, mapping, bestMapping.Length);
-            double bestCost = double.MaxValue;
-            double cost = double.MaxValue;
+            double bestCost = GetMappingCost(bestMapping, architecure, circuit);
+            double cost = bestCost * 1.5;
 
             for (double t = MaxTemperature; t > MinTemperature; t *= CoolingFactor)
             {
@@ -86,7 +99,8 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
                 for (int i = 0; i < NbRepetitions; i++)
                 {
                     //Console.WriteLine("Best: {0} - Cost: {1}", bestCost, cost);
-                    int[] newMapping = PerturbatMapping(mapping);
+                    (int[] newMapping, int swap1, int swap2) = PerturbatMapping(mapping);
+                    //double newCost = CalculateCostDifference(cost, swap1, swap2, architecure, circuit);
                     double newCost = GetMappingCost(newMapping, architecure, circuit);
 
                     if (newCost < bestCost)
@@ -105,13 +119,22 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
                         cost = newCost;
                         mapping = newMapping;
                     }
-                    
                 }
             }
             Console.WriteLine("Best: {0}", bestCost);
             return new Mapping(bestMapping);
         }
 
+        /// <summary>
+        /// Checks if a downhill move should be made or not. 
+        /// </summary>
+        /// <param name="cost"> The cost of the current mapping. </param>
+        /// <param name="newCost"> The cost of the newly generated mapping. </param>
+        /// <param name="temperature"> The current temperature in the algorithm. </param>
+        /// <returns>
+        /// True is returened with a probability equal to: 
+        ///    exp[(cost - newCost) / temperature]
+        /// </returns>
         private bool DoDownhillMove(double cost, double newCost, double temperature)
         {
             return Globals.Random.NextDouble() < Math.Exp((cost - newCost) / temperature);

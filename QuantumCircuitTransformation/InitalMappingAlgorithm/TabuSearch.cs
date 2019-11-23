@@ -6,7 +6,7 @@ using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 
 namespace QuantumCircuitTransformation.InitalMappingAlgorithm
 {
-    public class TabuSearch : InitalMapping
+    public class TabuSearch : InitialMapping
     {
         /// <summary>
         /// Variable referring to the number of neighbours to generate at
@@ -36,21 +36,33 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
         }
 
         /// <summary>
-        /// See <see cref="InitalMapping.ToString"/>.
+        /// See <see cref="InitialMapping.GetName"/>.
         /// </summary>
-        public override string ToString()
+        public override string GetName()
+        {
+            return "Tabu Search";
+        }
+
+        /// <summary>
+        /// See <see cref="InitialMapping.GetParameters"/>.
+        /// </summary>
+        public override string GetParameters()
         {
             return
-                "---TABU SEARCH---\n" +
-                "> The number of neighbours: " + NbNeighbours +
-                "> The number of tabus: " + NbTabus +
-                "> The maximal number of iterations: " + MaxNbIterations;
+                " > The number of neighbours: " + NbNeighbours + '\n' +
+                " > The number of tabus: " + NbTabus + '\n' +
+                " > The maximal number of iterations: " + MaxNbIterations;
         }
+
+
+
+
+
 
         /// <summary>
         /// Execute tabu search to find a mapping for the given circuit, which
         /// fits on the given architecture. 
-        /// (See <see cref="InitalMapping.Execute(ArchitectureGraph, QuantumCircuit)"/>)
+        /// (See <see cref="InitialMapping.Execute(ArchitectureGraph, QuantumCircuit)"/>)
         /// </summary>
         public override Mapping Execute(ArchitectureGraph architecture, QuantumCircuit circuit)
         {
@@ -64,10 +76,8 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
 
             int NbIterations = 0;
             while (NbIterations++ <= MaxNbIterations)
-            {
-
-                List<int[]> neighbours = GetNeighbours(bestMapping);                
-                int[] bestNeighbour = GetBestNeighbour(neighbours, architecture, circuit);
+            {              
+                int[] bestNeighbour = GetBestNeighbour(bestMapping, bestCost, architecture, circuit);
                 double cost = GetMappingCost(bestNeighbour, architecture, circuit);
                 //Console.WriteLine("Best: {0} - Cost: {1}", bestCost, cost);
                 if (!tabus.Contains(bestNeighbour))
@@ -97,24 +107,25 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
         {
             List<int[]> neighbours = new List<int[]>();
 
-            for (int i = 0; i < NbNeighbours; i++)
-                neighbours.Add(PerturbatMapping(mapping));
+            for (int i = 0; i < NbNeighbours; i++) ;
+                //neighbours.Add(PerturbatMapping(mapping));
 
             return neighbours;
         }
 
 
-        private int[] GetBestNeighbour(List<int[]> neighbours, ArchitectureGraph architecture, QuantumCircuit circuit)
+        private int[] GetBestNeighbour(int[] mapping, double cost, ArchitectureGraph architecture, QuantumCircuit circuit)
         {
-            int[] bestMapping = neighbours[0];
+            (int[] bestMapping, _, _) = PerturbatMapping(mapping);
             double bestCost = GetMappingCost(bestMapping, architecture, circuit);
-
-            for (int i = 1; i < neighbours.Count; i++)
+            int[] newMapping;
+            for (int i = 1; i < NbNeighbours; i++)
             {
-                double newCost = GetMappingCost(neighbours[i], architecture, circuit);
+                (newMapping, _, _) = PerturbatMapping(mapping);
+                double newCost = GetMappingCost(newMapping, architecture, circuit);
                 if (newCost < bestCost)
                 {
-                    bestMapping = neighbours[i];
+                    bestMapping = newMapping;
                     bestCost = newCost;
                 }
             }
