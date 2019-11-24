@@ -25,19 +25,19 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
         /// <summary>
         /// Variable referring to the maximum temperature during the algorithm. 
         /// </summary>
-        private readonly int MaxTemperature;
+        public readonly int MaxTemperature;
         /// <summary>
         /// Variable referring to the minimum temperature during the algorithm. 
         /// </summary>
-        private readonly int MinTemperature;
+        public readonly int MinTemperature;
         /// <summary>
         /// Variable referring to the cooling factor of the temperature. 
         /// </summary>
-        private readonly double CoolingFactor;
+        public readonly double CoolingFactor;
         /// <summary>
         /// Variable referring to the number of repetitions for a som fixed temperature.
         /// </summary>
-        private readonly int NbRepetitions;
+        public readonly int NbRepetitions;
 
         /// <summary>
         /// Initialise a new simuted annealing algorithms with all it's parameters. 
@@ -52,6 +52,30 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
             MinTemperature = minT;
             CoolingFactor = delta;
             NbRepetitions = r;
+        }
+
+        /// <summary>
+        /// See <see cref="InitialMapping.Equals(InitialMapping)"/>
+        /// </summary>
+        /// <returns>
+        /// True if the initial mapping equals according to <see cref="InitialMapping.Equals(InitialMapping)"/>
+        /// and if the parameters are equal of the given simulated annealing and 
+        /// this simulated annealing. 
+        /// </returns>
+        public override bool Equals(InitialMapping other)
+        {
+            if (base.Equals(other))
+            {
+                SimulatedAnnealing o = (SimulatedAnnealing)other;
+                return MaxTemperature == o.MaxTemperature &&
+                       MinTemperature == o.MinTemperature &&
+                       CoolingFactor == o.CoolingFactor &&
+                       NbRepetitions == o.NbRepetitions;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -73,8 +97,6 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
                 " > The cooling factor: " + CoolingFactor + '\n' +
                 " > The number of repetitions for given temperature: " + NbRepetitions;
         }
-
-
 
 
 

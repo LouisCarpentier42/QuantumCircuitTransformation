@@ -19,11 +19,12 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
     ///    algorithm.
     /// 
     /// @author:   Louis Carpentier
-    /// @version:  1.0
+    /// @version:  1.7
     /// 
     /// </summary>
-    public abstract class InitialMapping
+    public abstract class InitialMapping : IEquatable<InitialMapping>
     {
+
         /// <summary>
         /// Execute this inital mapping algorithm. 
         /// </summary>
@@ -47,6 +48,24 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
         }
 
         /// <summary>
+        /// Checks if the other initial mapping is the same as this 
+        /// initial mapping. 
+        /// </summary>
+        /// <param name="other"> The initial mapping to compare. </param>
+        /// <returns>
+        /// True if and only if the given initial mapping is not null and the
+        /// type of the given initial mapping equals the type of this initial
+        /// mapping. 
+        /// </returns>
+        public virtual bool Equals(InitialMapping other)
+        {
+            if (other == null || GetType() != other.GetType())
+                return false;
+            else
+                return true;
+        }
+
+        /// <summary>
         /// Give the name of the initial mapping algorithm. 
         /// </summary>
         public abstract string GetName();
@@ -57,11 +76,9 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
         public abstract string GetParameters();
 
 
-
-
+        /*
         private List<CNOT>[] ControlGates;
         private List<CNOT>[] TargetGates;
-
 
         protected void SetGates(ArchitectureGraph architecture, QuantumCircuit circuit)
         {
@@ -80,7 +97,9 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
                 TargetGates[gate.TargetQubit].Add(gate);
             }
         }
+        */
 
+        /*
         protected double CalculateCostDifference(double prevCost, int swap1, int swap2, ArchitectureGraph architecture, QuantumCircuit circuit)
         {
             double cost = prevCost;
@@ -107,10 +126,7 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
                     cost += architecture.CNOTDistance[gate.ControlQubit, swap1]
                         - architecture.CNOTDistance[gate.ControlQubit, swap2];
             }
-
-
             
-            /*
             foreach(CNOT gate in ControlGates[swap1])
             {
                 cost -= architecture.CNOTDistance[swap1, gate.TargetQubit];
@@ -134,10 +150,12 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
                 cost -= architecture.CNOTDistance[gate.ControlQubit, swap2];
                 cost += architecture.CNOTDistance[gate.ControlQubit, swap1];
             }
-            */
 
             return cost;
         }
+        */
+
+
 
 
 
@@ -157,20 +175,39 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
         }
 
 
+        private const int MAX_NB_GATES_IN_COST = 10000;
+
+
         public static double GetMappingCost(int[] mapping, ArchitectureGraph architecture, QuantumCircuit circuit)
         {
+
+            int NbGatesAllowed = Math.Min(circuit.NbGates, MAX_NB_GATES_IN_COST);
             double cost = 0;
             double weight;
-            double param = 1;
+            // p1 could mayb be better, p2 is just so there can be divided by 0
+            double p1 = circuit.NbGates * circuit.NbLayers / NbGatesAllowed;
+            double p2 = 0.1;
 
-            for (int i = 0; i < circuit.NbGates; i++)
+            //double param = 1;
+            //weight = (-param / circuit.NbGates) * i + param;
+            //cost += (weight*architecture.CNOTDistance[mapping[circuit.Gates[i].ControlQubit], mapping[circuit.Gates[i].TargetQubit]]);
+
+            int NbOfGatesLookedAt = 0;
+            int CurrentLayer = 0;
+            while (NbOfGatesLookedAt < NbGatesAllowed)
             {
-                weight = (-param / circuit.NbGates) * i + param;
-                cost += (weight*architecture.CNOTDistance[mapping[circuit.Gates[i].ControlQubit], mapping[circuit.Gates[i].TargetQubit]]);
+                weight = 1 / (CurrentLayer / p1 + p2);
+                foreach (CNOT gate in circuit.Layers[CurrentLayer])
+                {
+                    cost += architecture.CNOTDistance[mapping[gate.ControlQubit], mapping[gate.TargetQubit]];
+                }
+                NbOfGatesLookedAt += circuit.LayerSize[CurrentLayer++];
             }
 
             return cost;
         }
+
+        
 
 
         //public static double GetMappingCost(double originalCost, int swap1, int swap2, ArchitectureGraph architecture, QuantumCircuit circuit)

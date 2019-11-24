@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace QuantumCircuitTransformation.QuantumCircuitComponents
@@ -12,21 +13,27 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
     ///    for a class which can represent a physical circuit.
     ///    
     /// @author:   Louis Carpentier
-    /// @version:  1.2
+    /// @version:  1.3
     /// 
     /// </summary>
     public class QuantumCircuit
     {
         /// <summary>
-        /// A variable to keep track of all the gates in this quantum circuit.  
+        /// Variable referring to all the gates in this quantum circuit. The
+        /// gates are sorted in layers, such that the execution of a gate in
+        /// some layer doesn't affect the outcome of any other gate in the 
+        /// same layer. 
         /// </summary>
-        /// <remarks>
-        /// There are only CNOT gates (see <see cref="CNOT"/>) used. It can be proven 
-        /// that all single qubit gates and combined with CNOT gates are a universal 
-        /// set of gates in quantum computing. Since single qubit gates are not of 
-        /// interest in quantum circuit transformation are only the CNOT gates needed.
-        /// </remarks>
-        public List<CNOT> Gates { get; private set; }
+        public List<List<CNOT>> Layers { get; private set; }
+        /// <summary>
+        /// Variable referring to the size of each layer. At index i is the number
+        /// of gates in layer i of <see cref="Layers"/>.
+        /// </summary>
+        public List<int> LayerSize { get; private set; }
+        /// <summary>
+        /// Variable referring to the number of layers this quantum circuit has. 
+        /// </summary>
+        public int NbLayers { get; private set; }
         /// <summary>
         /// Variable referring to the number of gates in this quantum circuit. 
         /// </summary>
@@ -41,7 +48,9 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         /// </summary>
         public QuantumCircuit()
         {
-            Gates = new List<CNOT>();
+            Layers = new List<List<CNOT>> { new List<CNOT>() };
+            LayerSize = new List<int> { 0 };
+            NbLayers = 1;
             NbGates = 0;
             NbQubits = 0;
         }
@@ -49,12 +58,22 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         /// <summary>
         /// Adds a CNOT gate at the end of this quantum circuit. 
         /// </summary>
-        /// <param name="cnot"> The CNOT gate to add to this circuit. </param>
-        public virtual void AddGate(CNOT cnot)
+        /// <param name="newGate"> The gate to add to this circuit. </param>
+        public virtual void AddGate(CNOT newGate)
         {
-            Gates.Add(cnot);
+            if (Layers[0].Any(cnot => cnot.TargetQubit == newGate.ControlQubit))
+            {
+                Layers.Add(new List<CNOT> { newGate });
+                LayerSize.Add(1);
+                NbLayers++;
+            }
+            else
+            {
+                Layers[NbLayers - 1].Add(newGate);
+                LayerSize[NbLayers - 1]++;
+            }
             NbGates++;
-            NbQubits = Math.Max(Math.Max(cnot.ControlQubit, cnot.TargetQubit), NbQubits);
+            NbQubits = Math.Max(Math.Max(newGate.ControlQubit, newGate.TargetQubit), NbQubits);
         }
 
         /// <summary>
@@ -72,8 +91,9 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
                 "include \"qelib1.inc\";\n\n" +
                 "qreg q[" + NbQubits + "];\n" +
                 "creg q[" + NbQubits + "];\n"; ;
-            for (int i = 0; i < Gates.Count; i++)
-                codeRepresenation += "\n" + Gates[i];
+            for (int i = 0; i < NbLayers; i++)
+                for (int j = 0; j < Layers[i].Count; j++)
+                    codeRepresenation += "\n" + Layers[i][j];
             return codeRepresenation;
         }
     }

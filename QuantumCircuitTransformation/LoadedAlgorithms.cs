@@ -21,6 +21,6 @@ namespace QuantumCircuitTransformation
         /// <summary>
         /// Variable to keep track of the loaded initial mapping algorithm. 
         /// </summary>
-        public static InitialMapping InitialMapping = AllAlgorithms.InitialMappings[0];
+        public static InitialMapping InitialMapping;
     }
 }

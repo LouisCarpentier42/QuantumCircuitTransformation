@@ -36,6 +36,29 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
         }
 
         /// <summary>
+        /// See <see cref="InitialMapping.Equals(InitialMapping)"/>
+        /// </summary>
+        /// <returns>
+        /// True if the initial mapping equals according to <see cref="InitialMapping.Equals(InitialMapping)"/>
+        /// and if the parameters are equal of the given tabu search and 
+        /// this tabu search. 
+        /// </returns>
+        public override bool Equals(InitialMapping other)
+        {
+            if (base.Equals(other))
+            {
+                TabuSearch o = (TabuSearch)other;
+                return NbNeighbours == o.NbNeighbours &&
+                       NbTabus == o.NbTabus &&
+                       MaxNbIterations == o.MaxNbIterations;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
         /// See <see cref="InitialMapping.GetName"/>.
         /// </summary>
         public override string GetName()
@@ -53,7 +76,6 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
                 " > The number of tabus: " + NbTabus + '\n' +
                 " > The maximal number of iterations: " + MaxNbIterations;
         }
-
 
 
 
