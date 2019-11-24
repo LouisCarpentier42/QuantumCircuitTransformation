@@ -4,7 +4,6 @@ using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 using System.Linq;
 using QuantumCircuitTransformation.QuantumCircuitComponents;
 using QuantumCircuitTransformation.InitalMappingAlgorithm;
-using System.Timers;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -14,11 +13,11 @@ namespace QuantumCircuitTransformation
 {
     class Program
     {
-        private static InitialMapping mappingAlgo;
-        private static readonly Stopwatch Timer = new Stopwatch();
-        private static readonly List<Tuple<string, Action>> Menu = new List<Tuple<string, Action>>
+        
+        private static readonly List<Tuple<string, Action>> MainMenu = new List<Tuple<string, Action>>
         {
-            new Tuple<string, Action>("String", new Action(SelectLoadedInitialMappings))
+            new Tuple<string, Action>("Select an initial mapping algorithm", new Action(SelectLoadedInitialMappings)),
+            new Tuple<string, Action>("Add a new initial mapping algorithm", new Action(AddInitialMapping)),
         };
 
 
@@ -26,45 +25,35 @@ namespace QuantumCircuitTransformation
 
         static void Main(string[] args)
         {
-            int selection = -1;
-            while (selection != 0)
+            while (true)
             {
                 ConsoleLayout.Header("Main");
-                
-                ConsoleLayout.PrintMenu(Menu);
-
-                Console.Write("\nSelection: ");
-                selection = Convert.ToInt32(Console.ReadLine());
-
-                switch (selection)
+                int selection = ConsoleLayout.SelectFromMenu(MainMenu);
+                try
                 {
-                    case 2:
-                        return;
-                    case 1:
-                        SelectLoadedInitialMappings();
-                        break;
-                    case 42:
+                    if (selection == 0) return;
+                    if (selection == 42)
+                    {
                         Test();
-                        break;
-                    default:
-                        ConsoleLayout.InvalidInput();
-                        break;
+                        continue;
+                    }
+                    MainMenu[selection-1].Item2.Invoke();
+                } catch (ArgumentOutOfRangeException)
+                {
+                    ConsoleLayout.InvalidInput();
+                    ConsoleLayout.Footer();
                 }
             }
-
-            
         } 
+
+
+
 
         private static void Test()
         {
-            /*
-            FileInfo[] Files = new DirectoryInfo(Globals.BenchmarkFolder).GetFiles();
-            foreach (FileInfo f in Files)
-                Console.Write(f.Name);
-            */
+            ConsoleLayout.Header("Test environment");
 
 
-            InitialMapping sa = new SimulatedAnnealing(100, 1, 0.95, 100);
             //InitalMapping ts = new TabuSearch(50,5,1000);
             //QuantumCircuit c = CircuitGenerator.RandomCircuit(1000, 20);
             //ArchitectureGraph a = QuantumDevices.IBM_Q20;
@@ -80,16 +69,7 @@ namespace QuantumCircuitTransformation
             //Console.WriteLine("In total are {0} milliseconds taken", Timer.ElapsedMilliseconds);
 
 
-            /*
-            
-            for (int i = 0; i < 10; i++)
-            {
-                Console.WriteLine("------------------ITERATION {0}------------------", i);
-                QuantumCircuit c = CircuitGenerator.RandomCircuit(1000, 10);
-                sa.Execute(QuantumDevices.IBM_Q20, c);
-            }
-            
-            */
+            ConsoleLayout.Footer();
         }
 
 
@@ -98,38 +78,63 @@ namespace QuantumCircuitTransformation
         private static void SelectLoadedInitialMappings()
         {
             ConsoleLayout.Header("Select an initial mapping algorithm");
-            var orderedInitalMapping = LoadedAlgorithms.InitialMapping.OrderBy(item => item.GetType().FullName);
-            for (int i = 0; i < orderedInitalMapping.Count(); i++)
+            var orderedInitalMappings = AllAlgorithms.InitialMappings.OrderBy(item => item.GetType().FullName);
+            for (int i = 0; i < orderedInitalMappings.Count(); i++)
             {
-                Console.WriteLine(i+1 + ": " + orderedInitalMapping.ElementAt(i).GetName());
-                Console.WriteLine(orderedInitalMapping.ElementAt(i).GetParameters() + '\n');
+                Console.WriteLine(i+1 + ": " + orderedInitalMappings.ElementAt(i).GetName());
+                Console.WriteLine(orderedInitalMappings.ElementAt(i).GetParameters() + '\n');
             }
 
             try
             {
                 Console.Write("Give the ID of the initial mapping: ");
                 int index = Convert.ToInt32(Console.ReadLine());
-                mappingAlgo = orderedInitalMapping.ElementAt(index-1);
+                LoadedAlgorithms.InitialMapping = orderedInitalMappings.ElementAt(index-1);
                 Console.WriteLine("\nInitial mapping {0} has been selected.", index);
                 ConsoleLayout.Footer();
-            } catch (Exception e) when (e is ArgumentOutOfRangeException || e is FormatException)
+            }
+            catch (Exception e) when (e is ArgumentOutOfRangeException || e is FormatException)
             {
                 ConsoleLayout.InvalidInput();
                 ConsoleLayout.Footer();
-                SelectLoadedInitialMappings();
             }
         }
 
 
+        private static void AddInitialMapping()
+        {
+            ConsoleLayout.Header("New initial mapping");
 
 
+            var initialMappingAlgorithms = Assembly
+               .GetAssembly(typeof(InitialMapping))
+               .GetTypes()
+               .Where(t => t.IsSubclassOf(typeof(InitialMapping)));
+            Console.WriteLine("Select an inital mapping algorithm to add.");
+            for (int i = 0; i < initialMappingAlgorithms.Count(); i++)
+            {
+                Console.WriteLine(i+1 + ": " + initialMappingAlgorithms.ElementAt(i).GetTypeInfo().Name);
+            }
+            Console.Write("Choice: ");
 
-        
+            try
+            {
+                int index = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine();
+                Type t = initialMappingAlgorithms.ElementAt(index - 1);
+            }
+            catch (Exception e) when (e is ArgumentOutOfRangeException || e is FormatException)
+            {
+                Console.WriteLine();
+                ConsoleLayout.InvalidInput();
+            }
+
+            
 
 
+            Console.WriteLine("TODO");
 
-
-     
-
+            ConsoleLayout.Footer();
+        }
     }
 }

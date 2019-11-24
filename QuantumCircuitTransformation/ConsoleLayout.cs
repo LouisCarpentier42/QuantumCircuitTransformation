@@ -24,11 +24,25 @@ namespace QuantumCircuitTransformation
             Console.ReadLine();
         }
 
-        public static void PrintMenu(List<Tuple<string, Action>> menu)
+        public static int SelectFromMenu(List<Tuple<string, Action>> menu)
         {
-            for (int i =0; i < menu.Count; i++)
+            for (int i = 0; i < menu.Count; i++)
                 Console.WriteLine("{0}: {1}", i + 1, menu[i].Item1);
             Console.WriteLine("0: Return");
+
+            Console.Write("\nChoice: ");
+            
+            try
+            {
+                int index = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine();
+                return index;
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine();
+                return -1;
+            }
         }
 
         public static void InvalidInput()

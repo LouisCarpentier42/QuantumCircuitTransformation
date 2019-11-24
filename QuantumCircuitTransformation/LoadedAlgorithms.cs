@@ -8,8 +8,10 @@ namespace QuantumCircuitTransformation
     /// <summary>
     /// 
     /// LoadedAlgorithms:
-    ///    A static class to keep track of the different algorithms. 
-    /// 
+    ///    A static class to keep track of the loaded algorithms. These 
+    ///    are the ones preferred by the user. There are some default 
+    ///    algorithms inserted. 
+    ///    
     /// @author:   Louis Carpentier
     /// @version:  1.0
     /// 
@@ -17,12 +19,8 @@ namespace QuantumCircuitTransformation
     public static class LoadedAlgorithms
     {
         /// <summary>
-        /// A variable for the loaded initial mapping algorithms. 
+        /// Variable to keep track of the loaded initial mapping algorithm. 
         /// </summary>
-        public static List<InitialMapping> InitialMapping = new List<InitialMapping>
-        {
-            new SimulatedAnnealing(100, 1, 0.95, 100),
-            new TabuSearch(50, 5, 1000),
-        };
+        public static InitialMapping InitialMapping = AllAlgorithms.InitialMappings[0];
     }
 }

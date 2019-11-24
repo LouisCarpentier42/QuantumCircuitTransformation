@@ -1,6 +1,7 @@
 ﻿using QuantumCircuitTransformation.InitalMappingAlgorithm;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 
@@ -13,7 +14,7 @@ namespace QuantumCircuitTransformation
     ///    could be needed in the project. 
     ///    
     /// @author:   Louis Carpentier
-    /// @version:  1.1
+    /// @version:  1.2
     /// 
     /// </summary>
     public static class Globals
@@ -40,5 +41,10 @@ namespace QuantumCircuitTransformation
         /// </summary>
         public static readonly FileInfo[] Benchmarks = 
             new DirectoryInfo(BenchmarkFolder).GetFiles();
+
+        /// <summary>
+        /// Variable to easily time all algorithms durations. 
+        /// </summary>
+        public static readonly Stopwatch Timer = new Stopwatch();
     }
 }
