@@ -1,5 +1,5 @@
 ﻿using QuantumCircuitTransformation.Data;
-using QuantumCircuitTransformation.InitalMappingAlgorithm;
+using QuantumCircuitTransformation.InitialMappingAlgorithm;
 using QuantumCircuitTransformation.QuantumCircuitComponents;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 using System;
@@ -14,12 +14,16 @@ namespace QuantumCircuitTransformation
 
         private static readonly List<Tuple<string, Action>> MainMenu = new List<Tuple<string, Action>>
         {
-            new Tuple<string, Action>("Load an initial mapping algorithm", new Action(LoadInitialMappings)),
-            new Tuple<string, Action>("Add a new initial mapping algorithm", new Action(AddInitialMapping)),
-            new Tuple<string, Action>("Give an overview of all the available algorithms", new Action(GiveOverviewOfAllAlgorithms)),
-            new Tuple<string, Action>("Give an overview of the loaded algorithms", new Action(GiveOverviewOfLoadedAlgorithms)),
-            new Tuple<string, Action>("Execute the loaded initial mapping algorithm", new Action(ExecuteInitialMapping)),
-
+            new Tuple<string, Action>("Load an initial mapping algorithm", 
+                new Action(LoadInitialMappings)),
+            new Tuple<string, Action>("Add a new initial mapping algorithm", 
+                new Action(AddInitialMapping)),
+            new Tuple<string, Action>("Give an overview of all the available algorithms", 
+                new Action(GiveOverviewOfAllAlgorithms)),
+            new Tuple<string, Action>("Give an overview of the loaded algorithms", 
+                new Action(GiveOverviewOfLoadedAlgorithms)),
+            //new Tuple<string, Action>("Execute the loaded initial mapping algorithm", 
+            //    new Action(ExecuteInitialMapping)),
         };
 
         static void Main(string[] args)
@@ -46,21 +50,26 @@ namespace QuantumCircuitTransformation
             ConsoleLayout.Header("Test environment");
 
 
-            int nbCircuits = 100;
-            int nbGates = 20000;
-            for (int nbQubits = 4; nbQubits < 20; nbQubits++)
-            {
-                int averageLayers = 0;
-                for (int i = 0; i < nbCircuits; i++)
-                {
-                    averageLayers += (CircuitGenerator.RandomCircuit(nbGates, nbQubits).NbLayers);
-                }
-                Console.WriteLine("NbL / NbG: " + averageLayers / nbGates);
-                //Console.WriteLine("Average number of layers: " + averageLayers / nbCircuits);
-                //Console.WriteLine("NbGates / NbQubits: " + nbGates / nbQubits);
-                //Console.WriteLine("NbLayers *  NbQubits: " + averageLayers * nbQubits);
-                Console.WriteLine("----------------------------------------");
-            }
+
+            Console.WriteLine(AllAlgorithms.InitialMappings.Contains(new SimulatedAnnealing(100, 1, 0.95, 100)));
+
+
+
+            //int nbCircuits = 100;
+            //int nbGates = 20000;
+            //for (int nbQubits = 4; nbQubits < 20; nbQubits++)
+            //{
+            //    int averageLayers = 0;
+            //    for (int i = 0; i < nbCircuits; i++)
+            //    {
+            //        averageLayers += (CircuitGenerator.RandomCircuit(nbGates, nbQubits).NbLayers);
+            //    }
+            //    Console.WriteLine("NbL / NbG: " + averageLayers / nbGates);
+            //    //Console.WriteLine("Average number of layers: " + averageLayers / nbCircuits);
+            //    //Console.WriteLine("NbGates / NbQubits: " + nbGates / nbQubits);
+            //    //Console.WriteLine("NbLayers *  NbQubits: " + averageLayers * nbQubits);
+            //    Console.WriteLine("----------------------------------------");
+            //}
             
 
 
@@ -132,7 +141,6 @@ namespace QuantumCircuitTransformation
         {
             ConsoleLayout.Header("New initial mapping");
 
-
             var initialMappingAlgorithms = Assembly
                .GetAssembly(typeof(InitialMapping))
                .GetTypes()
@@ -148,18 +156,25 @@ namespace QuantumCircuitTransformation
             {
                 int index = Convert.ToInt32(Console.ReadLine());
                 Console.WriteLine();
-                Type t = initialMappingAlgorithms.ElementAt(index - 1);
+                Type type = initialMappingAlgorithms.ElementAt(index - 1);
+                ConstructorInfo constructorInfo = type.GetConstructors()[0];
+                object[] param = new object[constructorInfo.GetParameters().Count()];
+                for (int i = 0; i < constructorInfo.GetParameters().Count(); i++)
+                {
+                    Console.Write("> " + constructorInfo.GetParameters()[i].Name + ": ");
+                    Type paramType = constructorInfo.GetParameters()[i].ParameterType;
+                    param[i] = Convert.ChangeType(Console.ReadLine(),paramType);
+                }
+                InitialMapping initialMapping = (InitialMapping)constructorInfo.Invoke(param);
+                if (!AllAlgorithms.InitialMappings.Contains(initialMapping))
+                    AllAlgorithms.InitialMappings.Add(initialMapping);
+
             }
             catch (Exception e) when (e is ArgumentOutOfRangeException || e is FormatException)
             {
                 Console.WriteLine();
                 ConsoleLayout.Error();
             }
-
-            
-
-
-            Console.WriteLine("TODO");
 
             ConsoleLayout.Footer();
         }

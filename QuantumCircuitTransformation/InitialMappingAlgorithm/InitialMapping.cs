@@ -4,7 +4,7 @@ using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 using System;
 using System.Linq;
 
-namespace QuantumCircuitTransformation.InitalMappingAlgorithm
+namespace QuantumCircuitTransformation.InitialMappingAlgorithm
 {
     /// <summary>
     /// 
@@ -44,24 +44,6 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
         public static int[] GetRandomMapping(int NbNodes)
         {
             return Enumerable.Range(0, NbNodes).OrderBy(i => Guid.NewGuid()).ToArray();
-        }
-
-        /// <summary>
-        /// Checks if the other initial mapping is the same as this 
-        /// initial mapping. 
-        /// </summary>
-        /// <param name="other"> The initial mapping to compare. </param>
-        /// <returns>
-        /// True if and only if the given initial mapping is not null and the
-        /// type of the given initial mapping equals the type of this initial
-        /// mapping. 
-        /// </returns>
-        public virtual bool Equals(Algorithm other)
-        {
-            if (other == null || GetType() != other.GetType())
-                return false;
-            else
-                return true;
         }
 
         /// <summary>

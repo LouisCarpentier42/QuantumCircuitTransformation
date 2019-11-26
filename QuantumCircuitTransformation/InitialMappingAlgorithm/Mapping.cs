@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuantumCircuitTransformation.InitalMappingAlgorithm
+namespace QuantumCircuitTransformation.InitialMappingAlgorithm
 {
     /// <summary>
     /// 

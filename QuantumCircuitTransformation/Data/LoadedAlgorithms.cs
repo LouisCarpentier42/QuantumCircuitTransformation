@@ -1,4 +1,4 @@
-﻿using QuantumCircuitTransformation.InitalMappingAlgorithm;
+﻿using QuantumCircuitTransformation.InitialMappingAlgorithm;
 using QuantumCircuitTransformation.TransformationAlgorithm;
 
 namespace QuantumCircuitTransformation.Data

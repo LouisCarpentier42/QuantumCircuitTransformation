@@ -3,7 +3,7 @@ using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 using QuantumCircuitTransformation.Data;
 using System;
 
-namespace QuantumCircuitTransformation.InitalMappingAlgorithm
+namespace QuantumCircuitTransformation.InitialMappingAlgorithm
 {
     /// <summary>
     /// 
@@ -21,7 +21,7 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
     /// @version:  1.0
     /// 
     /// </summary>
-    public class SimulatedAnnealing : InitialMapping
+    public class SimulatedAnnealing : InitialMapping, IEquatable<SimulatedAnnealing>
     {
         /// <summary>
         /// Variable referring to the maximum temperature during the algorithm. 
@@ -43,44 +43,36 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
         /// <summary>
         /// Initialise a new simuted annealing algorithms with all it's parameters. 
         /// </summary>
-        /// <param name="maxT"> The variable for <see cref="MaxTemperature"/>. </param>
-        /// <param name="minT"> The variable for <see cref="MinTemperature"/>. </param>
-        /// <param name="delta"> The variable for <see cref="CoolingFactor"/>. </param>
-        /// <param name="r"> The variable for <see cref="NbRepetitions"/>. </param>
-        public SimulatedAnnealing(int maxT, int minT, double delta, int r)
+        /// <param name="maxTemperature"> The variable for <see cref="MaxTemperature"/>. </param>
+        /// <param name="minTemperature"> The variable for <see cref="MinTemperature"/>. </param>
+        /// <param name="coolingFactor"> The variable for <see cref="CoolingFactor"/>. </param>
+        /// <param name="nbRepetitions"> The variable for <see cref="NbRepetitions"/>. </param>
+        public SimulatedAnnealing(int maxTemperature, int minTemperature, double coolingFactor, int nbRepetitions)
         {
-            MaxTemperature = maxT;
-            MinTemperature = minT;
-            CoolingFactor = delta;
-            NbRepetitions = r;
+            MaxTemperature = maxTemperature;
+            MinTemperature = minTemperature;
+            CoolingFactor = coolingFactor;
+            NbRepetitions = nbRepetitions;
         }
 
         /// <summary>
-        /// See <see cref="InitialMapping.Equals(Algorithm)"/>
+        /// Checks whether or not this simulated annealing equals the given
+        /// qimulated annealing. 
         /// </summary>
         /// <returns>
-        /// True if the initial mapping equals according to <see cref="InitialMapping.Equals(Algorithm)"/>
-        /// and if the parameters are equal of the given simulated annealing and 
-        /// this simulated annealing. 
+        /// True if and only if the parameters are equal of the given simulated 
+        /// annealing and this simulated annealing. 
         /// </returns>
-        public override bool Equals(Algorithm other)
+        public bool Equals(SimulatedAnnealing other)
         {
-            if (base.Equals(other))
-            {
-                SimulatedAnnealing o = (SimulatedAnnealing)other;
-                return MaxTemperature == o.MaxTemperature &&
-                       MinTemperature == o.MinTemperature &&
-                       CoolingFactor == o.CoolingFactor &&
-                       NbRepetitions == o.NbRepetitions;
-            }
-            else
-            {
-                return false;
-            }
+            return MaxTemperature == other.MaxTemperature &&
+                       MinTemperature == other.MinTemperature &&
+                       CoolingFactor == other.CoolingFactor &&
+                       NbRepetitions == other.NbRepetitions;
         }
 
         /// <summary>
-        /// See <see cref="InitialMapping.Name"/>.
+        /// See <see cref="Algorithm.Name"/>.
         /// </summary>
         public override string Name()
         {
@@ -88,7 +80,7 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
         }
 
         /// <summary>
-        /// See <see cref="InitialMapping.Parameters"/>.
+        /// See <see cref="Algorithm.Parameters"/>.
         /// </summary>
         public override string Parameters()
         {

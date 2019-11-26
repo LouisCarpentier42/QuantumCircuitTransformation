@@ -6,8 +6,8 @@ namespace QuantumCircuitTransformation
 {
     public static class ConsoleLayout
     {
-        private const int HEADERSIZE = 80;
-        private const int SUBHEADERSIZE = 70;
+        private const int HEADERSIZE = 110;
+        private const int SUBHEADERSIZE = 80;
 
         public static void Header(string title)
         {

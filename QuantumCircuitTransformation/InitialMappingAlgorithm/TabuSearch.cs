@@ -4,9 +4,9 @@ using System.Text;
 using QuantumCircuitTransformation.QuantumCircuitComponents;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 
-namespace QuantumCircuitTransformation.InitalMappingAlgorithm
+namespace QuantumCircuitTransformation.InitialMappingAlgorithm
 {
-    public class TabuSearch : InitialMapping
+    public class TabuSearch : InitialMapping, IEquatable<TabuSearch>
     {
         /// <summary>
         /// Variable referring to the number of neighbours to generate at
@@ -36,30 +36,21 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
         }
 
         /// <summary>
-        /// See <see cref="InitialMapping.Equals(Algorithm)"/>
+        /// Checks whether or not the given tabu search eqauls this tabu search
         /// </summary>
         /// <returns>
-        /// True if the initial mapping equals according to <see cref="InitialMapping.Equals(Algorithm)"/>
-        /// and if the parameters are equal of the given tabu search and 
-        /// this tabu search. 
+        /// True if and only if the parameters are equal of the given tabu 
+        /// search and this tabu search. 
         /// </returns>
-        public override bool Equals(Algorithm other)
+        public bool Equals(TabuSearch other)
         {
-            if (base.Equals(other))
-            {
-                TabuSearch o = (TabuSearch)other;
-                return NbNeighbours == o.NbNeighbours &&
-                       NbTabus == o.NbTabus &&
-                       MaxNbIterations == o.MaxNbIterations;
-            }
-            else
-            {
-                return false;
-            }
+            return NbNeighbours == other.NbNeighbours &&
+                   NbTabus == other.NbTabus &&
+                   MaxNbIterations == other.MaxNbIterations;
         }
 
         /// <summary>
-        /// See <see cref="InitialMapping.Name"/>.
+        /// See <see cref="Algorithm.Name"/>.
         /// </summary>
         public override string Name()
         {
@@ -67,7 +58,7 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
         }
 
         /// <summary>
-        /// See <see cref="InitialMapping.Parameters"/>.
+        /// See <see cref="Algorithm.Parameters"/>.
         /// </summary>
         public override string Parameters()
         {

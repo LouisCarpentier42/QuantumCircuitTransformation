@@ -13,7 +13,7 @@ namespace QuantumCircuitTransformation
     /// @version:  1.0
     /// 
     /// </summary>
-    public interface Algorithm : IEquatable<Algorithm>
+    public interface Algorithm
     {
         /// <summary>
         /// Get the name of this algorithm. 
