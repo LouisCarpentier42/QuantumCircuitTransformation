@@ -1,19 +1,17 @@
 ﻿using QuantumCircuitTransformation.InitalMappingAlgorithm;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using QuantumCircuitTransformation.TransformationAlgorithm;
 
-namespace QuantumCircuitTransformation
+namespace QuantumCircuitTransformation.Data
 {
     /// <summary>
     /// 
     /// LoadedAlgorithms:
     ///    A static class to keep track of the loaded algorithms. These 
-    ///    are the ones preferred by the user. There are some default 
-    ///    algorithms inserted. 
+    ///    are the ones preferred by the user. By default are no algorithms
+    ///    set to use. 
     ///    
     /// @author:   Louis Carpentier
-    /// @version:  1.0
+    /// @version:  1.1
     /// 
     /// </summary>
     public static class LoadedAlgorithms
@@ -22,5 +20,10 @@ namespace QuantumCircuitTransformation
         /// Variable to keep track of the loaded initial mapping algorithm. 
         /// </summary>
         public static InitialMapping InitialMapping;
+
+        /// <summary>
+        /// Variable to keep track of the loaded transformation algorithm. 
+        /// </summary>
+        public static Transformation Transformation;
     }
 }

@@ -1,7 +1,7 @@
-﻿using QuantumCircuitTransformation.QuantumCircuitComponents;
+﻿using QuantumCircuitTransformation.Data;
+using QuantumCircuitTransformation.QuantumCircuitComponents;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace QuantumCircuitTransformation.InitalMappingAlgorithm
@@ -19,12 +19,11 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
     ///    algorithm.
     /// 
     /// @author:   Louis Carpentier
-    /// @version:  1.7
+    /// @version:  1.8
     /// 
     /// </summary>
-    public abstract class InitialMapping : IEquatable<InitialMapping>
+    public abstract class InitialMapping : Algorithm
     {
-
         /// <summary>
         /// Execute this inital mapping algorithm. 
         /// </summary>
@@ -57,7 +56,7 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
         /// type of the given initial mapping equals the type of this initial
         /// mapping. 
         /// </returns>
-        public virtual bool Equals(InitialMapping other)
+        public virtual bool Equals(Algorithm other)
         {
             if (other == null || GetType() != other.GetType())
                 return false;
@@ -68,12 +67,12 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
         /// <summary>
         /// Give the name of the initial mapping algorithm. 
         /// </summary>
-        public abstract string GetName();
+        public abstract string Name();
 
         /// <summary>
         /// Give an overview of the parameters of this initial mapping algorithm. 
         /// </summary>
-        public abstract string GetParameters();
+        public abstract string Parameters();
 
 
         /*
@@ -206,8 +205,6 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
 
             return cost;
         }
-
-        
 
 
         //public static double GetMappingCost(double originalCost, int swap1, int swap2, ArchitectureGraph architecture, QuantumCircuit circuit)

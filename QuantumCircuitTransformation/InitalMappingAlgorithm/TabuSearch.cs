@@ -36,14 +36,14 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
         }
 
         /// <summary>
-        /// See <see cref="InitialMapping.Equals(InitialMapping)"/>
+        /// See <see cref="InitialMapping.Equals(Algorithm)"/>
         /// </summary>
         /// <returns>
-        /// True if the initial mapping equals according to <see cref="InitialMapping.Equals(InitialMapping)"/>
+        /// True if the initial mapping equals according to <see cref="InitialMapping.Equals(Algorithm)"/>
         /// and if the parameters are equal of the given tabu search and 
         /// this tabu search. 
         /// </returns>
-        public override bool Equals(InitialMapping other)
+        public override bool Equals(Algorithm other)
         {
             if (base.Equals(other))
             {
@@ -59,17 +59,17 @@ namespace QuantumCircuitTransformation.InitalMappingAlgorithm
         }
 
         /// <summary>
-        /// See <see cref="InitialMapping.GetName"/>.
+        /// See <see cref="InitialMapping.Name"/>.
         /// </summary>
-        public override string GetName()
+        public override string Name()
         {
             return "Tabu Search";
         }
 
         /// <summary>
-        /// See <see cref="InitialMapping.GetParameters"/>.
+        /// See <see cref="InitialMapping.Parameters"/>.
         /// </summary>
-        public override string GetParameters()
+        public override string Parameters()
         {
             return
                 " > The number of neighbours: " + NbNeighbours + '\n' +

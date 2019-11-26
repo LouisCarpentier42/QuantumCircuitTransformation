@@ -13,7 +13,7 @@ namespace QuantumCircuitTransformation
     ///    A static class to easily generate circuits.
     ///    
     /// @author:   Louis Carpentier
-    /// @version:  1.0
+    /// @version:  1.1
     /// 
     /// </summary>
     public static class CircuitGenerator
@@ -42,11 +42,16 @@ namespace QuantumCircuitTransformation
             return circuit;
         }
 
-
-
-
-
-
+        /// <summary>
+        /// Generate a quantum circuit from a file. 
+        /// </summary>
+        /// <param name="fileName"> The filename in which the circuit is. </param>
+        /// <returns>
+        /// The quantum circuit representation of the circuit in the given file.
+        /// </returns>
+        /// <remarks>
+        /// The file should be in the folder <see cref="Globals.BenchmarkFolder"/>.
+        /// </remarks>
         public static QuantumCircuit ReadFromFile(string fileName)
         {
             QuantumCircuit circuit = new QuantumCircuit();
@@ -61,11 +66,7 @@ namespace QuantumCircuitTransformation
                     circuit.AddGate(new CNOT(control, target));
                 }
             }
-
             return circuit;
         }
-        
-
-
     }
 }
