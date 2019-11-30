@@ -40,6 +40,7 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         /// </summary>
         public readonly int NbRepetitions;
 
+
         /// <summary>
         /// Initialise a new simuted annealing algorithms with all it's parameters. 
         /// </summary>
@@ -171,6 +172,5 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         {
             return Globals.Random.NextDouble() < Math.Exp((cost - newCost) / temperature);
         }
-
     }
 }

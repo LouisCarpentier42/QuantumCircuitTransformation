@@ -1,4 +1,6 @@
-﻿using System;
+﻿using QuantumCircuitTransformation.InitialMappingAlgorithm;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -43,6 +45,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         /// </summary>
         private int NbQubits;
 
+
         /// <summary>
         /// Initialise a new Quantum circuit without any gates. 
         /// </summary>
@@ -77,6 +80,41 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         }
 
         /// <summary>
+        /// Adds a list of CNOT gates to this quantum circuit using the method
+        /// <see cref="AddGate(CNOT)"/>.
+        /// </summary>
+        /// <param name="newGates"> The gates to add to this circuit. </param>
+        public void AddGates(List<CNOT> newGates)
+        {
+            for (int i = 0; i < newGates.Count(); i++)
+                AddGate(newGates[i]);
+        }
+
+        /// <summary>
+        /// Removes all the CNOT gates which can be executed according to the 
+        /// architecture graph with the given mapping. 
+        /// </summary>
+        /// <param name="mapping"> The mapping to take into account. </param>
+        /// <param name="architecture"> The architecture graph to take into account. </param>
+        /// <returns>
+        /// A list of all the cnot gates which are removed. 
+        /// </returns>
+        public List<CNOT> RemoveAllExecutableGates(Mapping mapping, ArchitectureGraph architecture)
+        {
+            List<CNOT> executableGates = Layers[0].FindAll(cnot => architecture.CanExecuteCNOT(mapping.MapCNOT(cnot)));
+            Layers[0].RemoveAll(cnot => architecture.CanExecuteCNOT(mapping.MapCNOT(cnot)));
+            while (Layers[0].Count() == 0)
+            {
+                NbLayers--;
+                Layers.RemoveAt(0);
+                executableGates.AddRange(Layers[0].FindAll(cnot => architecture.CanExecuteCNOT(mapping.MapCNOT(cnot))));
+                Layers[0].RemoveAll(cnot => architecture.CanExecuteCNOT(mapping.MapCNOT(cnot)));
+            }
+            NbGates -= executableGates.Count();
+            return executableGates;
+        }
+
+        /// <summary>
         /// Gives a string representation of this quantum circuit.  
         /// </summary>
         /// <returns>
@@ -96,5 +134,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
                     codeRepresenation += "\n" + Layers[i][j];
             return codeRepresenation;
         }
+
+
     }
 }

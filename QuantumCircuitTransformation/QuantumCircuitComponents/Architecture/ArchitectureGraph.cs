@@ -33,6 +33,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
         /// </remarks>
         public int[,] CNOTDistance { get; private set; }
 
+
         /// <summary>
         /// Initialise a new architecture graph of a quantum device.
         /// </summary>
@@ -89,16 +90,6 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
             NbNodes = Edges.Max(x => Math.Max(x.Item1, x.Item2)) + 1;
         }
 
-        
-        private void SetCNOTDistance()
-        {
-            CNOTDistance = new int[NbNodes, NbNodes];
-            int[,] pathLength = ShortestPathFinder.Dijkstra(NbNodes, Edges);
-            for (int i = 0; i < NbNodes; i++)
-                for (int j = 0; j < NbNodes; j++)
-                    CNOTDistance[i, j] = ComputeCNOTDistance(pathLength[i, j]);
-        }
-
 
         /// <summary>
         /// Check whether or not a CNOT gate with given control and target qubit 
@@ -111,7 +102,21 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
         /// </returns>
         public abstract bool CanExecuteCNOT(CNOT cnot);
 
-       
+
+
+
+
+        
+
+        private void SetCNOTDistance()
+        {
+            CNOTDistance = new int[NbNodes, NbNodes];
+            int[,] pathLength = ShortestPathFinder.Dijkstra(NbNodes, Edges);
+            for (int i = 0; i < NbNodes; i++)
+                for (int j = 0; j < NbNodes; j++)
+                    CNOTDistance[i, j] = ComputeCNOTDistance(pathLength[i, j]);
+        }
+
         protected abstract int ComputeCNOTDistance(int pathLenght);
     }
 }

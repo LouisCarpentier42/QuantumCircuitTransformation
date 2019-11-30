@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 
-namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
+namespace QuantumCircuitTransformation.QuantumCircuitComponents
 {
     /// <summary>
     /// 
@@ -21,7 +22,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
         /// A variable to keep track of the architecture graph of the 
         /// physical device. 
         /// </summary>
-        private readonly ArchitectureGraph ArchitectureGraph;
+        public readonly ArchitectureGraph ArchitectureGraph;
 
 
         /// <summary>
@@ -41,9 +42,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
         public override void AddGate(CNOT cnot)
         {
             if (ArchitectureGraph.CanExecuteCNOT(cnot))
-            {
                 base.AddGate(cnot);
-            }
         }
     }
 }

@@ -2,6 +2,7 @@
 using QuantumCircuitTransformation.InitialMappingAlgorithm;
 using QuantumCircuitTransformation.QuantumCircuitComponents;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
+using QuantumCircuitTransformation.TransformationAlgorithm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,7 +50,16 @@ namespace QuantumCircuitTransformation
         {
             ConsoleLayout.Header("Test environment");
 
+            HeuristicSearch hs = new HeuristicSearch();
+            //hs.Execute();
 
+
+            int[] x = new int[4] { 1, 2, 3, 4 };
+            Mapping m = new Mapping(x);
+            Console.WriteLine(m);
+            m.Swap(1, 2);
+            Console.WriteLine(m);
+            
 
 
 

@@ -30,9 +30,19 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         /// <param name="architecture"> The architecture to find a mapping for. </param>
         /// <param name="circuit"> The circuit containing the qubits to map. </param>
         /// <returns>
-        /// The best <see cref="Mapping"/> which has been found by the algorithm. 
+        /// The best <see cref="Mapping"/> which has been found by the initial mapping algorithm. 
         /// </returns>
         public abstract (Mapping,double) Execute(ArchitectureGraph architecture, QuantumCircuit circuit);
+
+        /// <summary>
+        /// See <see cref="Algorithm.Name"/>.
+        /// </summary>
+        public abstract string Name();
+
+        /// <summary>
+        /// See<see cref="Algorithm.Parameters"/>.
+        /// </summary>
+        public abstract string Parameters();
 
         /// <summary>
         /// Get a random mapping with the given number of nodes. 
@@ -45,16 +55,6 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         {
             return Enumerable.Range(0, NbNodes).OrderBy(i => Globals.Random.Next()).ToArray();
         }
-
-        /// <summary>
-        /// See <see cref="Algorithm.Name"/>.
-        /// </summary>
-        public abstract string Name();
-
-        /// <summary>
-        /// See<see cref="Algorithm.Parameters"/>.
-        /// </summary>
-        public abstract string Parameters();
 
 
         /*

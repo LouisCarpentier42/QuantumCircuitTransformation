@@ -30,7 +30,21 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
             MaxNbIterations = maxNbIterations;
         }
 
+        /// <summary>
+        /// See <see cref="Algorithm.Equals(object)"/>.
+        /// </summary>
+        public override bool Equals(object obj)
+        {
+            throw new NotImplementedException();
+        }
 
+        /// <summary>
+        /// See <see cref="Algorithm.GetHashCode"/>.
+        /// </summary>
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// See <see cref="Algorithm.Name"/>.
@@ -124,7 +138,6 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         private int[] Intensificate(int[] mapping)
         {
             throw new NotImplementedException();
-
         }
 
         private int[] Diversificate(int[] mapping)
