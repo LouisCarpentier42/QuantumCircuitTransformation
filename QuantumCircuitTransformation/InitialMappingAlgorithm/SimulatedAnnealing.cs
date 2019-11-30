@@ -57,17 +57,10 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         }
 
         /// <summary>
-        /// Checks whether or not this simulated annealing equals the given
-        /// qimulated annealing. 
+        /// See <see cref="Algorithm.Equals(object)"/>.
         /// </summary>
-        /// <returns>
-        /// True if and only if the given object is not null, has the type 
-        /// SimulatedAnnealing and the parameters of the given simulated 
-        /// annealing and this simulated annealing have equal parameters. 
-        /// </returns>
         public override bool Equals(object other)
         {
-            Console.WriteLine("Reached");
             if (other == null) return false;
             try
             {
@@ -83,12 +76,8 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         }
 
         /// <summary>
-        /// Returns the hashcode of this simulated annealing. 
+        /// See <see cref="Algorithm.GetHashCode"/>.
         /// </summary>
-        /// <returns>
-        /// A prime factorisation based on the parameters of this simulated
-        /// annealing algorithm. 
-        /// </returns>
         public override int GetHashCode()
         {
             return (int)(Math.Pow(2, MaxTemperature)) *

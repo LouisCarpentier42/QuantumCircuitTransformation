@@ -18,7 +18,7 @@ namespace QuantumCircuitTransformation.TransformationAlgorithm
         /// <summary>
         /// See <see cref="Algorithm.Equals(object)"/>.
         /// </summary>
-        public override bool Equals(object obj)
+        public override bool Equals(object heuristic)
         {
             throw new NotImplementedException();
         }

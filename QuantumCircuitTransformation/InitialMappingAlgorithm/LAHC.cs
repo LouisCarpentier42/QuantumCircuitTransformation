@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using QuantumCircuitTransformation.Exceptions;
 using QuantumCircuitTransformation.Data;
 using QuantumCircuitTransformation.QuantumCircuitComponents;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
@@ -9,33 +10,88 @@ using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 namespace QuantumCircuitTransformation.InitialMappingAlgorithm
 {
     /// <summary>
-    /// 
-    /// @version:   2.0
+    /// TODO
     /// </summary>
+    /// <remarks>
+    ///     @author:   Louis Carpentier
+    ///     @version:  2.0
+    /// </remarks>
     public class LAHC : InitialMapping
     {
-
+        /// <summary>
+        /// Variable referring the late acceptance time. 
+        /// </summary>
         public readonly int LateAcceptanceSize;
-
+        /// <summary>
+        /// Variable referring to the number of tabu moves. 
+        /// </summary>
         public readonly int NbTabus;
-
+        /// <summary>
+        /// Variable referring to the maximal number of moves. 
+        /// </summary>
         public readonly int MaxNbIterations;
-
+        /// <summary>
+        /// Variable referring the the number of times there needs 
+        /// to be a diversification done. 
+        /// </summary>
         public readonly int DiversificationRate;
 
-        public LAHC(int lateAcceptanceSize, int nbTabus, int maxNbIterations)
+
+        public LAHC(int lateAcceptanceSize, int nbTabus, int maxNbIterations, int diversificationRate)
         {
-            LateAcceptanceSize = lateAcceptanceSize;
-            NbTabus = nbTabus;
-            MaxNbIterations = maxNbIterations;
+            if (IsValidLateAcceptanceSize(lateAcceptanceSize))
+                LateAcceptanceSize = lateAcceptanceSize;
+            else throw new InvalidParameterException();
+            if (IsValidNbTabus(nbTabus))
+                NbTabus = nbTabus;
+            else throw new InvalidParameterException();
+            if (IsValidMaxNbIterations(maxNbIterations))
+                MaxNbIterations = maxNbIterations;
+            else throw new InvalidParameterException();
+            if (IsValidDiversificationRate(diversificationRate))
+                DiversificationRate = diversificationRate;
+            else throw new InvalidParameterException();
+        }
+
+        public static bool IsValidLateAcceptanceSize(int lateAcceptanceSize)
+        {
+            return lateAcceptanceSize > 0;
+        }
+
+        public static bool IsValidNbTabus(int nbTabus)
+        {
+            return nbTabus > 0;
+        }
+
+        public static bool IsValidMaxNbIterations(int maxNbIterations)
+        {
+            return maxNbIterations > 0;
+        }
+        
+
+        public static bool IsValidDiversificationRate(int diversificationRate)
+        {
+            return diversificationRate > 0;
         }
 
         /// <summary>
         /// See <see cref="Algorithm.Equals(object)"/>.
         /// </summary>
-        public override bool Equals(object obj)
+        public override bool Equals(object other)
         {
-            throw new NotImplementedException();
+            if (other == null) return false;
+            try
+            {
+                LAHC o = (LAHC)other;
+                return LateAcceptanceSize == o.LateAcceptanceSize &&
+                       NbTabus == o.NbTabus &&
+                       MaxNbIterations == o.MaxNbIterations &&
+                       DiversificationRate == o.DiversificationRate;
+            }
+            catch (InvalidCastException)
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -43,7 +99,11 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         /// </summary>
         public override int GetHashCode()
         {
-            throw new NotImplementedException();
+            return 
+                (int)(Math.Pow(2, LateAcceptanceSize)) *
+                (int)(Math.Pow(3, NbTabus)) *
+                (int)(Math.Pow(5, MaxNbIterations)) *
+                (int)(Math.Pow(7, DiversificationRate));
         }
 
         /// <summary>
@@ -64,6 +124,11 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
                 " > The number of tabus: " + NbTabus + '\n' +
                 " > The maximal number of iterations: " + MaxNbIterations;
         }
+
+
+
+
+
 
 
 

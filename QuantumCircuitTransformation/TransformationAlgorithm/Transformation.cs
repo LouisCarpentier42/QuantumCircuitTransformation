@@ -55,7 +55,7 @@ namespace QuantumCircuitTransformation.TransformationAlgorithm
         {
             List<CNOT> frontLayer = circuit.Layers[0]; // Niet aanpassen
             double minCost = double.MaxValue;
-            
+            minCost++;
             
             throw new NotImplementedException();
         }

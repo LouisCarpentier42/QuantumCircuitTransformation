@@ -18,11 +18,11 @@ namespace QuantumCircuitTransformation
         /// <summary>
         /// Checks if other object equals to this object. 
         /// </summary>
-        /// <param name="obj"> The object to compare. </param>
+        /// <param name="other"> The object to compare. </param>
         /// <returns>
         /// True if and only if this and the given object is equal to this object. 
         /// </returns>
-        bool Equals(object obj);
+        bool Equals(object other);
 
         /// <summary>
         /// Returns a hashcode for this algorithm. 
