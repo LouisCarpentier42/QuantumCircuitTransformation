@@ -5,16 +5,15 @@ using System.Linq;
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
 {
     /// <summary>
-    /// 
-    /// ShortestPathFinder: 
-    ///    A static class to find the shortest path in an unweighted, undirected
-    ///    graph. The shortest path lengt between two nodes equals the minimal 
-    ///    number of edges to connect the two nodes. 
-    ///    
-    /// @Author:   Louis Carpentier
-    /// @Version:  1.0
-    /// 
+    ///     ShortestPathFinder: 
+    ///         A static class to find the shortest path in an unweighted, undirected
+    ///         graph. The shortest path lengt between two nodes equals the minimal 
+    ///         number of edges to connect the two nodes. 
     /// </summary>
+    /// <remarks>
+    ///     @author:   Louis Carpentier
+    ///     @version:  1.1
+    /// </remarks>
     public static class ShortestPathFinder
     {
         /// <summary>
@@ -63,8 +62,8 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
         /// Once a node has been used as source, it doesn't need to be used in the 
         /// computations of the other nodes cause the shortest path from a to be is 
         /// equal to the shortest path from b to a. There is iterated over the node
-        /// ID's from high to low cause this simplifies the use of the <see cref="Expanded"/>
-        /// and <see cref="PathFound"/> variables. 
+        /// ID's from high to low cause this simplifies the use of <see cref="Expanded"/>
+        /// and <see cref="PathFound"/>. 
         /// Note that this is an adjustment of the traditional algorithm. Normally, 
         /// the Dijkstra-algorithm finds the shortest path between to nodes. This 
         /// algorithm finds the shortest path between each pair of nodes.
@@ -74,27 +73,20 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
         /// </returns>
         public static int[,] Dijkstra(int nbNodes, List<Tuple<int, int>> edges)
         {
-            // Set up the variables
             SetUp(nbNodes);
             while (Source > 0)
             {
-                // Set up the source and it's related variables. 
                 SetSource();
                 while (PathFound.Contains(false))
                 {
-                    // Choose a new node to expand and set it's neighbours
                     SetCurrentNode();
                     SetValidNeighbours(edges);
                     foreach (int neighbour in ValidNeighboursOfCurrentNode)
                     {
-                        // The shortest path length from the source to a node equals the 
-                        // shortest path length of all neighbour but incremented
                         PathLength[Source, neighbour] = PathLength[Source, CurrentNode] + 1;
                         PathLength[neighbour, Source] = PathLength[CurrentNode, Source] + 1;
-                        // The path to the neighbour has been found
                         PathFound[neighbour] = true;
                     }
-                    // The current node has been expanded
                     Expanded[CurrentNode] = true;
                 }
             }

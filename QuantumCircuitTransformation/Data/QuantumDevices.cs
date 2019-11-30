@@ -29,7 +29,6 @@ namespace QuantumCircuitTransformation.Data
             new Tuple<int, int>(6,5),
             new Tuple<int, int>(6,7),
             new Tuple<int, int>(8,7),
-
             new Tuple<int, int>(15,0),
             new Tuple<int, int>(15,14),
             new Tuple<int, int>(13,14),
@@ -37,7 +36,6 @@ namespace QuantumCircuitTransformation.Data
             new Tuple<int, int>(12,11),
             new Tuple<int, int>(11,10),
             new Tuple<int, int>(9,10),
-
             new Tuple<int, int>(1,0),
             new Tuple<int, int>(15,2),
             new Tuple<int, int>(3,14),
@@ -59,50 +57,41 @@ namespace QuantumCircuitTransformation.Data
             new Tuple<int, int>(1,2),
             new Tuple<int, int>(2,3),
             new Tuple<int, int>(3,4),
-
             new Tuple<int, int>(5,6),
             new Tuple<int, int>(6,7),
             new Tuple<int, int>(7,8),
             new Tuple<int, int>(8,9),
-
             new Tuple<int, int>(10,11),
             new Tuple<int, int>(11,12),
             new Tuple<int, int>(12,13),
             new Tuple<int, int>(13,14),
-
             new Tuple<int, int>(15,16),
             new Tuple<int, int>(16,17),
             new Tuple<int, int>(17,18),
             new Tuple<int, int>(18,19),
-
             new Tuple<int, int>(0,5),
             new Tuple<int, int>(1,6),
             new Tuple<int, int>(2,7),
             new Tuple<int, int>(3,8),
             new Tuple<int, int>(4,9),
-
             new Tuple<int, int>(5,10),
             new Tuple<int, int>(6,11),
             new Tuple<int, int>(7,12),
             new Tuple<int, int>(8,13),
             new Tuple<int, int>(9,14),
-
             new Tuple<int, int>(10,15),
             new Tuple<int, int>(11,16),
             new Tuple<int, int>(12,17),
             new Tuple<int, int>(13,18),
             new Tuple<int, int>(14,19),
-
             new Tuple<int, int>(1,7),
             new Tuple<int, int>(2,6),
             new Tuple<int, int>(3,9),
             new Tuple<int, int>(4,8),
-
             new Tuple<int, int>(5,11),
             new Tuple<int, int>(6,10),
             new Tuple<int, int>(7,13),
             new Tuple<int, int>(8,12),
-
             new Tuple<int, int>(11,17),
             new Tuple<int, int>(12,16),
             new Tuple<int, int>(13,19),

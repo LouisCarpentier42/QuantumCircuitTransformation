@@ -53,13 +53,40 @@ namespace QuantumCircuitTransformation
             HeuristicSearch hs = new HeuristicSearch();
             //hs.Execute();
 
+            int nbNodes = 1000;
+            List<Tuple<int, int>> edges = new List<Tuple<int, int>>();
+            double density = 0.5;
 
-            int[] x = new int[4] { 1, 2, 3, 4 };
-            Mapping m = new Mapping(x);
-            Console.WriteLine(m);
-            m.Swap(1, 2);
-            Console.WriteLine(m);
+            Globals.Timer.Restart();
+            for (int i = 0; i < nbNodes - 1; i++)
+            {
+                for (int j = i + 1; j < nbNodes - 1; j++)
+                {
+                    if (Globals.Random.NextDouble() < density)
+                    {
+                        edges.Add(new Tuple<int, int>(i, j));
+                        //Console.WriteLine(edges.Last());
+                    }
+                }
+            }
+            Globals.Timer.Stop();
+            Console.WriteLine("Graph generated in {0} milliseconds.", Globals.Timer.Elapsed.TotalMilliseconds);
+
+
+            Globals.Timer.Restart();
+            int[,] paths = ShortestPathFinder.Dijkstra(nbNodes, edges);
+            Globals.Timer.Stop();
+            Console.WriteLine("Shortest paths found in {0} milliseconds.", Globals.Timer.Elapsed.TotalMilliseconds);
             
+
+            //for(int i = 0; i < nbNodes; i++)
+            //{
+            //    for (int j = 0; j < nbNodes; j++)
+            //    {
+            //        Console.Write(paths[i, j] + " ");
+            //    }
+            //    Console.WriteLine();
+            //}
 
 
 

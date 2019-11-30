@@ -5,14 +5,14 @@ using System.Linq;
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
 {
     /// <summary>
-    /// 
-    /// ArchitectureGraph:
-    ///    An abstract class for the architecture graph of some quantum device.
-    ///    
-    /// @Author:   Louis Carpentier
-    /// @Version:  2.2
-    /// 
+    ///     ArchitectureGraph:
+    ///         An abstract class for the architecture graph of 
+    ///         some quantum device.
     /// </summary>
+    /// <remarks>
+    ///     @Author:   Louis Carpentier
+    ///     @Version:  2.2
+    /// </remarks>
     public abstract class ArchitectureGraph
     {
         /// <summary>
@@ -104,9 +104,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
 
 
 
-
-
-        
+        // OPTIMISATION: Make the CNOT distance more accurate. 
 
         private void SetCNOTDistance()
         {

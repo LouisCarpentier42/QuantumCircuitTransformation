@@ -6,16 +6,15 @@ using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 namespace QuantumCircuitTransformation.QuantumCircuitComponents
 {
     /// <summary>
-    /// 
-    /// PhysicalCircuit
-    ///    A class to represent a physical quantum circuit. This is a
-    ///    quantum circuit which can be executed on a physical device,
-    ///    given by an architecture graph. 
-    ///    
-    /// @author:   Louis Carpentier
-    /// @version:  1.0
-    /// 
+    ///     PhysicalCircuit
+    ///         A class to represent a physical quantum circuit. This is a
+    ///         quantum circuit which can be executed on a physical device,
+    ///         given by an architecture graph. 
     /// </summary>
+    /// <remarks>
+    ///     @author:   Louis Carpentier
+    ///  @version:  1.0
+    /// </remarks>
     public class PhysicalCircuit : QuantumCircuit
     {
         /// <summary>

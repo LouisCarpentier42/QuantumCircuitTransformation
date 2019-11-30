@@ -5,17 +5,16 @@ using System.Text;
 namespace QuantumCircuitTransformation.QuantumCircuitComponents
 {
     /// <summary>
-    /// 
-    /// CNOT
-    ///    A class to keep track of a CNOT gate. A CNOT gate works on 
-    ///    two qubits, a control qubit and a target qubit. The control 
-    ///    qubit remains the same. On the target qubit is a NOT gate 
-    ///    applied, only if the control qubit equals to 1.
-    ///    
-    /// @author:   Louis Carpentier
-    /// @version:  1.0
-    /// 
+    ///     CNOT
+    ///         A class to keep track of a CNOT gate. A CNOT gate works on 
+    ///         two qubits, a control qubit and a target qubit. The control 
+    ///         qubit remains the same. On the target qubit is a NOT gate 
+    ///         applied, only if the control qubit equals to 1.
     /// </summary>
+    /// <remarks>
+    ///     @author:   Louis Carpentier
+    ///     @version:  1.0
+    /// </remarks>
     public class CNOT
     {
         /// <summary>

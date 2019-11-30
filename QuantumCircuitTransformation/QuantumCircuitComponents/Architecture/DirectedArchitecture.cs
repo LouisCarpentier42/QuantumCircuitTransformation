@@ -4,16 +4,15 @@ using System.Collections.Generic;
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
 {
     /// <summary>
-    /// 
-    /// DirectedArchitecture
-    ///    A class for directed architecture graphs of physical quantum devices.
-    ///    In an directed architecture can a CNOT gate only be executed if there 
-    ///    is a directed connection from the control qubit to the target qubit.
-    ///    
-    /// @author:   Louis Carpentier
-    /// @version:  1.1
-    /// 
+    ///     DirectedArchitecture
+    ///         A class for directed architecture graphs of physical quantum devices.
+    ///         In an directed architecture can a CNOT gate only be executed if there 
+    ///         is a directed connection from the control qubit to the target qubit.
     /// </summary>
+    /// <remarks>    
+    ///     @author:   Louis Carpentier
+    ///     @version:  1.1
+    /// </remarks>
     public class DirectedArchitecture : ArchitectureGraph
     {
         /// <summary>
@@ -34,6 +33,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
         {
             return Edges.Contains(new Tuple<int, int>(cnot.ControlQubit, cnot.TargetQubit));
         }
+
 
 
         protected override int ComputeCNOTDistance(int pathLength)

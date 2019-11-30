@@ -8,16 +8,15 @@ using System.Text;
 namespace QuantumCircuitTransformation.QuantumCircuitComponents
 {
     /// <summary>
-    /// 
-    /// QuantumCircuit
-    ///    A class to represent any quantum circuit. In general this class 
-    ///    represents logical circuits. See <see cref="PhysicalCircuit"/> 
-    ///    for a class which can represent a physical circuit.
-    ///    
-    /// @author:   Louis Carpentier
-    /// @version:  1.3
-    /// 
+    ///     QuantumCircuit
+    ///         A class to represent any quantum circuit. In general this class 
+    ///         represents logical circuits. See <see cref="PhysicalCircuit"/> 
+    ///         for a class which can represent a physical circuit.
     /// </summary>
+    /// <remarks>
+    ///     @author:   Louis Carpentier
+    ///     @version:  1.3
+    /// </remarks>
     public class QuantumCircuit
     {
         /// <summary>
@@ -134,7 +133,5 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
                     codeRepresenation += "\n" + Layers[i][j];
             return codeRepresenation;
         }
-
-
     }
 }
