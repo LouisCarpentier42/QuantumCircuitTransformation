@@ -22,8 +22,8 @@ namespace QuantumCircuitTransformation
                 new Action(GiveOverviewOfAllAlgorithms)),
             new Tuple<string, Action>("Give an overview of the loaded algorithms", 
                 new Action(GiveOverviewOfLoadedAlgorithms)),
-            //new Tuple<string, Action>("Execute the loaded initial mapping algorithm", 
-            //    new Action(ExecuteInitialMapping)),
+            new Tuple<string, Action>("Test the available initial mapping algorithms",
+                new Action(TestAvailableInitialMappings)),
         };
 
         static void Main(string[] args)
@@ -51,8 +51,6 @@ namespace QuantumCircuitTransformation
 
 
 
-            Console.WriteLine(AllAlgorithms.InitialMappings.Contains(new SimulatedAnnealing(100, 1, 0.95, 100)));
-
 
 
             //int nbCircuits = 100;
@@ -70,7 +68,7 @@ namespace QuantumCircuitTransformation
             //    //Console.WriteLine("NbLayers *  NbQubits: " + averageLayers * nbQubits);
             //    Console.WriteLine("----------------------------------------");
             //}
-            
+
 
 
             //Globals.Timer.Start();
@@ -155,9 +153,26 @@ namespace QuantumCircuitTransformation
             try
             {
                 int index = Convert.ToInt32(Console.ReadLine());
-                Console.WriteLine();
                 Type type = initialMappingAlgorithms.ElementAt(index - 1);
-                ConstructorInfo constructorInfo = type.GetConstructors()[0];
+                
+                ConstructorInfo constructorInfo;
+                if (type.GetConstructors().Count() == 1)
+                {
+                    constructorInfo = type.GetConstructors()[0];
+                }
+                else
+                {
+                    Console.WriteLine();
+                    for (int i = 0; i < type.GetConstructors().Count(); i++)
+                    {
+                        Console.WriteLine(i + 1 + ": " + type.Name + " " + type.GetConstructors()[i].ToString().Substring(10));
+                    }
+                    Console.Write("Choice: ");
+                    int index2 = Convert.ToInt32(Console.ReadLine());
+                    constructorInfo = type.GetConstructors()[index2-1];
+                }
+
+                Console.WriteLine();
                 object[] param = new object[constructorInfo.GetParameters().Count()];
                 for (int i = 0; i < constructorInfo.GetParameters().Count(); i++)
                 {
@@ -170,7 +185,7 @@ namespace QuantumCircuitTransformation
                     AllAlgorithms.InitialMappings.Add(initialMapping);
 
             }
-            catch (Exception e) when (e is ArgumentOutOfRangeException || e is FormatException)
+            catch (Exception e) when (e is IndexOutOfRangeException || e is ArgumentOutOfRangeException || e is FormatException)
             {
                 Console.WriteLine();
                 ConsoleLayout.Error();
@@ -226,17 +241,41 @@ namespace QuantumCircuitTransformation
             ConsoleLayout.Footer();
         }
 
-        private static void ExecuteInitialMapping()
+        private static void TestAvailableInitialMappings()
         {
-            ConsoleLayout.Header("Initial mapping");
+            ConsoleLayout.Header("Initial mapping test");
 
-            ArchitectureGraph a = QuantumDevices.IBM_Q20;
-            QuantumCircuit c = CircuitGenerator.RandomCircuit(100, 20);
+            int nbRep = 100;
+            int nbQubits = 20;
+            int nbGates = 7500;
+            ArchitectureGraph architecture = QuantumDevices.IBM_Q20;
+            
+            double[] totalCost = new double[AllAlgorithms.InitialMappings.Count()];
+            double[] titotalTime = new double[AllAlgorithms.InitialMappings.Count()];
 
-            Globals.Timer.Restart();
-            LoadedAlgorithms.InitialMapping.Execute(a, c);
-            Globals.Timer.Stop();
-            Console.WriteLine("In total are {0} milliseconds taken to find an initial mapping.", Globals.Timer.Elapsed.TotalMilliseconds);
+            for (int i = 0; i < nbRep; i++)
+            {
+                Console.WriteLine("Iteration " + (i + 1));
+                QuantumCircuit circuit = CircuitGenerator.RandomCircuit(nbGates, nbQubits);
+                for (int j = 0; j < AllAlgorithms.InitialMappings.Count(); j++)
+                {
+                    Globals.Timer.Restart();
+                    (_, double cost) = AllAlgorithms.InitialMappings[j].Execute(architecture, circuit);
+                    Globals.Timer.Stop();
+                    totalCost[j] += cost;
+                    titotalTime[j] += Globals.Timer.Elapsed.TotalMilliseconds;
+                    //Console.WriteLine("cost = {1} - time = {2} ({0})", AllAlgorithms.InitialMappings[j].Name(), cost, Globals.Timer.Elapsed.TotalMilliseconds);
+                }
+
+            }
+
+            for (int i = 0; i < AllAlgorithms.InitialMappings.Count(); i++)
+            {
+                Console.WriteLine();
+                Console.WriteLine(AllAlgorithms.InitialMappings[i].Name());
+                Console.WriteLine(AllAlgorithms.InitialMappings[i].Parameters());
+                Console.WriteLine("Result: Cost = {0} - time = {1}", totalCost[i] / nbRep, titotalTime[i] / nbRep);
+            }
 
             ConsoleLayout.Footer();
         }

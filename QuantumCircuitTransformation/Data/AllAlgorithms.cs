@@ -23,8 +23,8 @@ namespace QuantumCircuitTransformation.Data
         /// </summary>
         public static List<InitialMapping> InitialMappings = new List<InitialMapping>
         {
+            new LAHC(100, 10, 7500),
             new SimulatedAnnealing(100, 1, 0.95, 100),
-            new TabuSearch(50, 5, 1000),
         };
 
         /// <summary>

@@ -18,10 +18,10 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
     ///    to the current temperature, which is declined during the algorithm. 
     ///    
     /// @author:   Louis Carpentier
-    /// @version:  1.0
+    /// @version:  1.2
     /// 
     /// </summary>
-    public class SimulatedAnnealing : InitialMapping, IEquatable<SimulatedAnnealing>
+    public class SimulatedAnnealing : InitialMapping
     {
         /// <summary>
         /// Variable referring to the maximum temperature during the algorithm. 
@@ -60,15 +60,40 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         /// qimulated annealing. 
         /// </summary>
         /// <returns>
-        /// True if and only if the parameters are equal of the given simulated 
-        /// annealing and this simulated annealing. 
+        /// True if and only if the given object is not null, has the type 
+        /// SimulatedAnnealing and the parameters of the given simulated 
+        /// annealing and this simulated annealing have equal parameters. 
         /// </returns>
-        public bool Equals(SimulatedAnnealing other)
+        public override bool Equals(object other)
         {
-            return MaxTemperature == other.MaxTemperature &&
-                       MinTemperature == other.MinTemperature &&
-                       CoolingFactor == other.CoolingFactor &&
-                       NbRepetitions == other.NbRepetitions;
+            Console.WriteLine("Reached");
+            if (other == null) return false;
+            try
+            {
+                SimulatedAnnealing o = (SimulatedAnnealing)other;
+                return MaxTemperature == o.MaxTemperature &&
+                       MinTemperature == o.MinTemperature &&
+                       CoolingFactor == o.CoolingFactor &&
+                       NbRepetitions == o.NbRepetitions;
+            } catch (InvalidCastException)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Returns the hashcode of this simulated annealing. 
+        /// </summary>
+        /// <returns>
+        /// A prime factorisation based on the parameters of this simulated
+        /// annealing algorithm. 
+        /// </returns>
+        public override int GetHashCode()
+        {
+            return (int)(Math.Pow(2, MaxTemperature)) *
+                   (int)(Math.Pow(3, MinTemperature)) *
+                   (int)(Math.Pow(5, CoolingFactor*100)) *
+                   (int)(Math.Pow(7, NbRepetitions));
         }
 
         /// <summary>
@@ -92,52 +117,44 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         }
 
 
-
-
         /// <summary>
         /// Execute simulated annealing to find a mapping for the given circuit, which
         /// fits on the given architecture. 
         /// (See <see cref="InitialMapping.Execute(ArchitectureGraph, QuantumCircuit)"/>)
         /// </summary>
-        public override Mapping Execute(ArchitectureGraph architecure, QuantumCircuit circuit)
+        public override (Mapping, double) Execute(ArchitectureGraph architecure, QuantumCircuit circuit)
         {
-            // SetGates(architecure, circuit);
             int[] bestMapping = GetRandomMapping(architecure.NbNodes);
+            double bestCost = GetMappingCost(bestMapping, architecure, circuit);
+
             int[] mapping = new int[bestMapping.Length];
             Array.Copy(bestMapping, mapping, bestMapping.Length);
-            double bestCost = GetMappingCost(bestMapping, architecure, circuit);
-            double cost = bestCost * 1.5;
+            double cost = bestCost;
 
             for (double t = MaxTemperature; t > MinTemperature; t *= CoolingFactor)
             {
-                //Console.WriteLine("------------------{0}------------------", t);
                 for (int i = 0; i < NbRepetitions; i++)
                 {
-                    //Console.WriteLine("Best: {0} - Cost: {1}", bestCost, cost);
-                    (int[] newMapping, int swap1, int swap2) = PerturbatMapping(mapping);
-                    //double newCost = CalculateCostDifference(cost, swap1, swap2, architecure, circuit);
+                    int[] newMapping = PerturbatMapping(mapping);
                     double newCost = GetMappingCost(newMapping, architecure, circuit);
+
+                    //Console.WriteLine("Best: {0} - Cost: {1} - newCost: {2}", bestCost, cost, newCost);
 
                     if (newCost < bestCost)
                     {
+                        Array.Copy(newMapping, bestMapping, architecure.NbNodes);
                         bestCost = newCost;
-                        bestMapping = newMapping;
                     }
 
-                    if (newCost < cost)
+                    if (newCost < cost || DoDownhillMove(cost, newCost, t))
                     {
+                        Array.Copy(newMapping, mapping, architecure.NbNodes);
                         cost = newCost;
-                        mapping = newMapping;
-                    }
-                    else if (DoDownhillMove(cost, newCost, t))
-                    {
-                        cost = newCost;
-                        mapping = newMapping;
                     }
                 }
             }
-            Console.WriteLine("Best: {0}", bestCost);
-            return new Mapping(bestMapping);
+            //Console.WriteLine("Best: {0}", bestCost);
+            return (new Mapping(bestMapping), bestCost);
         }
 
         /// <summary>
@@ -148,11 +165,12 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         /// <param name="temperature"> The current temperature in the algorithm. </param>
         /// <returns>
         /// True is returened with a probability equal to: 
-        ///    exp[(cost - newCost) / temperature]
+        ///       exp[(cost - newCost) / temperature]
         /// </returns>
         private bool DoDownhillMove(double cost, double newCost, double temperature)
         {
             return Globals.Random.NextDouble() < Math.Exp((cost - newCost) / temperature);
         }
+
     }
 }

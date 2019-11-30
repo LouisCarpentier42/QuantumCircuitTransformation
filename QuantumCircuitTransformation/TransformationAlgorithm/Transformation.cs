@@ -16,6 +16,9 @@ namespace QuantumCircuitTransformation.TransformationAlgorithm
 
         public abstract string Name();
 
+        /// <summary>
+        /// See <see cref="Algorithm.Parameters"/>.
+        /// </summary>
         public abstract string Parameters();
 
     }
