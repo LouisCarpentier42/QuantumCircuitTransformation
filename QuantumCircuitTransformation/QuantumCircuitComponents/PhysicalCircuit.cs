@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 
@@ -13,7 +14,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///  @version:  1.0
+    ///     @version:  1.2
     /// </remarks>
     public class PhysicalCircuit : QuantumCircuit
     {
@@ -34,6 +35,21 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         }
 
         /// <summary>
+        /// Initialise a new physical circuit with given gates. 
+        /// </summary>
+        /// <param name="layers"> The gates of this physical circuit, divided in layers. </param>
+        /// <param name="layerSize"> The size of each layer in this physical circuit.. </param>
+        /// <param name="nbLayers"> The number of layers in this physical circuit.. </param>
+        /// <param name="nbGates"> The number of gates in this physical circuit.. </param>
+        /// <param name="nbQubits"> The number of qubits in this physical circuit. </param>
+        /// <param name="architectureGraph"> The architecture for this physical circuit. </param>
+        protected PhysicalCircuit(List<List<CNOT>> layers, List<int> layerSize, int nbLayers, int nbGates, int nbQubits, ArchitectureGraph architectureGraph) : 
+            base(layers, layerSize, nbLayers, nbGates, nbQubits)
+        {
+            ArchitectureGraph = architectureGraph;
+        }
+
+        /// <summary>
         /// Adds the given CNOT gate only if it can be exucuted on the architecture of 
         /// the physical device. 
         /// </summary>
@@ -42,6 +58,22 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         {
             if (ArchitectureGraph.CanExecuteCNOT(cnot))
                 base.AddGate(cnot);
+        }
+
+        /// <summary>
+        /// Clone this physical circuit. 
+        /// </summary>
+        /// <returns>
+        /// A new physical circuit with the same properties of this circuit.
+        /// </returns>
+        public new PhysicalCircuit Clone()
+        {
+            List<List<CNOT>> layersCloned = new List<List<CNOT>>(NbLayers);
+            for (int i = 0; i < NbLayers; i++)
+                layersCloned[i] = Layers[i].Select(cnot => cnot.Clone()).ToList();
+            List<int> layerSizeCloned = LayerSize.GetRange(0, NbLayers);
+            ArchitectureGraph architectureGraphCloned = ArchitectureGraph.Clone(); 
+            return new PhysicalCircuit(layersCloned, layerSizeCloned, NbLayers, NbGates, NbQubits, architectureGraphCloned);
         }
     }
 }

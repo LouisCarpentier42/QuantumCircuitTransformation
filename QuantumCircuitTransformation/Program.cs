@@ -53,31 +53,13 @@ namespace QuantumCircuitTransformation
             HeuristicSearch hs = new HeuristicSearch();
             //hs.Execute();
 
-            int nbNodes = 1000;
-            List<Tuple<int, int>> edges = new List<Tuple<int, int>>();
-            double density = 0.5;
-
-            Globals.Timer.Restart();
-            for (int i = 0; i < nbNodes - 1; i++)
-            {
-                for (int j = i + 1; j < nbNodes - 1; j++)
-                {
-                    if (Globals.Random.NextDouble() < density)
-                    {
-                        edges.Add(new Tuple<int, int>(i, j));
-                        //Console.WriteLine(edges.Last());
-                    }
-                }
-            }
-            Globals.Timer.Stop();
-            Console.WriteLine("Graph generated in {0} milliseconds.", Globals.Timer.Elapsed.TotalMilliseconds);
 
 
-            Globals.Timer.Restart();
-            int[,] paths = ShortestPathFinder.Dijkstra(nbNodes, edges);
-            Globals.Timer.Stop();
-            Console.WriteLine("Shortest paths found in {0} milliseconds.", Globals.Timer.Elapsed.TotalMilliseconds);
-            
+
+
+
+
+
 
             //for(int i = 0; i < nbNodes; i++)
             //{
@@ -191,22 +173,22 @@ namespace QuantumCircuitTransformation
             {
                 int index = Convert.ToInt32(Console.ReadLine());
                 Type type = initialMappingAlgorithms.ElementAt(index - 1);
-                
+                ConstructorInfo[] constructors = type.GetConstructors().ToList().FindAll(c => c.IsPublic).ToArray();
                 ConstructorInfo constructorInfo;
-                if (type.GetConstructors().Count() == 1)
+                if (constructors.Count() == 1)
                 {
-                    constructorInfo = type.GetConstructors()[0];
+                    constructorInfo = constructors[0];
                 }
                 else
                 {
                     Console.WriteLine();
-                    for (int i = 0; i < type.GetConstructors().Count(); i++)
+                    for (int i = 0; i < constructors.Count(); i++)
                     {
-                        Console.WriteLine(i + 1 + ": " + type.Name + " " + type.GetConstructors()[i].ToString().Substring(10));
+                        Console.WriteLine(i + 1 + ": " + type.Name + " " + constructors[i].ToString().Substring(10));
                     }
                     Console.Write("Choice: ");
                     int index2 = Convert.ToInt32(Console.ReadLine());
-                    constructorInfo = type.GetConstructors()[index2-1];
+                    constructorInfo = constructors[index2-1];
                 }
 
                 Console.WriteLine();

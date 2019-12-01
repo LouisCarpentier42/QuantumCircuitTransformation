@@ -42,7 +42,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         /// <summary>
         /// A variable to keep track of the number of qubits used in this circuit.
         /// </summary>
-        private int NbQubits;
+        public int NbQubits { get; private set; }
 
 
         /// <summary>
@@ -56,6 +56,24 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
             NbGates = 0;
             NbQubits = 0;
         }
+
+        /// <summary>
+        /// Initialise a new quantum circuit with given gates. 
+        /// </summary>
+        /// <param name="layers"> The gates of this quantum circuit, divided in layers. </param>
+        /// <param name="layerSize"> The size of each layer. </param>
+        /// <param name="nbLayers"> The number of layers. </param>
+        /// <param name="nbGates"> The number of gates. </param>
+        /// <param name="nbQubits"> The number of qubits in this </param>
+        protected QuantumCircuit(List<List<CNOT>> layers, List<int> layerSize, int nbLayers, int nbGates, int nbQubits)
+        {
+            Layers = layers;
+            LayerSize = layerSize;
+            NbLayers = nbLayers;
+            NbGates = nbGates;
+            NbQubits = nbQubits;
+        }
+
 
         /// <summary>
         /// Adds a CNOT gate at the end of this quantum circuit. 
@@ -132,6 +150,21 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
                 for (int j = 0; j < Layers[i].Count; j++)
                     codeRepresenation += "\n" + Layers[i][j];
             return codeRepresenation;
+        }
+
+        /// <summary>
+        /// Clone this quantum circuit. 
+        /// </summary>
+        /// <returns>
+        /// A new quantum circuit with the properties of this quantum circuit. 
+        /// </returns>
+        public QuantumCircuit Clone()
+        {
+            List<List<CNOT>> layersCloned = new List<List<CNOT>>(NbLayers);
+            for (int i = 0; i < NbLayers; i++)
+                layersCloned[i] = Layers[i].Select(cnot => cnot.Clone()).ToList();
+            List<int> layerSizeCloned = LayerSize.GetRange(0, NbLayers);
+            return new QuantumCircuit(layersCloned, layerSizeCloned, NbLayers, NbGates, NbQubits);
         }
     }
 }

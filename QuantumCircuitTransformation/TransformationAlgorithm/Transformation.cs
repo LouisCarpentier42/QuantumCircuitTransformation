@@ -44,9 +44,12 @@ namespace QuantumCircuitTransformation.TransformationAlgorithm
         /// Moves all gates which are executable after mapping the ID's 
         /// from the quantum circuit to the physical circuit. 
         /// </summary>
-        protected void ExecuteAllValidGates(Mapping mapping, PhysicalCircuit physicalCircuit, QuantumCircuit circuit)
+        protected (PhysicalCircuit, QuantumCircuit) ExecuteAllValidGates(Mapping mapping, PhysicalCircuit physicalCircuit, QuantumCircuit circuit)
         {
+            //PhysicalCircuit physicalCircuitResult = 
+
             physicalCircuit.AddGates(circuit.RemoveAllExecutableGates(mapping, physicalCircuit.ArchitectureGraph));
+            throw new NotImplementedException();
         }
 
 

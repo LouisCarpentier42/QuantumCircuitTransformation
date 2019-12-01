@@ -51,6 +51,20 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
         }
 
         /// <summary>
+        /// Initialise a new architecture graph with given edges, number of nodes
+        /// and cnot distances. 
+        /// </summary>
+        /// <param name="edges"> The edges for this architecture. </param>
+        /// <param name="nbNodes"> The number of nodes for this architecture. </param>
+        /// <param name="cnotDistance"> The cnot distances for this architecture. </param>
+        protected ArchitectureGraph(List<Tuple<int,int>> edges, int nbNodes, int[,] cnotDistance)
+        {
+            Edges = edges;
+            NbNodes = nbNodes;
+            CNOTDistance = cnotDistance;
+        }
+
+        /// <summary>
         /// Normalise all the edges in this architecture graph. This is making 
         /// sure that all no nodes are skipped (and thus never used) while some
         /// greater ID's are used. 
@@ -90,6 +104,34 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
             NbNodes = Edges.Max(x => Math.Max(x.Item1, x.Item2)) + 1;
         }
 
+        /// <summary>
+        /// Clone this architecture graph. 
+        /// </summary>
+        public ArchitectureGraph Clone()
+        {
+            List<Tuple<int, int>> edgesCloned = Edges.GetRange(0, Edges.Count());
+            int[,] cnotDistanceCloned = new int[NbNodes, NbNodes];
+            for (int i = 0; i < NbNodes; i++)
+            {
+                for (int j = i + 1; j < NbNodes; j++)
+                {
+                    cnotDistanceCloned[i, j] = CNOTDistance[i, j];
+                    cnotDistanceCloned[j, i] = CNOTDistance[j, i];
+                }
+            }
+            return Clone(edgesCloned, NbNodes, cnotDistanceCloned);
+        }
+
+        /// <summary>
+        /// Clone a new architecture graph with the given properties. 
+        /// </summary>
+        /// <param name="edges"> The edges for the architecture. </param>
+        /// <param name="nbNodes"> The number of nodes for the architecture. </param>
+        /// <param name="cnotDistance"> The cnot distances for the architecture. </param>
+        /// <returns>
+        /// A new architecture graph with the given properties. 
+        /// </returns>
+        protected abstract ArchitectureGraph Clone(List<Tuple<int, int>> edges, int nbNodes, int[,] cnotDistance);
 
         /// <summary>
         /// Check whether or not a CNOT gate with given control and target qubit 

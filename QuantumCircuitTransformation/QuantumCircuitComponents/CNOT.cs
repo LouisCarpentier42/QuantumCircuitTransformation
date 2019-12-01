@@ -13,7 +13,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.0
+    ///     @version:  1.1
     /// </remarks>
     public class CNOT
     {
@@ -30,12 +30,20 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         /// <summary>
         /// Initialise a new CNOT gate with given control and target qubit.
         /// </summary>
-        /// <param name="control"> The control qubit for this CNOT gate. </param>
-        /// <param name="target"> The target qubit for this CNOT gate. </param>
-        public CNOT(int control, int target)
+        /// <param name="controlQubit"> The control qubit for this CNOT gate. </param>
+        /// <param name="targetQubit"> The target qubit for this CNOT gate. </param>
+        public CNOT(int controlQubit, int targetQubit)
         {
-            ControlQubit = control;
-            TargetQubit = target;
+            ControlQubit = controlQubit;
+            TargetQubit = targetQubit;
+        }
+
+        /// <summary>
+        /// Clones this CNOT gate. 
+        /// </summary>
+        public CNOT Clone()
+        {
+            return new CNOT(ControlQubit, TargetQubit);
         }
 
         /// <summary>
