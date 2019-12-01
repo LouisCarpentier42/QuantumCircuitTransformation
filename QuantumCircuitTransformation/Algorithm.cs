@@ -5,14 +5,13 @@ using System.Text;
 namespace QuantumCircuitTransformation
 {
     /// <summary>
-    /// 
-    /// Algorithm:
-    ///    An interface for all the algorithms which will be implemented. 
-    /// 
-    /// @author:   Louis Carpentier
-    /// @version:  1.1
-    /// 
+    ///     Algorithm:
+    ///         An interface for all the algorithms which will be implemented. 
     /// </summary>
+    /// <remarks>
+    ///     @author:   Louis Carpentier
+    ///     @version:  1.1
+    /// </remarks>
     public interface Algorithm
     {
         /// <summary>

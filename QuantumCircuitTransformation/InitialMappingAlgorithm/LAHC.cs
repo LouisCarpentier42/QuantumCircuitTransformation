@@ -21,7 +21,7 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         /// <summary>
         /// Variable referring the late acceptance time. 
         /// </summary>
-        public readonly int LateAcceptanceSize;
+        public readonly int LateAcceptanceTime;
         /// <summary>
         /// Variable referring to the number of tabu moves. 
         /// </summary>
@@ -37,38 +37,68 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         public readonly int DiversificationRate;
 
 
-        public LAHC(int lateAcceptanceSize, int nbTabus, int maxNbIterations, int diversificationRate)
+        public LAHC(int lateAcceptanceTime, int nbTabus, int maxNbIterations, int diversificationRate)
         {
-            if (IsValidLateAcceptanceSize(lateAcceptanceSize))
-                LateAcceptanceSize = lateAcceptanceSize;
+            if (IsValidLateAcceptanceTime(lateAcceptanceTime))
+                LateAcceptanceTime = lateAcceptanceTime;
             else throw new InvalidParameterException();
+
             if (IsValidNbTabus(nbTabus))
                 NbTabus = nbTabus;
             else throw new InvalidParameterException();
+
             if (IsValidMaxNbIterations(maxNbIterations))
                 MaxNbIterations = maxNbIterations;
             else throw new InvalidParameterException();
+
             if (IsValidDiversificationRate(diversificationRate))
                 DiversificationRate = diversificationRate;
             else throw new InvalidParameterException();
         }
 
-        public static bool IsValidLateAcceptanceSize(int lateAcceptanceSize)
+        /// <summary>
+        /// Checks if the given late acceptance time is valid.
+        /// </summary>
+        /// <param name="lateAcceptanceTime"> The late acceptance time to check. </param>
+        /// <returns>
+        /// True if and only if the given late acceptance time is valid. 
+        /// </returns>
+        public static bool IsValidLateAcceptanceTime(int lateAcceptanceTime)
         {
-            return lateAcceptanceSize > 0;
+            return lateAcceptanceTime > 0;
         }
 
+        /// <summary>
+        /// Checks if the given number of tabus is valid.
+        /// </summary>
+        /// <param name="nbTabus"> The number of tabus to check. </param>
+        /// <returns>
+        /// True if and only if the given number of tabus is greater then 0.
+        /// </returns>
         public static bool IsValidNbTabus(int nbTabus)
         {
             return nbTabus > 0;
         }
 
+        /// <summary>
+        /// Checks if the given maximum number of iterations is valid.
+        /// </summary>
+        /// <param name="maxNbIterations"> The maximum numbers of iterations to check. </param>
+        /// <returns>
+        /// True if and only if the given maximum number of iterations is greater then 0.
+        /// </returns>
         public static bool IsValidMaxNbIterations(int maxNbIterations)
         {
             return maxNbIterations > 0;
         }
-        
 
+        /// <summary>
+        /// Checks if the given diversification rate is valid.
+        /// </summary>
+        /// <param name="diversificationRate"> The diversification rate to check. </param>
+        /// <returns>
+        /// True if and only if the given diversification rate is greater then 0.
+        /// </returns>
         public static bool IsValidDiversificationRate(int diversificationRate)
         {
             return diversificationRate > 0;
@@ -83,7 +113,7 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
             try
             {
                 LAHC o = (LAHC)other;
-                return LateAcceptanceSize == o.LateAcceptanceSize &&
+                return LateAcceptanceTime == o.LateAcceptanceTime &&
                        NbTabus == o.NbTabus &&
                        MaxNbIterations == o.MaxNbIterations &&
                        DiversificationRate == o.DiversificationRate;
@@ -100,7 +130,7 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         public override int GetHashCode()
         {
             return 
-                (int)(Math.Pow(2, LateAcceptanceSize)) *
+                (int)(Math.Pow(2, LateAcceptanceTime)) *
                 (int)(Math.Pow(3, NbTabus)) *
                 (int)(Math.Pow(5, MaxNbIterations)) *
                 (int)(Math.Pow(7, DiversificationRate));
@@ -120,7 +150,7 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         public override string Parameters()
         {
             return
-                " > The late acceptance size: " + LateAcceptanceSize + '\n' +
+                " > The late acceptance size: " + LateAcceptanceTime + '\n' +
                 " > The number of tabus: " + NbTabus + '\n' +
                 " > The maximal number of iterations: " + MaxNbIterations;
         }
@@ -154,8 +184,8 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
             Array.Copy(BestMapping, CurrentMapping, BestMapping.Length);
             CurrentCost = BestCost;
 
-            LateAcceptanceList = new double[LateAcceptanceSize];
-            for (int i = 0; i < LateAcceptanceSize; i++)
+            LateAcceptanceList = new double[LateAcceptanceTime];
+            for (int i = 0; i < LateAcceptanceTime; i++)
                 LateAcceptanceList[i] = CurrentCost;
 
             TabuList = new Queue<int[]>();
@@ -170,12 +200,12 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
             int[] newMapping;
             for (int iteration = 0; iteration < MaxNbIterations; iteration++)
             {
-                if (iteration % 500 == 499)
+                if (iteration % DiversificationRate == DiversificationRate - 1)
                     newMapping = Diversificate(CurrentMapping);
                 else
                     newMapping = PerturbatMapping(CurrentMapping);
                 double newCost = GetMappingCost(newMapping, architecture, circuit);
-                int LateAcceptanceID = iteration % LateAcceptanceSize;
+                int LateAcceptanceID = iteration % LateAcceptanceTime;
 
                 if (!TabuList.Contains(newMapping))
                 {
