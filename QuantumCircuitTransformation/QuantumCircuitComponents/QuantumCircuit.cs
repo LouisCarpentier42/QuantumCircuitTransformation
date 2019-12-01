@@ -160,11 +160,23 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         /// </returns>
         public QuantumCircuit Clone()
         {
+            (List<List<CNOT>> layersCloned, List<int> layerSizeCloned) = CopyProperties();
+            return new QuantumCircuit(layersCloned, layerSizeCloned, NbLayers, NbGates, NbQubits);
+        }
+
+        /// <summary>
+        /// Copy the properties of this quantum circuit. 
+        /// </summary>
+        /// <returns>
+        /// A copy of the CNOT gates and of the sizes of each layer. 
+        /// </returns>
+        protected (List<List<CNOT>>, List<int>) CopyProperties()
+        {
             List<List<CNOT>> layersCloned = new List<List<CNOT>>(NbLayers);
             for (int i = 0; i < NbLayers; i++)
                 layersCloned[i] = Layers[i].Select(cnot => cnot.Clone()).ToList();
             List<int> layerSizeCloned = LayerSize.GetRange(0, NbLayers);
-            return new QuantumCircuit(layersCloned, layerSizeCloned, NbLayers, NbGates, NbQubits);
+            return (layersCloned, layerSizeCloned);
         }
     }
 }

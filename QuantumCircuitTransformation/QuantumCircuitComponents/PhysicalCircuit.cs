@@ -68,12 +68,8 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         /// </returns>
         public new PhysicalCircuit Clone()
         {
-            List<List<CNOT>> layersCloned = new List<List<CNOT>>(NbLayers);
-            for (int i = 0; i < NbLayers; i++)
-                layersCloned[i] = Layers[i].Select(cnot => cnot.Clone()).ToList();
-            List<int> layerSizeCloned = LayerSize.GetRange(0, NbLayers);
-            ArchitectureGraph architectureGraphCloned = ArchitectureGraph.Clone(); 
-            return new PhysicalCircuit(layersCloned, layerSizeCloned, NbLayers, NbGates, NbQubits, architectureGraphCloned);
+            (List<List<CNOT>> layersCloned, List<int> layerSizeCloned) = CopyProperties();
+            return new PhysicalCircuit(layersCloned, layerSizeCloned, NbLayers, NbGates, NbQubits, ArchitectureGraph);
         }
     }
 }
