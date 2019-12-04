@@ -104,7 +104,7 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         {
             return diversificationRate > 0;
         }
-
+       
         /// <summary>
         /// See <see cref="Algorithm.Equals(object)"/>.
         /// </summary>
