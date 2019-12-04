@@ -1,24 +1,31 @@
 ﻿using QuantumCircuitTransformation.QuantumCircuitComponents;
+using System;
+using System.Linq;
 
-namespace QuantumCircuitTransformation.InitialMappingAlgorithm
+namespace QuantumCircuitTransformation.MappingPerturbation 
 {
     /// <summary>
-    /// 
-    /// Mapping:
-    ///     A class to keep track of a mapping. A mapping is a 
-    ///     bijection from [0..n] to [0..n].
-    /// 
-    /// @author:   Louis Carpenier
-    /// @version:  1.3
-    /// 
+    ///     Mapping:
+    ///         A class to keep track of a mapping. A mapping is a 
+    ///         bijection from [0..n] to [0..n] where n is the number
+    ///         of elements to map.
     /// </summary>
-    public class Mapping
+    /// <remarks>
+    ///     @author:   Louis Carpenier
+    ///     @version:  1.4   
+    ///  </remarks>
+    public class Mapping : IEquatable<Mapping>
     {
         /// <summary>
         /// Variable referring to a mapping. 
         /// </summary>
         public int[] Map { get; private set; }
+        /// <summary>
+        /// Variable referring to the number of qubits of this mapping. 
+        /// </summary>
+        public readonly int NbQubits;
 
+        
         /// <summary>
         /// Initialise a new mapping with given mapping array. 
         /// </summary>
@@ -26,6 +33,7 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         public Mapping(int[] map)
         {
             Map = map;
+            NbQubits = map.Count();
         }
 
         /// <summary>
@@ -37,7 +45,7 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         {
             int temp = Map[qubit1];
             Map[qubit1] = Map[qubit2];
-            Map[qubit2] = temp;
+            Map[qubit2] = temp; 
         }
 
         /// <summary>
@@ -54,6 +62,19 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         }
 
         /// <summary>
+        /// Clones this mapping.
+        /// </summary>
+        /// <returns>
+        /// A clone of this mapping with the same value. 
+        /// </returns>
+        public Mapping Clone()
+        {
+            int[] clonedMapArray = new int[Map.Length];
+            Array.Copy(Map, clonedMapArray, Map.Length);
+            return new Mapping(clonedMapArray);
+        }
+
+        /// <summary>
         /// Gives a string representation of this mapping. 
         /// </summary>
         /// <returns>
@@ -67,6 +88,20 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
             for (int i = 1; i < Map.Length; i++)
                 result += ", " + Map[i];
             return result + "]";
+        }
+
+        /// <summary>
+        /// Checks if this mapping equals a given mapping. 
+        /// </summary>
+        /// <param name="other"> The mapping to compare. </param>
+        /// <returns>
+        /// True if and only if the mapping array and the number of qubits
+        /// of this mapping are equal to those of the other mapping. 
+        /// </returns>
+        public bool Equals(Mapping other)
+        {
+            return Map.SequenceEqual(other.Map) &&
+                   NbQubits == other.NbQubits;
         }
     }
 }

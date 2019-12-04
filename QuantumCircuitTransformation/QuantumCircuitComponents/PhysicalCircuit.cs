@@ -14,7 +14,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.2
+    ///     @version:  1.3
     /// </remarks>
     public class PhysicalCircuit : QuantumCircuit
     {

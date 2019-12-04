@@ -105,6 +105,51 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
         }
 
         /// <summary>
+        /// Sets the cnot distances of this architecture graph. 
+        /// </summary>
+        private void SetCNOTDistance()
+        {
+            CNOTDistance = new int[NbNodes, NbNodes];
+            int[,] pathLength = ShortestPathFinder.Dijkstra(NbNodes, Edges);
+            for (int i = 0; i < NbNodes; i++)
+                for (int j = 0; j < NbNodes; j++)
+                    CNOTDistance[i, j] = Math.Max(0, NbOfCnotGatesPerSwap() * (pathLength[i, j] - 1));
+        }
+
+
+        /// <summary>
+        /// Returns the number of swap gates that is needed to replace one 
+        /// swap gate in this architecture. 
+        /// </summary>
+        public abstract int NbOfCnotGatesPerSwap();
+
+        /// <summary>
+        /// Check whether or not a CNOT gate with given control and target qubit 
+        /// can be executed on this architecture. 
+        /// </summary>
+        /// <param name="cnot"> The CNOT gate to check. </param>
+        /// <returns>
+        /// True if and only if there exists a connection in the architecture 
+        /// such that <paramref name="cnot"/> can be executed. 
+        /// </returns>
+        public abstract bool CanExecuteCNOT(CNOT cnot);
+
+        public List<Tuple<int,int>> GetAllTouchingEdges(List<CNOT> gates)
+        {
+            List<Tuple<int, int>> touchingEdges = new List<Tuple<int, int>>();
+            for (int i = 0; i < Edges.Count(); i++)
+            {
+                if (gates.Any( cnot => cnot.ControlQubit == Edges[i].Item1 || cnot.ControlQubit == Edges[i].Item2 ||
+                                       cnot.TargetQubit == Edges[i].Item1 || cnot.TargetQubit == Edges[i].Item2))
+                    touchingEdges.Add(Edges[i]);
+            }
+            return touchingEdges;
+        }
+
+        //public abstract List<Tuple<int, int>> GetInverslyExecutableEdges();
+
+
+        /// <summary>
         /// Clone this architecture graph. 
         /// </summary>
         public ArchitectureGraph Clone()
@@ -132,31 +177,5 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
         /// A new architecture graph with the given properties. 
         /// </returns>
         protected abstract ArchitectureGraph Clone(List<Tuple<int, int>> edges, int nbNodes, int[,] cnotDistance);
-
-        /// <summary>
-        /// Check whether or not a CNOT gate with given control and target qubit 
-        /// can be executed on this architecture. 
-        /// </summary>
-        /// <param name="cnot"> The CNOT gate to check. </param>
-        /// <returns>
-        /// True if and only if there exists a connection in the architecture 
-        /// such that <paramref name="cnot"/> can be executed. 
-        /// </returns>
-        public abstract bool CanExecuteCNOT(CNOT cnot);
-
-
-
-        // OPTIMISATION: Make the CNOT distance more accurate. 
-
-        private void SetCNOTDistance()
-        {
-            CNOTDistance = new int[NbNodes, NbNodes];
-            int[,] pathLength = ShortestPathFinder.Dijkstra(NbNodes, Edges);
-            for (int i = 0; i < NbNodes; i++)
-                for (int j = 0; j < NbNodes; j++)
-                    CNOTDistance[i, j] = ComputeCNOTDistance(pathLength[i, j]);
-        }
-
-        protected abstract int ComputeCNOTDistance(int pathLenght);
     }
 }

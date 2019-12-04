@@ -1,4 +1,5 @@
-﻿using QuantumCircuitTransformation.Data;
+﻿using QuantumCircuitTransformation.MappingPerturbation;
+using QuantumCircuitTransformation.Data;
 using QuantumCircuitTransformation.QuantumCircuitComponents;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 using System;
@@ -51,9 +52,9 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         /// <returns>
         /// A mapping in which each of the qubit ID's are mapped on a random ID. 
         /// </returns>
-        public static int[] GetRandomMapping(int NbNodes)
+        public static Mapping GetRandomMapping(int NbNodes)
         {
-            return Enumerable.Range(0, NbNodes).OrderBy(i => Globals.Random.Next()).ToArray();
+            return new Mapping(Enumerable.Range(0, NbNodes).OrderBy(i => Globals.Random.Next()).ToArray());
         }
 
 
@@ -137,17 +138,23 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         */
 
 
-
-        protected (int, int) GetSwap(int nbNodes)
+        /// <summary>
+        /// Returns a new swap perturbation for the given mapping.
+        /// </summary>
+        /// <param name="mapping"> The mapping for the swap. </param>
+        /// <returns>
+        /// A random swap operation for the given mapping.
+        /// </returns>
+        protected Swap GetSwapPerturbation(Mapping mapping)
         {
-            int swapQubit1 = Globals.Random.Next(nbNodes);
-            int swapQubit2;
-            do swapQubit2 = Globals.Random.Next(nbNodes); while (swapQubit1 == swapQubit2);
-            return (swapQubit1, swapQubit2);
+            int swapQubit1, swapQubit2;
+            swapQubit1 = Globals.Random.Next(mapping.NbQubits);
+            do swapQubit2 = Globals.Random.Next(mapping.NbQubits); while (swapQubit1 == swapQubit2);
+            return new Swap(mapping, swapQubit1, swapQubit2);
         }
 
 
-        public static int[] PerturbatMapping(int[] mapping)
+        public static int[] PerturbateMapping(int[] mapping)
         {
             int[] perturbation = new int[mapping.Length];
             Array.Copy(mapping, perturbation, mapping.Length);
@@ -165,7 +172,7 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         private const int MAX_NB_GATES_IN_COST = 10000;
 
 
-        public static double GetMappingCost(int[] mapping, ArchitectureGraph architecture, QuantumCircuit circuit)
+        public static double GetMappingCost(Mapping mapping, ArchitectureGraph architecture, QuantumCircuit circuit)
         {
 
             int NbGatesAllowed = Math.Min(circuit.NbGates, MAX_NB_GATES_IN_COST);
@@ -186,7 +193,7 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
                 weight = 1 / (CurrentLayer / p1 + p2);
                 foreach (CNOT gate in circuit.Layers[CurrentLayer])
                 {
-                    cost += architecture.CNOTDistance[mapping[gate.ControlQubit], mapping[gate.TargetQubit]];
+                    cost += architecture.CNOTDistance[mapping.Map[gate.ControlQubit], mapping.Map[gate.TargetQubit]];
                 }
                 NbOfGatesLookedAt += circuit.LayerSize[CurrentLayer++];
             }

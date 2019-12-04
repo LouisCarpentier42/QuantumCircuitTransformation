@@ -1,4 +1,5 @@
-﻿using QuantumCircuitTransformation.InitialMappingAlgorithm;
+﻿using QuantumCircuitTransformation.MappingPerturbation;
+using QuantumCircuitTransformation.InitialMappingAlgorithm;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.3
+    ///     @version:  1.4
     /// </remarks>
     public class QuantumCircuit
     {

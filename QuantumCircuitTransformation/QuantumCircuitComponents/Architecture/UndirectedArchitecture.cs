@@ -11,7 +11,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.1
+    ///     @version:  1.2
     /// </remarks>
     public class UndirectedArchitecture : ArchitectureGraph
     {
@@ -47,17 +47,15 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
         }
 
         /// <summary>
-        /// Compute the CNOT distance for two nodes with given pathlength
-        /// between them. 
+        /// See <see cref="ArchitectureGraph.NbOfCnotGatesPerSwap"/>.
         /// </summary>
-        /// <param name="pathLength"> The pathlength between the two nodes. </param>
         /// <returns>
-        /// For every swap gate are 3 extra gates needed, thus the pathlength
-        /// minus one and times 3.
+        /// A swap gate can be replaced by three cnot gates. First a cnot gate from a
+        /// to be, then a cnot gate from b to a and finally a cnot gate from a to b. 
         /// </returns>
-        protected override int ComputeCNOTDistance(int pathLength)
+        public override int NbOfCnotGatesPerSwap()
         {
-            return Math.Max(0, 3 * (pathLength - 1));
+            return 3;
         }
 
         /// <summary>

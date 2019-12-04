@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using QuantumCircuitTransformation.MappingPerturbation;
 using QuantumCircuitTransformation.InitialMappingAlgorithm;
 using QuantumCircuitTransformation.QuantumCircuitComponents;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
@@ -44,22 +45,42 @@ namespace QuantumCircuitTransformation.TransformationAlgorithm
         /// Moves all gates which are executable after mapping the ID's 
         /// from the quantum circuit to the physical circuit. 
         /// </summary>
-        protected (PhysicalCircuit, QuantumCircuit) ExecuteAllValidGates(Mapping mapping, PhysicalCircuit physicalCircuit, QuantumCircuit circuit)
+        protected (PhysicalCircuit, QuantumCircuit) ExecuteAllValidGates(Mapping mapping, PhysicalCircuit physicalCircuit, QuantumCircuit quantumCircuit)
         {
-            //PhysicalCircuit physicalCircuitResult = 
+            PhysicalCircuit physicalCircuitClone = physicalCircuit.Clone();
+            QuantumCircuit quantumCircuitClone = quantumCircuit.Clone();
 
-            physicalCircuit.AddGates(circuit.RemoveAllExecutableGates(mapping, physicalCircuit.ArchitectureGraph));
-            throw new NotImplementedException();
+            // Dit zal wss nog anders moeten, maar voorlopig ok
+            // physicalCircuitClone.AddGates(quantumCircuitClone.RemoveAllExecutableGates(mapping, physicalCircuitClone.ArchitectureGraph));
+            throw new NotImplementedException("Uncomment");
+
+
+            //return (physicalCircuitClone, quantumCircuitClone);
         }
 
 
 
-        protected double MinChildCost(Mapping mapping, QuantumCircuit circuit)
+        protected double MinChildCost(Mapping mapping, QuantumCircuit circuit, ArchitectureGraph architecture)
         {
-            List<CNOT> frontLayer = circuit.Layers[0]; // Niet aanpassen
             double minCost = double.MaxValue;
             minCost++;
+
+            List<Tuple<int, int>> touchingEdges = architecture.GetAllTouchingEdges(circuit.Layers[0]);
+            for (int i = 0; i < touchingEdges.Count; i++)
+            {
+                double gCost = architecture.NbOfCnotGatesPerSwap();
+                double hCost = GetHCost();
+
+
+            }
             
+            
+            throw new NotImplementedException();
+        }
+
+
+        private double GetHCost()
+        {
             throw new NotImplementedException();
         }
 

@@ -2,6 +2,7 @@
 using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 using QuantumCircuitTransformation.Data;
 using System;
+using QuantumCircuitTransformation.MappingPerturbation;
 
 namespace QuantumCircuitTransformation.InitialMappingAlgorithm
 {
@@ -114,37 +115,37 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         /// </summary>
         public override (Mapping, double) Execute(ArchitectureGraph architecure, QuantumCircuit circuit)
         {
-            int[] bestMapping = GetRandomMapping(architecure.NbNodes);
+            Mapping bestMapping = GetRandomMapping(architecure.NbNodes);
             double bestCost = GetMappingCost(bestMapping, architecure, circuit);
 
-            int[] mapping = new int[bestMapping.Length];
-            Array.Copy(bestMapping, mapping, bestMapping.Length);
+            Mapping mapping = bestMapping.Clone();
             double cost = bestCost;
 
             for (double t = MaxTemperature; t > MinTemperature; t *= CoolingFactor)
             {
                 for (int i = 0; i < NbRepetitions; i++)
                 {
-                    int[] newMapping = PerturbatMapping(mapping);
-                    double newCost = GetMappingCost(newMapping, architecure, circuit);
+                    Swap perturbation = GetSwapPerturbation(mapping.Clone());
+                    perturbation.Apply();
+                    double newCost = GetMappingCost(perturbation.Mapping, architecure, circuit);
 
                     //Console.WriteLine("Best: {0} - Cost: {1} - newCost: {2}", bestCost, cost, newCost);
 
                     if (newCost < bestCost)
                     {
-                        Array.Copy(newMapping, bestMapping, architecure.NbNodes);
+                        bestMapping = perturbation.Mapping.Clone();
                         bestCost = newCost;
                     }
 
                     if (newCost < cost || DoDownhillMove(cost, newCost, t))
                     {
-                        Array.Copy(newMapping, mapping, architecure.NbNodes);
+                        mapping = perturbation.Mapping.Clone();
                         cost = newCost;
                     }
                 }
             }
             //Console.WriteLine("Best: {0}", bestCost);
-            return (new Mapping(bestMapping), bestCost);
+            return (bestMapping, bestCost);
         }
 
         /// <summary>

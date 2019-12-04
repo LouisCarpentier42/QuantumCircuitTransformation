@@ -1,4 +1,5 @@
-﻿using QuantumCircuitTransformation.Data;
+﻿using QuantumCircuitTransformation.MappingPerturbation;
+using QuantumCircuitTransformation.Data;
 using QuantumCircuitTransformation.InitialMappingAlgorithm;
 using QuantumCircuitTransformation.QuantumCircuitComponents;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
@@ -54,6 +55,37 @@ namespace QuantumCircuitTransformation
             //hs.Execute();
 
 
+
+
+            Queue<Tuple<int, int>> q = new Queue<Tuple<int, int>>();
+            q.Enqueue(new Tuple<int, int>(0, 1));
+            q.Enqueue(new Tuple<int, int>(2, 3));
+            q.Enqueue(new Tuple<int, int>(0, 6));
+
+            int nbNodes = 10;
+
+            Mapping m2 = new Mapping(new int[5] { 0, 1, 2, 3, 4 });
+            Mapping m3 = new Mapping(new int[5] { 0, 1, 2, 3, 5 });
+            Mapping m4 = new Mapping(new int[5] { 0, 1, 2, 3, 6 });
+            Mapping m5 = new Mapping(new int[5] { 0, 1, 2, 3, 7 });
+
+            List<Mapping> ms = new List<Mapping>() { m2, m3, m4, m5 };
+
+
+            Mapping m = new Mapping(new int[5] { 0, 1, 2, 3, 4 });
+            List<Swap> swaps = new List<Swap>()
+            {
+                new Swap(m, 0, 1),
+                new Swap(m, 0, 2)
+            };
+
+            swaps.Contains(new Swap(m, 0, 1));
+
+
+            Console.WriteLine(swaps.Contains(new Swap(m2,0,1)));
+
+
+            List<int> b = Enumerable.Range(0, nbNodes).ToList();
 
 
 
@@ -264,9 +296,9 @@ namespace QuantumCircuitTransformation
         {
             ConsoleLayout.Header("Initial mapping test");
 
-            int nbRep = 100;
+            int nbRep = 25;
             int nbQubits = 20;
-            int nbGates = 7500;
+            int nbGates = 5000;
             ArchitectureGraph architecture = QuantumDevices.IBM_Q20;
             
             double[] totalCost = new double[AllAlgorithms.InitialMappings.Count()];
