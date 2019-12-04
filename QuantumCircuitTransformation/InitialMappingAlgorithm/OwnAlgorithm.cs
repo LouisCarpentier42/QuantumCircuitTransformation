@@ -17,7 +17,7 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
     ///     @author:   Louis Carpentier
     ///     @version:  2.0
     /// </remarks>
-    public class LAHC : InitialMapping
+    public class OwnAlgorithm : InitialMapping
     {
         /// <summary>
         /// Variable referring the late acceptance time. 
@@ -38,7 +38,7 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         public readonly int DiversificationRate;
 
 
-        public LAHC(int lateAcceptanceTime, int nbTabus, int maxNbIterations, int diversificationRate)
+        public OwnAlgorithm(int lateAcceptanceTime, int nbTabus, int maxNbIterations, int diversificationRate)
         {
             if (IsValidLateAcceptanceTime(lateAcceptanceTime))
                 LateAcceptanceTime = lateAcceptanceTime;
@@ -113,7 +113,7 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
             if (other == null) return false;
             try
             {
-                LAHC o = (LAHC)other;
+                OwnAlgorithm o = (OwnAlgorithm)other;
                 return LateAcceptanceTime == o.LateAcceptanceTime &&
                        NbTabus == o.NbTabus &&
                        MaxNbIterations == o.MaxNbIterations &&
@@ -130,7 +130,7 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         /// </summary>
         public override int GetHashCode()
         {
-            return 
+            return
                 (int)(Math.Pow(2, LateAcceptanceTime)) *
                 (int)(Math.Pow(3, NbTabus)) *
                 (int)(Math.Pow(5, MaxNbIterations)) *
@@ -153,7 +153,7 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
             return
                 " > The late acceptance size: " + LateAcceptanceTime + '\n' +
                 " > The number of tabus: " + NbTabus + '\n' +
-                " > The maximal number of iterations: " + MaxNbIterations;
+                " > The maximal number of iterations: " + MaxNbIterations + DiversificationRate;
         }
 
 
@@ -273,5 +273,6 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
             return new Cycle(mapping, permutation);
         }
 
+        
     }
 }

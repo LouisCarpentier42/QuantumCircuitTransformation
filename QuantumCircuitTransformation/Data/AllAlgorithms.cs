@@ -7,15 +7,14 @@ using System.Text;
 namespace QuantumCircuitTransformation.Data
 {
     /// <summary>
-    /// 
-    /// LoadedAlgorithms:
-    ///    A static class to keep track of the different algorithms 
-    ///    which can be used. 
-    /// 
-    /// @author:   Louis Carpentier
-    /// @version:  1.2
-    /// 
+    ///     LoadedAlgorithms:
+    ///         A static class to keep track of the different algorithms 
+    ///         which can be used. 
     /// </summary>
+    /// <remarks>
+    ///     @author:   Louis Carpentier
+    ///     @version:  1.2
+    /// </remarks>
     public static class AllAlgorithms
     {
         /// <summary>
@@ -23,7 +22,7 @@ namespace QuantumCircuitTransformation.Data
         /// </summary>
         public static List<InitialMapping> InitialMappings = new List<InitialMapping>
         {
-            new LAHC(100, 10, 8500, 500),
+            new OwnAlgorithm(100, 10, 8500, 500),
             new SimulatedAnnealing(100, 1, 0.95, 100),
         };
 

@@ -5,15 +5,14 @@ using System.Collections.Generic;
 namespace QuantumCircuitTransformation.Data
 {
     /// <summary>
-    /// 
-    /// QuantumDevices
-    ///    A static class to keep track of different quantum devices. These 
-    ///    can be real life machines or imaginary ones. 
-    ///    
-    /// @author:   Louis Carpentier
-    /// @version:  1.0
-    /// 
+    ///     QuantumDevices:
+    ///         A static class to keep track of different quantum devices. These 
+    ///         can be real life machines or imaginary ones. 
     /// </summary>
+    /// <remarks>
+    ///     @author:   Louis Carpentier
+    ///     @version:  1.0
+    /// </remarks>
     public static class QuantumDevices
     {
         /// <summary>

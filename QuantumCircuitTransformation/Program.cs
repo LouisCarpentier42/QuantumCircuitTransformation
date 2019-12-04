@@ -73,7 +73,7 @@ namespace QuantumCircuitTransformation
 
 
             Mapping m = new Mapping(new int[5] { 0, 1, 2, 3, 4 });
-            List<Swap> swaps = new List<Swap>()
+            List<Perturbation> swaps = new List<Perturbation>()
             {
                 new Swap(m, 0, 1),
                 new Swap(m, 0, 2)
@@ -317,7 +317,6 @@ namespace QuantumCircuitTransformation
                     titotalTime[j] += Globals.Timer.Elapsed.TotalMilliseconds;
                     //Console.WriteLine("cost = {1} - time = {2} ({0})", AllAlgorithms.InitialMappings[j].Name(), cost, Globals.Timer.Elapsed.TotalMilliseconds);
                 }
-
             }
 
             for (int i = 0; i < AllAlgorithms.InitialMappings.Count(); i++)

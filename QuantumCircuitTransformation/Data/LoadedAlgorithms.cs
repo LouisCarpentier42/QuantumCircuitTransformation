@@ -4,16 +4,15 @@ using QuantumCircuitTransformation.TransformationAlgorithm;
 namespace QuantumCircuitTransformation.Data
 {
     /// <summary>
-    /// 
-    /// LoadedAlgorithms:
-    ///    A static class to keep track of the loaded algorithms. These 
-    ///    are the ones preferred by the user. By default are no algorithms
-    ///    set to use. 
-    ///    
-    /// @author:   Louis Carpentier
-    /// @version:  1.1
-    /// 
+    ///     LoadedAlgorithms:
+    ///         A static class to keep track of the loaded algorithms. These 
+    ///         are the ones preferred by the user. By default are no algorithms
+    ///         set to use. 
     /// </summary>
+    /// <remarks>
+    ///     @author:   Louis Carpentier
+    ///     @version:  1.1
+    /// </remarks>
     public static class LoadedAlgorithms
     {
         /// <summary>

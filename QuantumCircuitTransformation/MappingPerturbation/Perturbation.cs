@@ -33,5 +33,7 @@ namespace QuantumCircuitTransformation.MappingPerturbation
         /// Apply this move on the map of this move. 
         /// </summary>
         public abstract void Apply();
+
+        
     }
 }

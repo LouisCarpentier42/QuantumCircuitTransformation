@@ -8,15 +8,14 @@ using System.Text;
 namespace QuantumCircuitTransformation.Data
 {
     /// <summary>
-    /// 
-    /// Globals:
-    ///    A static class to keep track of all the global variables which 
-    ///    could be needed in the project. 
-    ///    
-    /// @author:   Louis Carpentier
-    /// @version:  1.2
-    /// 
+    ///     Globals:
+    ///         A static class to keep track of all the global variables which 
+    ///         could be needed in the project. 
     /// </summary>
+    /// <remarks>
+    ///     @author:   Louis Carpentier
+    ///     @version:  1.2
+    /// </remarks>
     public static class Globals
     {
         /// <summary>
