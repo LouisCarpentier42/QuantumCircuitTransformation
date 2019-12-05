@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuantumCircuitTransformation.QuantumCircuitComponents
+namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
 {
     /// <summary>
-    ///     CNOT
+    ///     CNOT:
     ///         A class to keep track of a CNOT gate. A CNOT gate works on 
     ///         two qubits, a control qubit and a target qubit. The control 
     ///         qubit remains the same. On the target qubit is a NOT gate 
@@ -13,9 +13,9 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.1
+    ///     @version:  1.2
     /// </remarks>
-    public class CNOT
+    public class CNOT : PhysicalGate
     {
         /// <summary>
         /// Variable to keep track of the control qubit of this CNOT gate.
@@ -39,15 +39,15 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         }
 
         /// <summary>
-        /// Clones this CNOT gate. 
+        /// See <see cref="PhysicalGate.Clone"/>.
         /// </summary>
-        public CNOT Clone()
+        public PhysicalGate Clone()
         {
             return new CNOT(ControlQubit, TargetQubit);
         }
 
         /// <summary>
-        /// Gives this CNOT gate in a string represenation. 
+        /// See <see cref="PhysicalGate.ToString"/>.
         /// </summary>
         /// <returns>
         /// A CNOT gate is represented with a prefix "cx". Next is the ID

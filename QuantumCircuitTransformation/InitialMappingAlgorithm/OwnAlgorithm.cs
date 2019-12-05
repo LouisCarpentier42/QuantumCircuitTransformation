@@ -224,11 +224,8 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
                     CurrentMapping = newMapping;
                     CurrentCost = newCost;
                 }
-
                 LateAcceptanceList[LateAcceptanceID] = CurrentCost;
-
                 RemoveAgedTabus();
-
                 //Console.WriteLine("Best: {0} - Cost: {1} - newCost: {2}", BestCost, CurrentCost, newCost);
             }
             //Console.WriteLine("Best: {0}", bestCost);

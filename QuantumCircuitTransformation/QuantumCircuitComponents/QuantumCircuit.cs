@@ -1,4 +1,5 @@
 ﻿using QuantumCircuitTransformation.MappingPerturbation;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 using QuantumCircuitTransformation.InitialMappingAlgorithm;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 using System;
@@ -152,7 +153,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
                     codeRepresenation += "\n" + Layers[i][j];
             return codeRepresenation;
         }
-
+    
         /// <summary>
         /// Clone this quantum circuit. 
         /// </summary>
@@ -175,9 +176,9 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         {
             List<List<CNOT>> layersCloned = new List<List<CNOT>>(NbLayers);
             for (int i = 0; i < NbLayers; i++)
-                layersCloned[i] = Layers[i].Select(cnot => cnot.Clone()).ToList();
+                layersCloned[i] = Layers[i].Select(cnot => (CNOT)cnot.Clone()).ToList();
             List<int> layerSizeCloned = LayerSize.GetRange(0, NbLayers);
             return (layersCloned, layerSizeCloned);
-        }
+        }Z
     }
 }

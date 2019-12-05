@@ -4,6 +4,7 @@ using QuantumCircuitTransformation.QuantumCircuitComponents;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 using System;
 using System.Linq;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 
 namespace QuantumCircuitTransformation.InitialMappingAlgorithm
 {

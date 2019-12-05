@@ -1,5 +1,6 @@
 ﻿using QuantumCircuitTransformation.Data;
 using QuantumCircuitTransformation.QuantumCircuitComponents;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 using System;
 using System.Collections.Generic;
 using System.IO;

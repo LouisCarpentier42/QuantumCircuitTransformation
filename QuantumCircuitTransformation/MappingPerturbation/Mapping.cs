@@ -1,4 +1,5 @@
 ﻿using QuantumCircuitTransformation.QuantumCircuitComponents;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 using System;
 using System.Linq;
 

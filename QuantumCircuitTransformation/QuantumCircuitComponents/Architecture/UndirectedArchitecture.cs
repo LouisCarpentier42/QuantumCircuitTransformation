@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
+using System;
 using System.Collections.Generic;
 
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
