@@ -179,6 +179,6 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
                 layersCloned[i] = Layers[i].Select(cnot => (CNOT)cnot.Clone()).ToList();
             List<int> layerSizeCloned = LayerSize.GetRange(0, NbLayers);
             return (layersCloned, layerSizeCloned);
-        }Z
+        }
     }
 }
