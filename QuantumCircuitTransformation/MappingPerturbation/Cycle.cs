@@ -16,9 +16,9 @@ namespace QuantumCircuitTransformation.MappingPerturbation
     /// </summary>
     /// <remarks>
     ///      @author:   Louis Carpentier
-    ///      @version:  1.0
+    ///      @version:  1.2
     /// </remarks>
-    public class Cycle : Perturbation, IEquatable<Cycle>
+    public class Cycle : Perturbation
     {
         /// <summary>
         /// Variable to keep track of the permutation for 
@@ -28,12 +28,10 @@ namespace QuantumCircuitTransformation.MappingPerturbation
 
 
         /// <summary>
-        /// Initialise a new cycle perturbation with given mapping
-        /// and permutation. 
+        /// Initialise a new cycle perturbation with given permutation. 
         /// </summary>
-        /// <param name="mapping"> The mapping for this cycle. </param>
         /// <param name="permutation"> The permutation for this cycle. </param>
-        public Cycle(Mapping mapping, int[] permutation) : base(mapping)
+        public Cycle(int[] permutation)
         {
             Permutation = permutation;
         }
@@ -41,25 +39,41 @@ namespace QuantumCircuitTransformation.MappingPerturbation
         /// <summary>
         /// Apply this cycle perturbation. 
         /// </summary>
-        public override void Apply()
+        /// <param name="mapping"> The mapping to apply this cycle on. </param>
+        public void Apply(Mapping mapping)
         {
             for (int i = 0; i < Permutation.Length - 1; i++)
-                Mapping.Swap(Permutation[i + 1], Permutation[i]);
-            Mapping.Swap(Permutation[0], Permutation[Permutation.Length - 1]);
+                mapping.Swap(Permutation[i + 1], Permutation[i]);
+            mapping.Swap(Permutation[0], Permutation[Permutation.Length - 1]);
         }
 
         /// <summary>
-        /// Checks if this cycle equals to the given cycle. 
+        /// See <see cref="Perturbation.Equals(object)"/>.
         /// </summary>
-        /// <param name="other"> The cycle to compare. </param>
         /// <returns>
-        /// True if and only if the given cycle has the same mapping 
-        /// as this cycle and the same permutation. 
+        /// True if and only if the permutation for this cycle equals
+        /// to the permutation of the given cycle. 
         /// </returns>
-        public bool Equals(Cycle other)
+        public override bool Equals(object other)
         {
-            return Mapping.Equals(other.Mapping) &&
-                   Permutation.SequenceEqual(other.Permutation);
+            if (other == null) return false;
+            try
+            {
+                Cycle o = (Cycle)other;
+                return Permutation.SequenceEqual(o.Permutation);
+            }
+            catch (InvalidCastException)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// See <see cref="Perturbation.GetHashCode"/>.
+        /// </summary>
+        public override int GetHashCode()
+        {
+            return Permutation.GetHashCode();
         }
     }
 }

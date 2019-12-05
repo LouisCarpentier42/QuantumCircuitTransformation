@@ -142,7 +142,7 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         /// </summary>
         public override string Name()
         {
-            return "LAHC";
+            return "Own algorithm";
         }
 
         /// <summary>
@@ -228,7 +228,7 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
 
                 RemoveAgedTabus();
 
-                // Console.WriteLine("Best: {0} - Cost: {1} - newCost: {2} - fitness = {3}", bestCost, cost, newCost, fitnessArray[v]);
+                Console.WriteLine("Best: {0} - Cost: {1} - newCost: {2}", BestCost, CurrentCost, newCost);
             }
             //Console.WriteLine("Best: {0}", bestCost);
             return (BestMapping, BestCost);

@@ -5,35 +5,39 @@ using System.Text;
 namespace QuantumCircuitTransformation.MappingPerturbation
 {
     /// <summary>
-    ///     Move:
-    ///         An abstract class for moves to apply on a mapping
+    ///     Perturbation:
+    ///         An interface for perturbations to apply
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.0 
+    ///     @version:  1.4 
     /// </remarks>
-    public abstract class Perturbation
+    public interface Perturbation
     {
         /// <summary>
-        /// The mapping to apply the this move to.
+        /// Apply this perturbation on the given mapping.
         /// </summary>
-        public readonly Mapping Mapping;
-
+        /// <param name="mapping"></param>
+        void Apply(Mapping mapping);
 
         /// <summary>
-        /// Initialise a new move with given mapping.
+        /// Checks if the given object is equal to this perturbation
         /// </summary>
-        /// <param name="mapping"> The map for this move. </param>
-        public Perturbation(Mapping mapping)
-        {
-            Mapping = mapping;
-        }
-
-        /// <summary>
-        /// Apply this move on the map of this move. 
-        /// </summary>
-        public abstract void Apply();
-
+        /// <param name="other"> The object to compare too. </param>
+        /// <returns>
+        /// True if and only if the given object is not null, has the 
+        /// same type and equal properties.
+        /// </returns>
+        bool Equals(object other);
         
+        /// <summary>
+        /// Gives the hashcode of this perturbation. 
+        /// </summary>
+        /// <returns>
+        /// A prime factorisation based on the properties of this
+        /// perturbation. 
+        /// </returns>
+        int GetHashCode();
     }
 }
+w

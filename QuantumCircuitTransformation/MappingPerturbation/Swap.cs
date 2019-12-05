@@ -12,9 +12,9 @@ namespace QuantumCircuitTransformation.MappingPerturbation
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.1
+    ///     @version:  1.3
     /// </remarks>
-    public class Swap : Perturbation, IEquatable<Swap>
+    public class Swap : Perturbation
     {
         /// <summary>
         /// Variable referring to the first qubit of this move. 
@@ -29,10 +29,9 @@ namespace QuantumCircuitTransformation.MappingPerturbation
         /// <summary>
         /// Initialise a new swap perturbation with given mapping and qubits. 
         /// </summary>
-        /// <param name="mapping"> The mapping to apply this move to. </param>
         /// <param name="qubit1"> The first qubit of this swap move. </param>
         /// <param name="qubit2"> The second qubit of this swap move. </param>
-        public Swap(Mapping mapping, int qubit1, int qubit2) : base(mapping)
+        public Swap(int qubit1, int qubit2)
         {
             Qubit1 = qubit1;
             Qubit2 = qubit2;
@@ -41,29 +40,42 @@ namespace QuantumCircuitTransformation.MappingPerturbation
         /// <summary>
         /// Apply this swap perturbation. 
         /// </summary>
-        public override void Apply()
+        /// <param name="mapping"> The mapping to apply this move too. </param>
+        public void Apply(Mapping mapping)
         {
-            Mapping.Swap(Qubit1, Qubit2);
+            mapping.Swap(Qubit1, Qubit2);
         }
 
         /// <summary>
-        /// Checks if this swap is equal to the given swap.
+        /// See <see cref="Perturbation.Equals(object)"/>.
         /// </summary>
-        /// <param name="other"> The swap to compare. </param>
         /// <returns>
-        /// True if and only if the given swap has the same mapping as the
-        /// mapping of this swap and the qubits in the given swap are equal 
-        /// to the qubits in this swap.
+        /// True if and only if the given swap has the same qubits to swap. 
         /// </returns>
         /// <remarks>
         /// When a is swapped with b, than a swap which swap b with a is equal
         /// to this.
         /// </remarks>
-        public bool Equals(Swap other)
+        public override bool Equals(object other)
         {
-            return Mapping.Equals(other.Mapping) &&
-                   ((Qubit1 == other.Qubit1 && Qubit2 == other.Qubit2) ||
-                   (Qubit1 == other.Qubit2 && Qubit2 == other.Qubit1));
+            if (other == null) return false;
+            try
+            {
+                Swap o = (Swap)other;
+                return (Qubit1 == o.Qubit1 && Qubit2 == o.Qubit2) ||
+                       (Qubit1 == o.Qubit2 && Qubit2 == o.Qubit1);
+            } catch (InvalidCastException)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// See <see cref="Perturbation.GetHashCode"/>.
+        /// </summary>
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
         }
     }
 }

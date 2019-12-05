@@ -83,7 +83,7 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         {
             return (int)(Math.Pow(2, MaxTemperature)) *
                    (int)(Math.Pow(3, MinTemperature)) *
-                   (int)(Math.Pow(5, CoolingFactor*100)) *
+                   (int)(Math.Pow(5, CoolingFactor*10000)) *
                    (int)(Math.Pow(7, NbRepetitions));
         }
 
@@ -129,7 +129,7 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
                     perturbation.Apply();
                     double newCost = GetMappingCost(perturbation.Mapping, architecure, circuit);
 
-                    //Console.WriteLine("Best: {0} - Cost: {1} - newCost: {2}", bestCost, cost, newCost);
+                    Console.WriteLine("Best: {0} - Cost: {1} - newCost: {2}", bestCost, cost, newCost);
 
                     if (newCost < bestCost)
                     {

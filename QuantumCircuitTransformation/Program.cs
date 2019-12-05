@@ -55,40 +55,11 @@ namespace QuantumCircuitTransformation
             //hs.Execute();
 
 
+            QuantumCircuit c = CircuitGenerator.RandomCircuit(5000, 20);
 
-
-            Queue<Tuple<int, int>> q = new Queue<Tuple<int, int>>();
-            q.Enqueue(new Tuple<int, int>(0, 1));
-            q.Enqueue(new Tuple<int, int>(2, 3));
-            q.Enqueue(new Tuple<int, int>(0, 6));
-
-            int nbNodes = 10;
-
-            Mapping m2 = new Mapping(new int[5] { 0, 1, 2, 3, 4 });
-            Mapping m3 = new Mapping(new int[5] { 0, 1, 2, 3, 5 });
-            Mapping m4 = new Mapping(new int[5] { 0, 1, 2, 3, 6 });
-            Mapping m5 = new Mapping(new int[5] { 0, 1, 2, 3, 7 });
-
-            List<Mapping> ms = new List<Mapping>() { m2, m3, m4, m5 };
-
-
-            Mapping m = new Mapping(new int[5] { 0, 1, 2, 3, 4 });
-            List<Perturbation> swaps = new List<Perturbation>()
-            {
-                new Swap(m, 0, 1),
-                new Swap(m, 0, 2)
-            };
-
-            swaps.Contains(new Swap(m, 0, 1));
-
-
-            Console.WriteLine(swaps.Contains(new Swap(m2,0,1)));
-
-
-            List<int> b = Enumerable.Range(0, nbNodes).ToList();
-
-
-
+            AllAlgorithms.InitialMappings[0].Execute(QuantumDevices.IBM_Q20, c);
+            Console.ReadLine();
+            AllAlgorithms.InitialMappings[1].Execute(QuantumDevices.IBM_Q20, c);
 
 
 
