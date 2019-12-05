@@ -40,4 +40,3 @@ namespace QuantumCircuitTransformation.MappingPerturbation
         int GetHashCode();
     }
 }
-w

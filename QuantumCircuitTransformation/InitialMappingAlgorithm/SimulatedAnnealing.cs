@@ -121,27 +121,31 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
             Mapping mapping = bestMapping.Clone();
             double cost = bestCost;
 
+            Swap swap;
+            Mapping newMapping;
+            
             for (double t = MaxTemperature; t > MinTemperature; t *= CoolingFactor)
             {
                 for (int i = 0; i < NbRepetitions; i++)
                 {
-                    Swap perturbation = GetSwapPerturbation(mapping.Clone());
-                    perturbation.Apply();
-                    double newCost = GetMappingCost(perturbation.Mapping, architecure, circuit);
+                    swap = GetSwapPerturbation(mapping.NbQubits);
 
-                    Console.WriteLine("Best: {0} - Cost: {1} - newCost: {2}", bestCost, cost, newCost);
+                    newMapping = mapping.Clone();
+                    swap.Apply(newMapping);
+                    double newCost = GetMappingCost(newMapping, architecure, circuit);
 
                     if (newCost < bestCost)
                     {
-                        bestMapping = perturbation.Mapping.Clone();
+                        bestMapping = newMapping;
                         bestCost = newCost;
                     }
 
                     if (newCost < cost || DoDownhillMove(cost, newCost, t))
                     {
-                        mapping = perturbation.Mapping.Clone();
+                        mapping = newMapping;
                         cost = newCost;
                     }
+                    // Console.WriteLine("Best: {0} - Cost: {1} - newCost: {2}", bestCost, cost, newCost);
                 }
             }
             //Console.WriteLine("Best: {0}", bestCost);

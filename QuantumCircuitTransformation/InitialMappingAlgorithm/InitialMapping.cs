@@ -45,6 +45,7 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         /// </summary>
         public abstract string Parameters();
 
+
         /// <summary>
         /// Get a random mapping with the given number of nodes. 
         /// </summary>
@@ -56,6 +57,23 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         {
             return new Mapping(Enumerable.Range(0, NbNodes).OrderBy(i => Globals.Random.Next()).ToArray());
         }
+
+        /// <summary>
+        /// Returns a new swap perturbation for a mapping with the 
+        /// given number of qubits.
+        /// </summary>
+        /// <param name="nbQubits"> The number of qubits which can be swapped </param>
+        /// <returns>
+        /// A random swap operation for the given mapping.
+        /// </returns>
+        protected static Swap GetSwapPerturbation(int nbQubits)
+        {
+            int swapQubit1, swapQubit2;
+            swapQubit1 = Globals.Random.Next(nbQubits);
+            do swapQubit2 = Globals.Random.Next(nbQubits); while (swapQubit1 == swapQubit2);
+            return new Swap(swapQubit1, swapQubit2);
+        }
+
 
 
         /*
@@ -138,20 +156,7 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         */
 
 
-        /// <summary>
-        /// Returns a new swap perturbation for the given mapping.
-        /// </summary>
-        /// <param name="mapping"> The mapping for the swap. </param>
-        /// <returns>
-        /// A random swap operation for the given mapping.
-        /// </returns>
-        protected Swap GetSwapPerturbation(Mapping mapping)
-        {
-            int swapQubit1, swapQubit2;
-            swapQubit1 = Globals.Random.Next(mapping.NbQubits);
-            do swapQubit2 = Globals.Random.Next(mapping.NbQubits); while (swapQubit1 == swapQubit2);
-            return new Swap(mapping, swapQubit1, swapQubit2);
-        }
+
 
 
         public static int[] PerturbateMapping(int[] mapping)

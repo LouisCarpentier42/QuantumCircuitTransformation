@@ -199,28 +199,29 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         {
             SetUp(architecture, circuit);
             Perturbation perturbation;
+            Mapping newMapping;
             for (int iteration = 0; iteration < MaxNbIterations; iteration++)
             {
 
                 if (iteration % DiversificationRate == DiversificationRate - 1)
-                    perturbation  = GetCyclePerturbation(CurrentMapping.Clone());
+                    perturbation  = GetCyclePerturbation(CurrentMapping.NbQubits);
                 else
-                    perturbation = GetSwapPerturbation(CurrentMapping.Clone());
-                perturbation.Apply();
+                    perturbation = GetSwapPerturbation(CurrentMapping.NbQubits);
 
-                double newCost = GetMappingCost(perturbation.Mapping, architecture, circuit);
+                newMapping = CurrentMapping.Clone();
+                perturbation.Apply(newMapping);
+                double newCost = GetMappingCost(newMapping, architecture, circuit);
 
                 int LateAcceptanceID = iteration % LateAcceptanceTime;
 
-                
                 if (newCost < BestCost)
                 {
-                    BestMapping = perturbation.Mapping.Clone();
+                    BestMapping = newMapping;
                     BestCost = newCost;
                 }
                 if (newCost < CurrentCost || newCost <= LateAcceptanceList[LateAcceptanceID])
                 {
-                    CurrentMapping = perturbation.Mapping.Clone();
+                    CurrentMapping = newMapping;
                     CurrentCost = newCost;
                 }
 
@@ -228,7 +229,7 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
 
                 RemoveAgedTabus();
 
-                Console.WriteLine("Best: {0} - Cost: {1} - newCost: {2}", BestCost, CurrentCost, newCost);
+                //Console.WriteLine("Best: {0} - Cost: {1} - newCost: {2}", BestCost, CurrentCost, newCost);
             }
             //Console.WriteLine("Best: {0}", bestCost);
             return (BestMapping, BestCost);
@@ -244,35 +245,34 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
         }
 
         /// <summary>
-        /// Returns a new swap perturbation for the given mapping which 
-        /// is not in the tabu list. 
+        /// Returns a new swap perturbation for the given mapping with the
+        /// given number of qubits, which is not in the tabu list. 
         /// </summary>
-        /// <param name="mapping"> The mapping for the swap. </param>
+        /// <param name="mapping"> The number of qubits of the mapping for the swap. </param>
         /// <returns>
-        /// A random swap operation for the given mapping which is not in 
+        /// A random swap operation for the given number of qubits which is not in 
         /// the tabu list. 
         /// </returns>
-        private Swap GetNoneTabuSwapPerturbation(Mapping mapping)
+        private Swap GetNoneTabuSwapPerturbation(int nbQubits)
         {
             Swap swap;
-            do swap = GetSwapPerturbation(mapping); while (TabuList.Contains(swap));
+            do swap = GetSwapPerturbation(nbQubits); while (TabuList.Contains(swap));
             return swap;
         }
 
-
         /// <summary>
-        /// Returns a new cycle perturbation with the given mapping. 
+        /// Returns a new cycle perturbation for a mapping with the
+        /// given number of qubits.
         /// </summary>
-        /// <param name="mapping"> The mapping for the cycle perturbation. </param>
+        /// <param name="nbQubits"> The number of qubits of the mapping for the cycle perturbation. </param>
         /// <returns>
-        /// A random cycle perturbation for the given mapping. 
+        /// A random cycle perturbation for a mapping with the given number 
+        /// of qubits. 
         /// </returns>
-        private Cycle GetCyclePerturbation(Mapping mapping)
+        private Cycle GetCyclePerturbation(int nbQubits)
         {
-            int[] permutation = Enumerable.Range(0, mapping.Map.Length).OrderBy(x => Globals.Random.Next()).ToArray();
-            return new Cycle(mapping, permutation);
+            int[] permutation = Enumerable.Range(0, nbQubits).OrderBy(x => Globals.Random.Next()).ToArray();
+            return new Cycle(permutation);
         }
-
-        
     }
 }
