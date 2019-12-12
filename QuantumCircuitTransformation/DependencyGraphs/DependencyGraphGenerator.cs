@@ -5,6 +5,14 @@ using System.Text;
 
 namespace QuantumCircuitTransformation.DependencyGraphs
 {
+    /// <summary>
+    ///     DependencyGraphGenerator:
+    ///         A static class for constructing dependency graphs.
+    /// </summary>
+    /// <remarks>
+    ///     @author:   Louis Carpentier
+    ///     @version:  1.0
+    /// </remarks>
     public static class DependencyGraphGenerator
     {
 
@@ -17,9 +25,6 @@ namespace QuantumCircuitTransformation.DependencyGraphs
                 for (int j = i + 1; j < gates.Count; j++)
                 {
                     throw new NotImplementedException("Dependency rules must be implemented");
-                    if (true) // TODO dependencyrules
-                        edges.Add(new Tuple<int, int>(i, j));
-                    // Remove redundant edges. 
                 }
             }
 
