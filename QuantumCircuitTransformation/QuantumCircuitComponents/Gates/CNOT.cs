@@ -47,14 +47,6 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         }
 
         /// <summary>
-        /// See <see cref="PhysicalGate.DependsOn(PhysicalGate)"/>.
-        /// </summary>
-        public bool DependsOn(PhysicalGate gate)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
         /// See <see cref="PhysicalGate.ToString"/>.
         /// </summary>
         /// <returns>
