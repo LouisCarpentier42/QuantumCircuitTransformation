@@ -16,11 +16,11 @@ namespace QuantumCircuitTransformation.DependencyGraphs.DependencyRules
     public abstract class DependencyRule
     {
 
-        public bool MustBeExecutedBefore(PhysicalGate gate1, PhysicalGate gate2)
+        public bool DependsOn(PhysicalGate gate1, PhysicalGate gate2)
         {
             try
             {
-                return DependsOn(gate1, gate2);
+                return MustBeExecutedBefore(gate1, gate2);
             }
             catch (InvalidCastException)
             {
@@ -29,6 +29,6 @@ namespace QuantumCircuitTransformation.DependencyGraphs.DependencyRules
         }
 
 
-        protected abstract bool DependsOn(PhysicalGate gate1, PhysicalGate gate2);
+        protected abstract bool MustBeExecutedBefore(PhysicalGate gate1, PhysicalGate gate2);
     }
 }

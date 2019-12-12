@@ -25,7 +25,7 @@ namespace QuantumCircuitTransformation.DependencyGraphs
             {
                 for (int j = i + 1; j < gates.Count; j++)
                 {
-                    if (rules.Any(rule => rule.MustBeExecutedBefore(gates[i], gates[j])))
+                    if (rules.Any(rule => rule.DependsOn(gates[j], gates[i])))
                     {
                         edges.Add(new Tuple<int, int>(i, j));
                     }
