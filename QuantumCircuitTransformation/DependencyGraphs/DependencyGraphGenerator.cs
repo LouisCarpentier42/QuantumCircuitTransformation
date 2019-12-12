@@ -1,7 +1,8 @@
-﻿using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
+﻿using QuantumCircuitTransformation.DependencyGraphs.DependencyRules;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace QuantumCircuitTransformation.DependencyGraphs
 {
@@ -16,7 +17,7 @@ namespace QuantumCircuitTransformation.DependencyGraphs
     public static class DependencyGraphGenerator
     {
 
-        public static DependencyGraph DependencyGraphMaker(List<PhysicalGate> gates)
+        public static DependencyGraph DependencyGraphMaker(List<PhysicalGate> gates, List<DependencyRule> rules)
         {
             List<Tuple<int, int>> edges = new List<Tuple<int, int>>();
             
@@ -24,12 +25,16 @@ namespace QuantumCircuitTransformation.DependencyGraphs
             {
                 for (int j = i + 1; j < gates.Count; j++)
                 {
-                    throw new NotImplementedException("Dependency rules must be implemented");
+                    if (rules.Any(rule => rule.MustBeExecutedBefore(gates[i], gates[j])))
+                    {
+                        edges.Add(new Tuple<int, int>(i, j));
+                    }
                 }
             }
 
             return new DependencyGraph(new List<PhysicalGate>(gates), edges);
         }
+
 
 
 
