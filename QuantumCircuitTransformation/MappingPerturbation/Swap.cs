@@ -75,7 +75,9 @@ namespace QuantumCircuitTransformation.MappingPerturbation
         /// </summary>
         public override int GetHashCode()
         {
-            throw new NotImplementedException();
+            return
+                 (int)(Math.Pow(2, Qubit1) + Math.Pow(3, Qubit2)) *
+                 (int)(Math.Pow(2, Qubit2) + Math.Pow(3, Qubit1));
         }
     }
 }
