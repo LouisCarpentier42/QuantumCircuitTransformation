@@ -329,23 +329,7 @@ namespace QuantumCircuitTransformation
 
 
 
-        private static void DependencyGraphMaker(List<PhysicalGate> gates)
-        {
-            List<Tuple<int, int>> edges = new List<Tuple<int, int>>();
-            List<PhysicalGate> nodes = new List<PhysicalGate>(gates);
-
-            for (int i = 0; i < gates.Count; i++)
-            {
-                for (int j = i + 1; j < gates.Count; j++)
-                {
-                    if (gates[i].DependsOn(gates[j]))
-                        edges.Add(new Tuple<int, int>(i, j));
-                    // Later remove redundant edges. 
-                }
-            }
-
-            // Dependency graph: edges and nodes
-        }
+        
 
 
 
