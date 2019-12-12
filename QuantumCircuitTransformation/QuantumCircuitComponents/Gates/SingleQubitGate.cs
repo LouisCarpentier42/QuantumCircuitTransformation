@@ -61,14 +61,6 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         }
 
         /// <summary>
-        /// See <see cref="PhysicalGate.DependsOn(PhysicalGate)"/>.
-        /// </summary>
-        public bool DependsOn(PhysicalGate gate)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
         /// Return a Hadamard gate. 
         /// </summary>
         /// <param name="qubit"> The qubit on which this hadamard gate should operate. </param>
