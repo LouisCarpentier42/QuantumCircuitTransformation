@@ -13,7 +13,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.2
+    ///     @version:  1.3
     /// </remarks>
     public class CNOT : PhysicalGate
     {
@@ -44,6 +44,14 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         public PhysicalGate Clone()
         {
             return new CNOT(ControlQubit, TargetQubit);
+        }
+
+        /// <summary>
+        /// See <see cref="PhysicalGate.DependsOn(PhysicalGate)"/>.
+        /// </summary>
+        public bool DependsOn(PhysicalGate gate)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

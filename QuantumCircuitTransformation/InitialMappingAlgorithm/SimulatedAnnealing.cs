@@ -1,4 +1,4 @@
-﻿using QuantumCircuitTransformation.QuantumCircuitComponents;
+﻿using QuantumCircuitTransformation.QuantumCircuitComponents.Circuit;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 using QuantumCircuitTransformation.Data;
 using System;

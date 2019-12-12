@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using QuantumCircuitTransformation.MappingPerturbation;
 using QuantumCircuitTransformation.InitialMappingAlgorithm;
-using QuantumCircuitTransformation.QuantumCircuitComponents;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Circuit;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 
 namespace QuantumCircuitTransformation.TransformationAlgorithm

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace QuantumCircuitTransformation.QuantumCircuitComponents
+namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
 {
     /// <summary>
     ///     QuantumCircuit
@@ -27,7 +27,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         /// some layer doesn't affect the outcome of any other gate in the 
         /// same layer. 
         /// </summary>
-        public List<List<CNOT>> Layers { get; private set; }
+        public List<List<PhysicalGate>> Layers { get; private set; }
         /// <summary>
         /// Variable referring to the size of each layer. At index i is the number
         /// of gates in layer i of <see cref="Layers"/>.
@@ -52,7 +52,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         /// </summary>
         public QuantumCircuit()
         {
-            Layers = new List<List<CNOT>> { new List<CNOT>() };
+            Layers = new List<List<PhysicalGate>> { new List<PhysicalGate>() };
             LayerSize = new List<int> { 0 };
             NbLayers = 1;
             NbGates = 0;
@@ -67,7 +67,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         /// <param name="nbLayers"> The number of layers. </param>
         /// <param name="nbGates"> The number of gates. </param>
         /// <param name="nbQubits"> The number of qubits in this </param>
-        protected QuantumCircuit(List<List<CNOT>> layers, List<int> layerSize, int nbLayers, int nbGates, int nbQubits)
+        protected QuantumCircuit(List<List<PhysicalGate>> layers, List<int> layerSize, int nbLayers, int nbGates, int nbQubits)
         {
             Layers = layers;
             LayerSize = layerSize;
@@ -76,62 +76,43 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
             NbQubits = nbQubits;
         }
 
+        //public void AddGate(PhysicalGate newGate)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         /// <summary>
         /// Adds a CNOT gate at the end of this quantum circuit. 
         /// </summary>
-        /// <param name="newGate"> The gate to add to this circuit. </param>
-        public virtual void AddGate(CNOT newGate)
+        /// <param name="newCNOT"> The gate to add to this circuit. </param>
+        public virtual void AddGate(CNOT newCNOT)
         {
-            if (Layers[0].Any(cnot => cnot.TargetQubit == newGate.ControlQubit))
+            if (Layers[0].Any(gate => ((CNOT)gate).TargetQubit == newCNOT.ControlQubit))
             {
-                Layers.Add(new List<CNOT> { newGate });
+                Layers.Add(new List<PhysicalGate> { newCNOT });
                 LayerSize.Add(1);
                 NbLayers++;
             }
             else
             {
-                Layers[NbLayers - 1].Add(newGate);
+                Layers[NbLayers - 1].Add(newCNOT);
                 LayerSize[NbLayers - 1]++;
             }
             NbGates++;
-            NbQubits = Math.Max(Math.Max(newGate.ControlQubit, newGate.TargetQubit), NbQubits);
+            NbQubits = Math.Max(Math.Max(newCNOT.ControlQubit, newCNOT.TargetQubit), NbQubits);
         }
 
-        /// <summary>
-        /// Adds a list of CNOT gates to this quantum circuit using the method
-        /// <see cref="AddGate(CNOT)"/>.
-        /// </summary>
-        /// <param name="newGates"> The gates to add to this circuit. </param>
-        public void AddGates(List<CNOT> newGates)
-        {
-            for (int i = 0; i < newGates.Count(); i++)
-                AddGate(newGates[i]);
-        }
+        ///// <summary>
+        ///// Adds a list of CNOT gates to this quantum circuit using the method
+        ///// <see cref="AddGate(PhysicalGate)"/>.
+        ///// </summary>
+        ///// <param name="newGates"> The gates to add to this circuit. </param>
+        //public void AddGates(List<PhysicalGate> newGates)
+        //{
+        //    for (int i = 0; i < newGates.Count(); i++)
+        //        AddGate(newGates[i]);
+        //}
 
-        /// <summary>
-        /// Removes all the CNOT gates which can be executed according to the 
-        /// architecture graph with the given mapping. 
-        /// </summary>
-        /// <param name="mapping"> The mapping to take into account. </param>
-        /// <param name="architecture"> The architecture graph to take into account. </param>
-        /// <returns>
-        /// A list of all the cnot gates which are removed. 
-        /// </returns>
-        public List<CNOT> RemoveAllExecutableGates(Mapping mapping, ArchitectureGraph architecture)
-        {
-            List<CNOT> executableGates = Layers[0].FindAll(cnot => architecture.CanExecuteCNOT(mapping.MapCNOT(cnot)));
-            Layers[0].RemoveAll(cnot => architecture.CanExecuteCNOT(mapping.MapCNOT(cnot)));
-            while (Layers[0].Count() == 0)
-            {
-                NbLayers--;
-                Layers.RemoveAt(0);
-                executableGates.AddRange(Layers[0].FindAll(cnot => architecture.CanExecuteCNOT(mapping.MapCNOT(cnot))));
-                Layers[0].RemoveAll(cnot => architecture.CanExecuteCNOT(mapping.MapCNOT(cnot)));
-            }
-            NbGates -= executableGates.Count();
-            return executableGates;
-        }
 
         /// <summary>
         /// Gives a string representation of this quantum circuit.  
@@ -162,7 +143,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         /// </returns>
         public QuantumCircuit Clone()
         {
-            (List<List<CNOT>> layersCloned, List<int> layerSizeCloned) = CopyProperties();
+            (List<List<PhysicalGate>> layersCloned, List<int> layerSizeCloned) = CopyProperties();
             return new QuantumCircuit(layersCloned, layerSizeCloned, NbLayers, NbGates, NbQubits);
         }
 
@@ -172,11 +153,11 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         /// <returns>
         /// A copy of the CNOT gates and of the sizes of each layer. 
         /// </returns>
-        protected (List<List<CNOT>>, List<int>) CopyProperties()
+        protected (List<List<PhysicalGate>>, List<int>) CopyProperties()
         {
-            List<List<CNOT>> layersCloned = new List<List<CNOT>>(NbLayers);
+            List<List<PhysicalGate>> layersCloned = new List<List<PhysicalGate>>(NbLayers);
             for (int i = 0; i < NbLayers; i++)
-                layersCloned[i] = Layers[i].Select(cnot => (CNOT)cnot.Clone()).ToList();
+                layersCloned[i] = Layers[i].Select(gate => gate.Clone()).ToList();
             List<int> layerSizeCloned = LayerSize.GetRange(0, NbLayers);
             return (layersCloned, layerSizeCloned);
         }

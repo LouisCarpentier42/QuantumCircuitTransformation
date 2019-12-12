@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using QuantumCircuitTransformation.MappingPerturbation;
 using QuantumCircuitTransformation.InitialMappingAlgorithm;
-using QuantumCircuitTransformation.QuantumCircuitComponents;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Circuit;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 
 namespace QuantumCircuitTransformation.TransformationAlgorithm
@@ -62,17 +62,17 @@ namespace QuantumCircuitTransformation.TransformationAlgorithm
 
         protected double MinChildCost(Mapping mapping, QuantumCircuit circuit, ArchitectureGraph architecture)
         {
-            double minCost = double.MaxValue;
-            minCost++;
+            //double minCost = double.MaxValue;
+            //minCost++;
 
-            List<Tuple<int, int>> touchingEdges = architecture.GetAllTouchingEdges(circuit.Layers[0]);
-            for (int i = 0; i < touchingEdges.Count; i++)
-            {
-                double gCost = architecture.NbOfCnotGatesPerSwap();
-                double hCost = GetHCost();
+            //List<Tuple<int, int>> touchingEdges = architecture.GetAllTouchingEdges(circuit.Layers[0]);
+            //for (int i = 0; i < touchingEdges.Count; i++)
+            //{
+            //    double gCost = architecture.NbOfCnotGatesPerSwap();
+            //    double hCost = GetHCost();
 
 
-            }
+            //}
             
             
             throw new NotImplementedException();

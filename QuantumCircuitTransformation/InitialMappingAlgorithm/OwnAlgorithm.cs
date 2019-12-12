@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using QuantumCircuitTransformation.Exceptions;
 using QuantumCircuitTransformation.Data;
-using QuantumCircuitTransformation.QuantumCircuitComponents;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Circuit;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 using QuantumCircuitTransformation.MappingPerturbation;
 

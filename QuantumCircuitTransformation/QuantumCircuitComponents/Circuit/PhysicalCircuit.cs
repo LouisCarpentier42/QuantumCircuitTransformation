@@ -5,7 +5,7 @@ using System.Text;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 
-namespace QuantumCircuitTransformation.QuantumCircuitComponents
+namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
 {
     /// <summary>
     ///     PhysicalCircuit
@@ -44,7 +44,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         /// <param name="nbGates"> The number of gates in this physical circuit.. </param>
         /// <param name="nbQubits"> The number of qubits in this physical circuit. </param>
         /// <param name="architectureGraph"> The architecture for this physical circuit. </param>
-        protected PhysicalCircuit(List<List<CNOT>> layers, List<int> layerSize, int nbLayers, int nbGates, int nbQubits, ArchitectureGraph architectureGraph) : 
+        protected PhysicalCircuit(List<List<PhysicalGate>> layers, List<int> layerSize, int nbLayers, int nbGates, int nbQubits, ArchitectureGraph architectureGraph) : 
             base(layers, layerSize, nbLayers, nbGates, nbQubits)
         {
             ArchitectureGraph = architectureGraph;
@@ -69,7 +69,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents
         /// </returns>
         public new PhysicalCircuit Clone()
         {
-            (List<List<CNOT>> layersCloned, List<int> layerSizeCloned) = CopyProperties();
+            (List<List<PhysicalGate>> layersCloned, List<int> layerSizeCloned) = CopyProperties();
             return new PhysicalCircuit(layersCloned, layerSizeCloned, NbLayers, NbGates, NbQubits, ArchitectureGraph);
         }
     }

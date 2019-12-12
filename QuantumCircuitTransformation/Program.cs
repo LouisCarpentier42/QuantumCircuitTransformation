@@ -1,13 +1,14 @@
 ﻿using QuantumCircuitTransformation.MappingPerturbation;
 using QuantumCircuitTransformation.Data;
 using QuantumCircuitTransformation.InitialMappingAlgorithm;
-using QuantumCircuitTransformation.QuantumCircuitComponents;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Circuit;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 using QuantumCircuitTransformation.TransformationAlgorithm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 
 namespace QuantumCircuitTransformation
 {
@@ -55,11 +56,34 @@ namespace QuantumCircuitTransformation
             //hs.Execute();
 
 
-            QuantumCircuit c = CircuitGenerator.RandomCircuit(5000, 20);
+            List<PhysicalGate> x = new List<PhysicalGate>
+            {
+                new CNOT(0,1),
+                new CNOT(1,2),
+                new CNOT(2,3),
+                new CNOT(3,4)
+            };
+            List<PhysicalGate> y = new List<PhysicalGate>(x);
 
-            AllAlgorithms.InitialMappings[0].Execute(QuantumDevices.IBM_Q20, c);
-            Console.ReadLine();
-            AllAlgorithms.InitialMappings[1].Execute(QuantumDevices.IBM_Q20, c);
+            x[2] = SingleQubitGate.GetHadamardGate(10);
+
+            foreach (var a in x)
+                Console.WriteLine(a);
+            foreach (var a in y)
+                Console.WriteLine(a);
+
+
+
+            //QuantumCircuit c = new QuantumCircuit();
+            //c.AddGate(new CNOT(0, 1));
+            //c.AddGate(SingleQubitGate.GetHadamardGate(1));
+            //c.AddGate(SingleQubitGate.GetHadamardGate(1));
+            //c.AddGate(new CNOT(0, 1));
+
+
+            //AllAlgorithms.InitialMappings[0].Execute(QuantumDevices.IBM_Q20, c);
+            //Console.ReadLine();
+            //AllAlgorithms.InitialMappings[1].Execute(QuantumDevices.IBM_Q20, c);
 
 
 
@@ -267,9 +291,9 @@ namespace QuantumCircuitTransformation
         {
             ConsoleLayout.Header("Initial mapping test");
 
-            int nbRep = 25;
+            int nbRep = 10;
             int nbQubits = 20;
-            int nbGates = 5000;
+            int nbGates = 500;
             ArchitectureGraph architecture = QuantumDevices.IBM_Q20;
             
             double[] totalCost = new double[AllAlgorithms.InitialMappings.Count()];
@@ -300,6 +324,30 @@ namespace QuantumCircuitTransformation
 
             ConsoleLayout.Footer();
         }
+
+
+
+
+
+        private static void DependencyGraphMaker(List<PhysicalGate> gates)
+        {
+            List<Tuple<int, int>> edges = new List<Tuple<int, int>>();
+            List<PhysicalGate> nodes = new List<PhysicalGate>(gates);
+
+            for (int i = 0; i < gates.Count; i++)
+            {
+                for (int j = i + 1; j < gates.Count; j++)
+                {
+                    if (gates[i].DependsOn(gates[j]))
+                        edges.Add(new Tuple<int, int>(i, j));
+                    // Later remove redundant edges. 
+                }
+            }
+
+            // Dependency graph: edges and nodes
+        }
+
+
 
 
     }

@@ -135,20 +135,6 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
         /// </returns>
         public abstract bool CanExecuteCNOT(CNOT cnot);
 
-        public List<Tuple<int,int>> GetAllTouchingEdges(List<CNOT> gates)
-        {
-            List<Tuple<int, int>> touchingEdges = new List<Tuple<int, int>>();
-            for (int i = 0; i < Edges.Count(); i++)
-            {
-                if (gates.Any( cnot => cnot.ControlQubit == Edges[i].Item1 || cnot.ControlQubit == Edges[i].Item2 ||
-                                       cnot.TargetQubit == Edges[i].Item1 || cnot.TargetQubit == Edges[i].Item2))
-                    touchingEdges.Add(Edges[i]);
-            }
-            return touchingEdges;
-        }
-
-        //public abstract List<Tuple<int, int>> GetInverslyExecutableEdges();
-
 
         /// <summary>
         /// Clone this architecture graph. 

@@ -11,7 +11,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.1
+    ///     @version:  1.2
     /// </remarks>
     public class SingleQubitGate : PhysicalGate
     {
@@ -60,6 +60,13 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
             return GateNameShort + " q[" + Qubit + "];";
         }
 
+        /// <summary>
+        /// See <see cref="PhysicalGate.DependsOn(PhysicalGate)"/>.
+        /// </summary>
+        public bool DependsOn(PhysicalGate gate)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Return a Hadamard gate. 

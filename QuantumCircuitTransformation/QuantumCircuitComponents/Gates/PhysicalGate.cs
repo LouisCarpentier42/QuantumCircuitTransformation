@@ -16,7 +16,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.0
+    ///     @version:  1.1
     /// </remarks>
     public interface PhysicalGate
     {
@@ -24,6 +24,15 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         /// Return a clone of this physical gate.
         /// </summary>
         PhysicalGate Clone();
+
+        /// <summary>
+        /// Checks if the given gate depends on the this physical gate. 
+        /// </summary>
+        /// <param name="gate"> The gate to check if it depends on this gate. </param>
+        /// <returns> 
+        /// True if and only if the given gate depends on this gate.  
+        /// </returns>
+        bool DependsOn(PhysicalGate gate);
 
         /// <summary>
         /// Return a string representation of this executable gate. 

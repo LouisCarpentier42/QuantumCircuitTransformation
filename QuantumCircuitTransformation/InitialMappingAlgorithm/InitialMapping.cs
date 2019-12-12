@@ -1,6 +1,6 @@
 ﻿using QuantumCircuitTransformation.MappingPerturbation;
 using QuantumCircuitTransformation.Data;
-using QuantumCircuitTransformation.QuantumCircuitComponents;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Circuit;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 using System;
 using System.Linq;
@@ -160,19 +160,6 @@ namespace QuantumCircuitTransformation.InitialMappingAlgorithm
 
 
 
-        public static int[] PerturbateMapping(int[] mapping)
-        {
-            int[] perturbation = new int[mapping.Length];
-            Array.Copy(mapping, perturbation, mapping.Length);
-
-            int qubit1 = Globals.Random.Next(mapping.Length);
-            int qubit2;
-            do qubit2 = Globals.Random.Next(mapping.Length); while (qubit1 == qubit2);
-
-            perturbation[qubit1] = mapping[qubit2];
-            perturbation[qubit2] = mapping[qubit1];
-            return perturbation;
-        }
 
 
         private const int MAX_NB_GATES_IN_COST = 10000;
