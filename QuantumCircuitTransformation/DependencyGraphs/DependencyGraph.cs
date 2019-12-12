@@ -29,12 +29,15 @@ namespace QuantumCircuitTransformation.DependencyGraphs
         public readonly List<Tuple<int, int>> DependencyEdges;
 
 
+        /// <summary>
+        /// Initialise a new dependency graph with given gates and dependencies.
+        /// </summary>
+        /// <param name="gates"> The gates for this dependency graph. </param>
+        /// <param name="dependencyEdges"> The edges for this dependency graph. </param>
         public DependencyGraph(List<PhysicalGate> gates, List<Tuple<int, int>> dependencyEdges)
         {
             Gates = gates;
             DependencyEdges = dependencyEdges;
-            
         }
-
     }
 }
