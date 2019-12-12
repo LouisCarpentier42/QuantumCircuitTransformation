@@ -24,10 +24,10 @@ namespace QuantumCircuitTransformation.DependencyGraphs
             {
                 for (int j = i + 1; j < gates.Count; j++)
                 {
-                    throw new NotImplementedException("Dependency rules must be implemented");
-                    if (true) // TODO dependencyrules
+                    if (true)
                         edges.Add(new Tuple<int, int>(i, j));
-                    // Remove redundant edges. 
+                    // Later remove redundant edges. 
+                    // Put depends on in a rule class
                 }
             }
 
