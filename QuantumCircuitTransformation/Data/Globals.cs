@@ -1,4 +1,4 @@
-﻿using QuantumCircuitTransformation.InitialMappingAlgorithm;
+﻿using QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

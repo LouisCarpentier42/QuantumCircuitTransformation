@@ -8,7 +8,7 @@ using QuantumCircuitTransformation.QuantumCircuitComponents.Circuit;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 using QuantumCircuitTransformation.MappingPerturbation;
 
-namespace QuantumCircuitTransformation.InitialMappingAlgorithm
+namespace QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm
 {
     /// <summary>
     /// TODO

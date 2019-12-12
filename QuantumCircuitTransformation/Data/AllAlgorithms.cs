@@ -1,5 +1,5 @@
-﻿using QuantumCircuitTransformation.InitialMappingAlgorithm;
-using QuantumCircuitTransformation.TransformationAlgorithm;
+﻿using QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm;
+using QuantumCircuitTransformation.Algorithms.TransformationAlgorithm;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -1,9 +1,9 @@
 ﻿using QuantumCircuitTransformation.MappingPerturbation;
 using QuantumCircuitTransformation.Data;
-using QuantumCircuitTransformation.InitialMappingAlgorithm;
+using QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Circuit;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
-using QuantumCircuitTransformation.TransformationAlgorithm;
+using QuantumCircuitTransformation.Algorithms.TransformationAlgorithm;
 using System;
 using System.Collections.Generic;
 using System.Linq;

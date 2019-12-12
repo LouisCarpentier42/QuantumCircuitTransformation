@@ -1,6 +1,6 @@
 ﻿using QuantumCircuitTransformation.MappingPerturbation;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
-using QuantumCircuitTransformation.InitialMappingAlgorithm;
+using QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 using System;
 using System.Collections.Generic;

@@ -4,7 +4,7 @@ using QuantumCircuitTransformation.Data;
 using System;
 using QuantumCircuitTransformation.MappingPerturbation;
 
-namespace QuantumCircuitTransformation.InitialMappingAlgorithm
+namespace QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm
 {
     /// <summary>
     /// 

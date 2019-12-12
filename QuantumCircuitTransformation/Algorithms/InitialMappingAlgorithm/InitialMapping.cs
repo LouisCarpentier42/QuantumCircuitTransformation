@@ -6,7 +6,7 @@ using System;
 using System.Linq;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 
-namespace QuantumCircuitTransformation.InitialMappingAlgorithm
+namespace QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm
 {
     /// <summary>
     /// 
