@@ -17,17 +17,29 @@ namespace QuantumCircuitTransformation
 
         private static readonly List<Tuple<string, Action>> MainMenu = new List<Tuple<string, Action>>
         {
-            new Tuple<string, Action>("Load an initial mapping algorithm", 
-                new Action(LoadInitialMappings)),
-            new Tuple<string, Action>("Add a new initial mapping algorithm", 
-                new Action(AddInitialMapping)),
-            new Tuple<string, Action>("Give an overview of all the available algorithms", 
-                new Action(GiveOverviewOfAllAlgorithms)),
-            new Tuple<string, Action>("Give an overview of the loaded algorithms", 
+            new Tuple<string, Action>("Give an overview of the loaded algorithms",
                 new Action(GiveOverviewOfLoadedAlgorithms)),
+            new Tuple<string, Action>("Give an overview of the available initial mapping algorithms",
+                new Action(GiveOverviewOfInitialMappingAlgorithms)),
+            new Tuple<string, Action>("Give an overview of the available transformation algorithms",
+                new Action(GiveOverviewOfTransformationAlgorithms)),
+            new Tuple<string, Action>("Give an overview of all the available algorithms",
+                new Action(GiveOverviewOfAllAlgorithms)),
+            null,
+            new Tuple<string, Action>("Load an initial mapping algorithm", 
+                new Action(LoadInitialMappingAlgorithm)),
+            new Tuple<string, Action>("(TODO)Load a transformation algorithm",
+                new Action(LoadTransformationAlgorithm)),
+            null,
+            new Tuple<string, Action>("Add a new initial mapping algorithm", 
+                new Action(AddInitialMappingAlgorithm)),
+            new Tuple<string, Action>("(TODO)Add a new transformation algorithm",
+                new Action(AddTransformationAlgorithm)),
+            null,
             new Tuple<string, Action>("Test the available initial mapping algorithms",
                 new Action(TestAvailableInitialMappings)),
         };
+
 
         static void Main(string[] args)
         {
@@ -48,95 +60,10 @@ namespace QuantumCircuitTransformation
             }
         } 
 
+
         private static void Test()
         {
             ConsoleLayout.Header("Test environment");
-
-            HeuristicSearch hs = new HeuristicSearch();
-            //hs.Execute();
-
-
-            double angle = -10;
-
-            Console.WriteLine(Math.Abs(angle) % (2 * Math.PI));
-
-
-
-            //QuantumCircuit c = new QuantumCircuit();
-            //c.AddGate(new CNOT(0, 1));
-            //c.AddGate(SingleQubitGate.GetHadamardGate(1));
-            //c.AddGate(SingleQubitGate.GetHadamardGate(1));
-            //c.AddGate(new CNOT(0, 1));
-
-
-            //AllAlgorithms.InitialMappings[0].Execute(QuantumDevices.IBM_Q20, c);
-            //Console.ReadLine();
-            //AllAlgorithms.InitialMappings[1].Execute(QuantumDevices.IBM_Q20, c);
-
-
-
-
-            //for(int i = 0; i < nbNodes; i++)
-            //{
-            //    for (int j = 0; j < nbNodes; j++)
-            //    {
-            //        Console.Write(paths[i, j] + " ");
-            //    }
-            //    Console.WriteLine();
-            //}
-
-
-
-            //int nbCircuits = 100;
-            //int nbGates = 20000;
-            //for (int nbQubits = 4; nbQubits < 20; nbQubits++)
-            //{
-            //    int averageLayers = 0;
-            //    for (int i = 0; i < nbCircuits; i++)
-            //    {
-            //        averageLayers += (CircuitGenerator.RandomCircuit(nbGates, nbQubits).NbLayers);
-            //    }
-            //    Console.WriteLine("NbL / NbG: " + averageLayers / nbGates);
-            //    //Console.WriteLine("Average number of layers: " + averageLayers / nbCircuits);
-            //    //Console.WriteLine("NbGates / NbQubits: " + nbGates / nbQubits);
-            //    //Console.WriteLine("NbLayers *  NbQubits: " + averageLayers * nbQubits);
-            //    Console.WriteLine("----------------------------------------");
-            //}
-
-
-
-            //Globals.Timer.Start();
-            //QuantumCircuit c = CircuitGenerator.RandomCircuit(15000, 20);
-            //Globals.Timer.Stop();
-            //Console.WriteLine("In total are {0} milliseconds taken to generate the circuit", Globals.Timer.Elapsed.TotalMilliseconds);
-
-            //ArchitectureGraph a = QuantumDevices.IBM_Q20;
-
-            //Console.WriteLine(AllAlgorithms.InitialMappings[1].GetName() + '\n' + AllAlgorithms.InitialMappings[1].GetParameters() + '\n');
-            //Globals.Timer.Restart();
-            //AllAlgorithms.InitialMappings[1].Execute(a, c);
-            //Globals.Timer.Stop();
-            //Console.WriteLine("In total are {0} milliseconds taken to find an initial mapping.", Globals.Timer.Elapsed.TotalMilliseconds);
-
-            //Console.WriteLine("\n\n");
-
-            //Console.WriteLine(AllAlgorithms.InitialMappings[0].GetName() + '\n' + AllAlgorithms.InitialMappings[0].GetParameters() + '\n');
-            //Globals.Timer.Restart();
-            //AllAlgorithms.InitialMappings[0].Execute(a, c);
-            //Globals.Timer.Stop();
-            //Console.WriteLine("In total are {0} milliseconds taken to find an initial mapping.", Globals.Timer.Elapsed.TotalMilliseconds);
-
-
-
-            //Timer.Start();
-            //sa.Execute(a, c);
-            //Timer.Stop();
-            //Console.WriteLine("In total are {0} milliseconds taken", Timer.ElapsedMilliseconds);
-
-            //Globals.Timer.Start();
-            //AllAlgorithms.InitialMappings[0].Execute(a, c);
-            //Globals.Timer.Stop();
-            //Console.WriteLine("in total are {0} milliseconds taken", Globals.Timer.Elapsed.TotalMilliseconds);
 
 
             ConsoleLayout.Footer();
@@ -144,10 +71,14 @@ namespace QuantumCircuitTransformation
 
 
 
+        /*****************************************************************
+         * LOAD ALGORITHMS
+         *****************************************************************/
 
-        private static void LoadInitialMappings()
+        private static void LoadInitialMappingAlgorithm()
         {
             ConsoleLayout.Header("Select an initial mapping algorithm");
+
             var orderedInitalMappings = AllAlgorithms.InitialMappings.OrderBy(item => item.GetType().FullName);
             for (int i = 0; i < orderedInitalMappings.Count(); i++)
             {
@@ -166,10 +97,25 @@ namespace QuantumCircuitTransformation
             {
                 ConsoleLayout.Error("Failed to load an initial mapping algorithm");
             }
+
             ConsoleLayout.Footer();
         }
 
-        private static void AddInitialMapping()
+        private static void LoadTransformationAlgorithm()
+        {
+            ConsoleLayout.Header("Select a transformation algorithm");
+
+            Console.WriteLine("TODO"); // Remove TODO from menu
+
+            ConsoleLayout.Footer();
+        }
+
+
+        /*****************************************************************
+         * ADD NEW ALGORITHMS
+         *****************************************************************/
+
+        private static void AddInitialMappingAlgorithm()
         {
             ConsoleLayout.Header("New initial mapping");
 
@@ -228,6 +174,20 @@ namespace QuantumCircuitTransformation
             ConsoleLayout.Footer();
         }
 
+        private static void AddTransformationAlgorithm()
+        {
+            ConsoleLayout.Header("Add a transformation algorithm");
+
+            Console.WriteLine("TODO"); // remove TODO from menu
+
+            ConsoleLayout.Footer();
+        }
+
+
+        /*****************************************************************
+         * OVERVIEW OF ALGORITHMS
+         *****************************************************************/
+
         private static void GiveOverviewOfLoadedAlgorithms()
         {
             ConsoleLayout.Header("Loaded algorithms");
@@ -252,7 +212,6 @@ namespace QuantumCircuitTransformation
             ConsoleLayout.Header("Available algorithms");
 
             ConsoleLayout.SubHeader("Initial Mapping Algorithms");
-
             if (AllAlgorithms.InitialMappings.Count() == 0)
                 Console.WriteLine("No initial mapping algorithms are available...");
             var orderedInitalMappings = AllAlgorithms.InitialMappings.OrderBy(item => item.GetType().FullName);
@@ -274,6 +233,41 @@ namespace QuantumCircuitTransformation
 
             ConsoleLayout.Footer();
         }
+
+        private static void GiveOverviewOfInitialMappingAlgorithms()
+        {
+            ConsoleLayout.Header("Available initial mapping algorithms");
+
+            if (AllAlgorithms.InitialMappings.Count() == 0)
+                Console.WriteLine("No initial mapping algorithms are available...");
+            var orderedInitalMappings = AllAlgorithms.InitialMappings.OrderBy(item => item.GetType().FullName);
+            for (int i = 0; i < AllAlgorithms.InitialMappings.Count(); i++)
+            {
+                Console.WriteLine(i + 1 + ": " + orderedInitalMappings.ElementAt(i).Name());
+                Console.WriteLine(orderedInitalMappings.ElementAt(i).Parameters() + '\n');
+            }
+
+            ConsoleLayout.Footer();
+        }
+
+        private static void GiveOverviewOfTransformationAlgorithms()
+        {
+            ConsoleLayout.Header("Available transformation algorithms");
+
+            ConsoleLayout.SubHeader("Transformation Algorithms");
+            if (AllAlgorithms.Transformations.Count() == 0)
+                Console.WriteLine("No transformation algorithms are available...");
+            var orderedTransformation = AllAlgorithms.Transformations.OrderBy(item => item.GetType().FullName);
+            for (int i = 0; i < AllAlgorithms.Transformations.Count(); i++)
+            {
+                Console.WriteLine(i + 1 + ": " + orderedTransformation.ElementAt(i).Name());
+                Console.WriteLine(orderedTransformation.ElementAt(i).Parameters() + '\n');
+            }
+
+            ConsoleLayout.Footer();
+        }
+
+
 
         private static void TestAvailableInitialMappings()
         {
@@ -312,15 +306,6 @@ namespace QuantumCircuitTransformation
 
             ConsoleLayout.Footer();
         }
-
-
-
-
-
-        
-
-
-
 
     }
 }
