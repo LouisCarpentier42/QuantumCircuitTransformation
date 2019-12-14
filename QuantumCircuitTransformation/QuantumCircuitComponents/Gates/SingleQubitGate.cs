@@ -1,4 +1,5 @@
 ﻿using System;
+using QuantumCircuitTransformation.Exceptions;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,7 +12,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.2
+    ///     @version:  1.3
     /// </remarks>
     public class SingleQubitGate : PhysicalGate
     {
@@ -26,18 +27,44 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         /// The qubit this single qubit gate operates on. 
         /// </summary>
         public readonly int Qubit;
+        /// <summary>
+        /// Variable referring to the extra parameter of this single
+        /// qubit gate. If this variable equals null, then there is 
+        /// no extra parameter needed. 
+        /// </summary>
+        public readonly object ExtraParam;
 
 
         /// <summary>
         /// Initialise a new single qubit gate with given name and qubit
-        /// to operate on. 
+        /// to operate on and an extra parameter. 
+        /// </summary>
+        /// <param name="gateNameShort"> The short name of this gate. </param>
+        /// <param name="qubit"> The qubit this gate operates on. </param>
+        /// <param name="extraParam"> The value of the extra parameter. </param>
+        private SingleQubitGate(string gateNameShort, int qubit, object extraParam)
+        {
+            GateNameShort = gateNameShort;
+            Qubit = qubit;
+            ExtraParam = extraParam;
+        }
+
+        /// <summary>
+        /// Initialise a new single qubit gate with given name and qubit
+        /// to operate on and no extra parameter. 
         /// </summary>
         /// <param name="gateNameShort"> The short name of this gate. </param>
         /// <param name="qubit"> The qubit this gate operates on. </param>
         private SingleQubitGate(string gateNameShort, int qubit)
+            : this(gateNameShort, qubit, null) { }
+
+
+        /// <summary>
+        /// See <see cref="PhysicalGate.Clone"/>.
+        /// </summary>
+        public PhysicalGate Clone()
         {
-            GateNameShort = gateNameShort;
-            Qubit = qubit;
+            return new SingleQubitGate(GateNameShort, Qubit, ExtraParam);
         }
 
         /// <summary>
@@ -49,7 +76,10 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         /// </returns>
         public override string ToString()
         {
-            return GateNameShort + " q[" + Qubit + "];";
+            string extra = "";
+            if (ExtraParam != null)
+                extra += ", " + extra.ToString();
+            return GateNameShort + " q[" + Qubit + "]" + extra + ";";
         }
 
         /// <summary>
@@ -63,6 +93,28 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         public static SingleQubitGate GetHadamardGate(int qubit)
         {
             return new SingleQubitGate("H", qubit);
+        }
+
+        /// <summary>
+        /// Get a gate which rotates the given qubit around the given axis
+        /// with a given angle. 
+        /// </summary>
+        /// <param name="qubit"> The qubit for the gate to return. </param>
+        /// <param name="axis"> The axis for the gate to return. </param>
+        /// <param name="angle"> The angle in radians to rotate. </param>
+        /// <returns>
+        /// A new single qubit gate with given for rotating the qubit around
+        /// the given axis with the given angle. 
+        /// </returns>
+        /// <exception cref="InvalidParameterException"> If the given axis is not the x, y or z axis. </exception>
+        /// <remarks>
+        /// The angle is normalised to be in the interval [0,2PI).
+        /// </remarks>
+        public static SingleQubitGate GetRotationalGate(int qubit, char axis, double angle)
+        {
+            if (axis != 'x' || axis != 'y' || axis != 'z')
+                throw new InvalidParameterException("The given axis is invalid!");
+            return new SingleQubitGate("R" + axis, qubit, Math.Abs(angle) % (2 * Math.PI));
         }
     }
 }

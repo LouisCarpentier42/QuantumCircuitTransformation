@@ -1,6 +1,8 @@
-﻿using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
+﻿using QuantumCircuitTransformation.Exceptions;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace QuantumCircuitTransformation.DependencyGraphs
@@ -14,7 +16,7 @@ namespace QuantumCircuitTransformation.DependencyGraphs
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.0
+    ///     @version:  1.2
     /// </remarks>
     public class DependencyGraph
     {
@@ -27,6 +29,18 @@ namespace QuantumCircuitTransformation.DependencyGraphs
         /// means that <see cref="Gates"/>[j] depends on <see cref="Gates"/>[i].
         /// </summary>
         public readonly List<Tuple<int, int>> DependencyEdges;
+        /// <summary>
+        /// A list to keep track of all the gates which have been resolved already. 
+        /// </summary>
+        private List<int> ResolvedGates;
+        /// <summary>
+        /// A list to keep track of all the gates which are not blocked by another gate.
+        /// </summary>
+        private List<int> BlockingGates;
+        /// <summary>
+        /// A list to keep track of all the gates which are blocked by some other gate. 
+        /// </summary>
+        private List<int> BlockedGates;
 
 
         /// <summary>
@@ -38,6 +52,46 @@ namespace QuantumCircuitTransformation.DependencyGraphs
         {
             Gates = gates;
             DependencyEdges = dependencyEdges;
+            SetUpGates(gates, dependencyEdges);
+        }
+
+        /// <summary>
+        /// Setup of the resolved, blocking and blocked gates. 
+        /// </summary>
+        /// <param name="gates"> The gates which should be set in the different lists. </param>
+        /// <param name="dependencyEdges"> The dependency edges to sort the gates with. </param>
+        private void SetUpGates(List<PhysicalGate> gates, List<Tuple<int, int>> dependencyEdges)
+        {
+            ResolvedGates = new List<int>();
+            BlockingGates = new List<int>();
+            BlockedGates = new List<int>();
+            for (int i = 0; i < gates.Count; i++)
+            {
+                if (dependencyEdges.Any(edge => edge.Item2 == 1))
+                    BlockedGates.Add(i);
+                else
+                    BlockingGates.Add(i);
+            }
+        }
+
+
+        /// <summary>
+        /// Resolve a given gate from this dependency graph and update the 
+        /// resolved, blocking and blocked gate. 
+        /// </summary>
+        /// <param name="gateID"> The ID of the gate to resolve. </param>
+        /// <exception cref="GateIsNotBlockingException"> If the given gate is not in the blocking list. </exception>
+        private void ResolveGate(int gateID)
+        {
+            if (!BlockingGates.Contains(gateID))
+                throw new GateIsNotBlockingException(Gates[gateID]);
+            BlockingGates.Remove(gateID);
+            ResolvedGates.Add(gateID);
+            for (int i = 0; i < BlockedGates.Count; i++)
+            {
+                if (DependencyEdges.Any(edge => edge.Item2 == BlockedGates[i] && ResolvedGates.Contains(edge.Item1)))
+                    BlockedGates.Remove(gateID);
+            }
         }
     }
 }
