@@ -41,14 +41,6 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         }
 
         /// <summary>
-        /// See <see cref="PhysicalGate.Clone"/>.
-        /// </summary>
-        public PhysicalGate Clone()
-        {
-            return new SingleQubitGate(GateNameShort, Qubit);
-        }
-
-        /// <summary>
         /// See <see cref="PhysicalGate.ToString"/>.
         /// </summary>
         /// <returns>
