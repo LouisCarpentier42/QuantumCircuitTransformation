@@ -1,4 +1,5 @@
-﻿using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
+﻿using QuantumCircuitTransformation.Exceptions;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace QuantumCircuitTransformation.DependencyGraphs
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.1
+    ///     @version:  1.2
     /// </remarks>
     public class DependencyGraph
     {
@@ -74,6 +75,23 @@ namespace QuantumCircuitTransformation.DependencyGraphs
         }
 
 
-
+        /// <summary>
+        /// Resolve a given gate from this dependency graph and update the 
+        /// resolved, blocking and blocked gate. 
+        /// </summary>
+        /// <param name="gateID"> The ID of the gate to resolve. </param>
+        /// <exception cref="GateIsNotBlockingException"> If the given gate is not in the blocking list. </exception>
+        private void ResolveGate(int gateID)
+        {
+            if (!BlockingGates.Contains(gateID))
+                throw new GateIsNotBlockingException(Gates[gateID]);
+            BlockingGates.Remove(gateID);
+            ResolvedGates.Add(gateID);
+            for (int i = 0; i < BlockedGates.Count; i++)
+            {
+                if (DependencyEdges.Any(edge => edge.Item2 == BlockedGates[i] && ResolvedGates.Contains(edge.Item1)))
+                    BlockedGates.Remove(gateID);
+            }
+        }
     }
 }

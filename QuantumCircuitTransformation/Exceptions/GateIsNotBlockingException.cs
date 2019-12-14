@@ -6,7 +6,7 @@ using System.Text;
 namespace QuantumCircuitTransformation.Exceptions
 {
     /// <summary>
-    ///     GateIsBlockedException:
+    ///     GateIsNotBlockingException:
     ///         An exception which can be used a try is made to add 
     ///         an gate to the physical circuit, even though it is 
     ///         blocked by some other gate. 
@@ -15,13 +15,13 @@ namespace QuantumCircuitTransformation.Exceptions
     ///     @author:   Louis Carpentier
     ///     @version:  1.0
     /// </remarks>
-    class GateIsBlockedException : Exception
+    class GateIsNotBlockingException : Exception
     {
-        public GateIsBlockedException() { }
+        public GateIsNotBlockingException() { }
 
-        public GateIsBlockedException(PhysicalGate gate)
+        public GateIsNotBlockingException(PhysicalGate gate)
             : base("Gate '" + gate.ToString() + "' is blocked") { }
 
-        public GateIsBlockedException(string message) : base(message) { }
+        public GateIsNotBlockingException(string message) : base(message) { }
     }
 }
