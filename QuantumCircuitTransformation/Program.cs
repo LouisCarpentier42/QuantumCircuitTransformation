@@ -56,21 +56,9 @@ namespace QuantumCircuitTransformation
             //hs.Execute();
 
 
-            List<PhysicalGate> x = new List<PhysicalGate>
-            {
-                new CNOT(0,1),
-                new CNOT(1,2),
-                new CNOT(2,3),
-                new CNOT(3,4)
-            };
-            List<PhysicalGate> y = new List<PhysicalGate>(x);
+            double angle = -10;
 
-            x[2] = SingleQubitGate.GetHadamardGate(10);
-
-            foreach (var a in x)
-                Console.WriteLine(a);
-            foreach (var a in y)
-                Console.WriteLine(a);
+            Console.WriteLine(Math.Abs(angle) % (2 * Math.PI));
 
 
 
