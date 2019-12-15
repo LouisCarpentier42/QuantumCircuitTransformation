@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using QuantumCircuitTransformation.Exceptions;
 
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
 {
@@ -13,7 +14,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.3
+    ///     @version:  1.5
     /// </remarks>
     public class CNOT : PhysicalGate
     {
@@ -57,6 +58,26 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         public override string ToString()
         {
             return "cx q[" + ControlQubit + "], q[" + TargetQubit + "];";
+        }
+
+        /// <summary>
+        /// See <see cref="PhysicalGate.GetQubits"/>.
+        /// </summary>
+        public List<int> GetQubits()
+        {
+            return new List<int> { ControlQubit, TargetQubit };
+        }
+
+        /// <summary>
+        /// See <see cref="PhysicalGate.GetGatePart(int)"/>. 
+        /// </summary>
+        public GatePart GetGatePart(int qubit)
+        {
+            if (qubit == ControlQubit)
+                return GatePart.Control;
+            if (qubit == TargetQubit)
+                return GatePart.Target;
+            throw new QubitIsNotPartOfGateException(qubit, this);
         }
     }
 }
