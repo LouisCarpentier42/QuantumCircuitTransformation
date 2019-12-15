@@ -1,5 +1,4 @@
-﻿using QuantumCircuitTransformation.DependencyGraphs.DependencyRules;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
+﻿using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 using System;
 using System.Collections.Generic;
 using System.Linq;

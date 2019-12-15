@@ -56,9 +56,11 @@ namespace QuantumCircuitTransformation
             //hs.Execute();
 
 
-            double angle = -10;
+            
 
-            Console.WriteLine(Math.Abs(angle) % (2 * Math.PI));
+            //double angle = -10;
+
+            //Console.WriteLine(Math.Abs(angle) % (2 * Math.PI));
 
 
 
