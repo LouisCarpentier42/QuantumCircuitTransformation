@@ -37,19 +37,9 @@ namespace QuantumCircuitTransformation
 
         public static int SelectFromMenu(List<Tuple<string, Action>> menu)
         {
-            int menuNb = 1;
-            int i = -1;
-            while (++i <= menu.Count - 1)
-            {
-                if (menu[i] == null)
-                    Console.WriteLine();
-                else
-                    Console.WriteLine("{0}: {1}", menuNb++, menu[i].Item1);
-            }
-            if (menu.Contains(null))
-                Console.WriteLine("\n0: Return\n");
-            else
-                Console.WriteLine("0: Return");
+            for (int i = 0; i < menu.Count; i++)
+                Console.WriteLine("{0}: {1}", i+1, menu[i].Item1);
+            Console.WriteLine("0: Return");
 
             Console.Write("\nChoice: ");
             try

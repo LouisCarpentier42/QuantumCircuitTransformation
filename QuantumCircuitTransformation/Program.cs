@@ -25,17 +25,14 @@ namespace QuantumCircuitTransformation
                 new Action(GiveOverviewOfTransformationAlgorithms)),
             new Tuple<string, Action>("Give an overview of all the available algorithms",
                 new Action(GiveOverviewOfAllAlgorithms)),
-            null,
             new Tuple<string, Action>("Load an initial mapping algorithm", 
                 new Action(LoadInitialMappingAlgorithm)),
             new Tuple<string, Action>("(TODO)Load a transformation algorithm",
                 new Action(LoadTransformationAlgorithm)),
-            null,
             new Tuple<string, Action>("Add a new initial mapping algorithm", 
                 new Action(AddInitialMappingAlgorithm)),
             new Tuple<string, Action>("(TODO)Add a new transformation algorithm",
                 new Action(AddTransformationAlgorithm)),
-            null,
             new Tuple<string, Action>("Test the available initial mapping algorithms",
                 new Action(TestAvailableInitialMappings)),
         };
@@ -254,7 +251,6 @@ namespace QuantumCircuitTransformation
         {
             ConsoleLayout.Header("Available transformation algorithms");
 
-            ConsoleLayout.SubHeader("Transformation Algorithms");
             if (AllAlgorithms.Transformations.Count() == 0)
                 Console.WriteLine("No transformation algorithms are available...");
             var orderedTransformation = AllAlgorithms.Transformations.OrderBy(item => item.GetType().FullName);
