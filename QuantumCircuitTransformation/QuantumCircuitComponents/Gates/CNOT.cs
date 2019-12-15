@@ -13,7 +13,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.3
+    ///     @version:  1.4
     /// </remarks>
     public class CNOT : PhysicalGate
     {
@@ -57,6 +57,14 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         public override string ToString()
         {
             return "cx q[" + ControlQubit + "], q[" + TargetQubit + "];";
+        }
+
+        /// <summary>
+        /// See <see cref="PhysicalGate.GetQubits"/>.
+        /// </summary>
+        public List<int> GetQubits()
+        {
+            return new List<int> { ControlQubit, TargetQubit };
         }
     }
 }

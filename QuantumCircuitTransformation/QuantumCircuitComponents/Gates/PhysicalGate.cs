@@ -16,7 +16,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.1
+    ///     @version:  1.2
     /// </remarks>
     public interface PhysicalGate
     {
@@ -29,5 +29,11 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         /// Return a string representation of this executable gate. 
         /// </summary>
         string ToString();
+
+        /// <summary>
+        /// Return a list of all the qubits on which this physical 
+        /// gate operates. 
+        /// </summary>
+        List<int> GetQubits();
     }
 }

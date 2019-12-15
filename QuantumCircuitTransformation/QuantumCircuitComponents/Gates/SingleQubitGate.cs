@@ -12,7 +12,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.3
+    ///     @version:  1.4
     /// </remarks>
     public class SingleQubitGate : PhysicalGate
     {
@@ -81,6 +81,15 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
                 extra += ", " + extra.ToString();
             return GateNameShort + " q[" + Qubit + "]" + extra + ";";
         }
+
+        /// <summary>
+        /// See <see cref="PhysicalGate.GetQubits"/>.
+        /// </summary>
+        public List<int> GetQubits()
+        {
+            return new List<int> { Qubit };
+        }
+
 
         /// <summary>
         /// Return a Hadamard gate. 
