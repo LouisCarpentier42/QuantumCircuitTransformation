@@ -16,7 +16,7 @@ namespace QuantumCircuitTransformation.DependencyGraphs
     ///     @author:   Louis Carpentier
     ///     @version:  1.3
     /// </remarks>
-    public struct DependencyRule
+    public class DependencyRule
     {
         /// <summary>
         /// The gate parts which may overlap. These are sorted. 

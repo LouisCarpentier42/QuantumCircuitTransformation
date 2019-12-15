@@ -56,15 +56,6 @@ namespace QuantumCircuitTransformation
             //hs.Execute();
 
 
-            List<GatePart> x = new List<GatePart> { GatePart.Control, GatePart.H, GatePart.Rx };
-            List<GatePart> y = new List<GatePart> { GatePart.H, GatePart.Control };
-
-            x.Sort();
-            foreach (var z in x)
-                Console.WriteLine(z);
-
-            Console.WriteLine(x.SequenceEqual(y));
-
 
 
             //double angle = -10;
