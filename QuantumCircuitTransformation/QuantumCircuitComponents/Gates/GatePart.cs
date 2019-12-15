@@ -19,8 +19,8 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
     /// </remarks>
     public enum GatePart
     {
-        Target, Control, // CNOT gate
-        Rz, Rx, Ry, // Rotational gates
-        H // Hadamard gate
+        Control, Target, // CNOT gate
+        H, // Hadamard gate
+        Rx, Ry, Rz // Rotational gates
     }
 }

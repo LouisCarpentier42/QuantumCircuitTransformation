@@ -89,7 +89,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         /// </remarks>
         public static SingleQubitGate GetRotationalGate(int qubit, char axis, double angle)
         {
-            if (axis != 'x' || axis != 'y' || axis != 'z')
+            if (axis != 'x' && axis != 'y' && axis != 'z')
                 throw new InvalidParameterException("The given axis is invalid!");
             return new SingleQubitGate("R" + axis, qubit, Math.Abs(angle) % (2 * Math.PI));
         }

@@ -1,14 +1,14 @@
-﻿using QuantumCircuitTransformation.MappingPerturbation;
-using QuantumCircuitTransformation.Data;
-using QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Circuit;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
+﻿using QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm;
 using QuantumCircuitTransformation.Algorithms.TransformationAlgorithm;
+using QuantumCircuitTransformation.Data;
+using QuantumCircuitTransformation.DependencyGraphs;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Circuit;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 
 namespace QuantumCircuitTransformation
 {
@@ -56,7 +56,16 @@ namespace QuantumCircuitTransformation
             //hs.Execute();
 
 
-            
+            List<GatePart> x = new List<GatePart> { GatePart.Control, GatePart.H, GatePart.Rx };
+            List<GatePart> y = new List<GatePart> { GatePart.H, GatePart.Control };
+
+            x.Sort();
+            foreach (var z in x)
+                Console.WriteLine(z);
+
+            Console.WriteLine(x.SequenceEqual(y));
+
+
 
             //double angle = -10;
 
