@@ -116,4 +116,4 @@ namespace QuantumCircuitTransformation.DependencyGraphs
             return overlappingGateParts.Count > 0 && !rules.Any(rule => rule.CanBeSwitched(overlappingGateParts));
         }
     }
-}
+} 
