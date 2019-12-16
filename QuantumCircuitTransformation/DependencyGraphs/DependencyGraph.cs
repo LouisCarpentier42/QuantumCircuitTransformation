@@ -16,7 +16,7 @@ namespace QuantumCircuitTransformation.DependencyGraphs
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.3
+    ///     @version:  1.4
     /// </remarks>
     public class DependencyGraph
     {
@@ -66,10 +66,10 @@ namespace QuantumCircuitTransformation.DependencyGraphs
             GateStates = new List<GateState>();
             for (int i = 0; i < gates.Count; i++)
             {
-                if (dependencyEdges.Any(edge => edge.Item2 == i))
-                    GateStates[i] = GateState.Blocked;
-                else
+                if (IsNotBlocked(i))
                     GateStates[i] = GateState.Blocking;
+                else
+                    GateStates[i] = GateState.Blocked;
             }
         }
 
@@ -88,10 +88,24 @@ namespace QuantumCircuitTransformation.DependencyGraphs
 
             for (int i = 0; i < Gates.Count; i++)
             {
-                // ...
+                if (GateStates[i] == GateState.Blocked && IsNotBlocked(i))
+                {
+                    GateStates[i] = GateState.Blocking;
+                }
             }
-            throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Checks if the gate at the given gateID is blocked.
+        /// </summary>
+        /// <param name="gateID"> The ID of the gate to check. </param>
+        /// <returns>
+        /// True if and only if the gate at the given ID has only edges directed 
+        /// to it from gates which are resolved. 
+        /// </returns>
+        private bool IsNotBlocked(int gateID)
+        {
+            return !DependencyEdges.Any(edge => edge.Item2 == gateID && GateStates[edge.Item1] != GateState.Resolved);
+        }
     }
 }
