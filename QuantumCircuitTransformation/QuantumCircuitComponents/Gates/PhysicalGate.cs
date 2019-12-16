@@ -16,15 +16,10 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.4
+    ///     @version:  1.5
     /// </remarks>
     public interface PhysicalGate
     {
-        /// <summary>
-        /// Return a clone of this physical gate.
-        /// </summary>
-        PhysicalGate Clone();
-
         /// <summary>
         /// Return a string representation of this executable gate. 
         /// </summary>

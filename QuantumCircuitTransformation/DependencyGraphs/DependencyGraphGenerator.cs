@@ -11,7 +11,7 @@ namespace QuantumCircuitTransformation.DependencyGraphs
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.2
+    ///     @version:  1.3
     /// </remarks>
     public static class DependencyGraphGenerator
     {
@@ -25,7 +25,19 @@ namespace QuantumCircuitTransformation.DependencyGraphs
         /// </returns>
         public static DependencyGraph Generate(List<PhysicalGate> gates)
         {
-            return Generate(gates, new List<DependencyRule>());
+            List<Tuple<int, int>> edges = new List<Tuple<int, int>>();
+            for (int i = 0; i < gates.Count; i++)
+            {
+                for (int j = i + 1; j < gates.Count; j++)
+                {
+                    List<GatePart> overlappingGateParts = GetOverlappingGateParts(gates[i], gates[j]);
+                    if (GatesAreDependent(overlappingGateParts))
+                    {
+                        edges.Add(new Tuple<int, int>(i, j));
+                    }
+                }
+            }
+            return new DependencyGraph(new List<PhysicalGate>(gates), edges);
         }
 
         /// <summary>
@@ -74,6 +86,19 @@ namespace QuantumCircuitTransformation.DependencyGraphs
             }
             overlappingGateParts.Sort();
             return overlappingGateParts;
+        }
+
+        /// <summary>
+        /// Checks if two gates are dependent based on their overlapping gate parts
+        /// and the dependency rule. 
+        /// </summary>
+        /// <param name="overlappingGateParts"> The overlapping gate parts. </param>
+        /// <returns>
+        /// True if and only if there are overlapping gate parts.
+        /// </returns>
+        private static bool GatesAreDependent(List<GatePart> overlappingGateParts)
+        {
+            return overlappingGateParts.Count > 0;
         }
 
         /// <summary>
