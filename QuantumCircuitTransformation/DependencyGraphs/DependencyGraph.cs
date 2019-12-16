@@ -16,19 +16,10 @@ namespace QuantumCircuitTransformation.DependencyGraphs
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.4
+    ///     @version:  1.5
     /// </remarks>
     public class DependencyGraph
     {
-        /// <summary>
-        /// A list of all the gates in this dependency graph. 
-        /// </summary>
-        public readonly List<PhysicalGate> Gates;
-        /// <summary>
-        /// The dependency edges of this dependency graph. A connection (i,j) 
-        /// means that <see cref="Gates"/>[j] depends on <see cref="Gates"/>[i].
-        /// </summary>
-        public readonly List<Tuple<int, int>> DependencyEdges;
         /// <summary>
         /// The different states in which a gate can be. 
         /// </summary>
@@ -38,6 +29,12 @@ namespace QuantumCircuitTransformation.DependencyGraphs
             Blocking,
             Blocked
         }
+
+        /// <summary>
+        /// The dependency edges of this dependency graph. A connection (i,j) 
+        /// means that <see cref="Gates"/>[j] depends on <see cref="Gates"/>[i].
+        /// </summary>
+        public readonly List<Tuple<int, int>> DependencyEdges;
         /// <summary>
         /// Variable referring to the state of each gate. 
         /// </summary>
@@ -47,24 +44,23 @@ namespace QuantumCircuitTransformation.DependencyGraphs
         /// <summary>
         /// Initialise a new dependency graph with given gates and dependencies.
         /// </summary>
-        /// <param name="gates"> The gates for this dependency graph. </param>
+        /// <param name="nbGates"> The number of gates for this dependency graph. </param>
         /// <param name="dependencyEdges"> The edges for this dependency graph. </param>
-        public DependencyGraph(List<PhysicalGate> gates, List<Tuple<int, int>> dependencyEdges)
+        public DependencyGraph(int nbGates, List<Tuple<int, int>> dependencyEdges)
         {
-            Gates = gates;
             DependencyEdges = dependencyEdges;
-            SetUpGateStates(gates, dependencyEdges);
+            SetUpGateStates(nbGates, dependencyEdges);
         }
 
         /// <summary>
         /// Set the states of the gates correctly. 
         /// </summary>
-        /// <param name="gates"> The gates which should be set in the different lists. </param>
-        /// <param name="dependencyEdges"> The dependency edges to sort the gates with. </param>
-        private void SetUpGateStates(List<PhysicalGate> gates, List<Tuple<int, int>> dependencyEdges)
+        /// <param name="nbGates"> The number of gates for this dependency graph. </param>
+        /// <param name="dependencyEdges"> The dependency edges of this dependency graph. </param>
+        private void SetUpGateStates(int nbGates, List<Tuple<int, int>> dependencyEdges)
         {
             GateStates = new List<GateState>();
-            for (int i = 0; i < gates.Count; i++)
+            for (int i = 0; i < nbGates; i++)
             {
                 if (IsNotBlocked(i))
                     GateStates[i] = GateState.Blocking;
@@ -83,10 +79,10 @@ namespace QuantumCircuitTransformation.DependencyGraphs
         private void ResolveGate(int gateID)
         {
             if (GateStates[gateID] != GateState.Blocking)
-                throw new GateIsNotBlockingException(Gates[gateID]);
+                throw new GateIsNotBlockingException();
             GateStates[gateID] = GateState.Resolved;
 
-            for (int i = 0; i < Gates.Count; i++)
+            for (int i = 0; i < GateStates.Count; i++)
             {
                 if (GateStates[i] == GateState.Blocked && IsNotBlocked(i))
                 {
