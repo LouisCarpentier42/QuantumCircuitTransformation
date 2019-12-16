@@ -8,6 +8,13 @@ using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
 
 namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>
+    ///     @author:   Louis Carpentier
+    ///     @version:  1.1
+    /// </remarks>
     public class HeuristicSearch : Transformation
     {
 
@@ -50,25 +57,6 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
 
 
 
-
-        public override PhysicalCircuit Execute(Mapping mapping, QuantumCircuit circuit, ArchitectureGraph architecture)
-        {
-            PhysicalCircuit physicalCircuit = new PhysicalCircuit(architecture);
-            ExecuteAllValidGates(mapping, physicalCircuit, circuit);
-
-            while (circuit.NbLayers > 0)
-            {
-
-            }
-
-
-            throw new NotImplementedException();
-        }
-
-
-
-
-    
        
     }
 }

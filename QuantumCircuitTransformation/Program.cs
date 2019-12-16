@@ -56,7 +56,36 @@ namespace QuantumCircuitTransformation
             //hs.Execute();
 
 
+            List<PhysicalGate> gates = new List<PhysicalGate>();
+            for (int i = 0; i < 5000; i++)
+            {
+                gates.Add(new CNOT(Globals.Random.Next(20), Globals.Random.Next(20)));
+            }
 
+            List<DependencyRule> rules = new List<DependencyRule>
+            {
+                new DependencyRule(GatePart.Control, GatePart.Control),
+                new DependencyRule(GatePart.Target, GatePart.Target),
+                new DependencyRule(GatePart.Control, GatePart.Rz),
+                new DependencyRule(GatePart.Target, GatePart.Rx)
+            };
+
+            DependencyGraph graph;
+
+            //Globals.Timer.Restart();
+            //graph = DependencyGraphGenerator.Generate(gates);
+            //Globals.Timer.Stop();
+            //Console.WriteLine(graph.DependencyEdges.Count);
+            //Console.WriteLine(Globals.Timer.Elapsed.TotalMilliseconds);
+
+            Globals.Timer.Restart();
+            graph = DependencyGraphGenerator.Generate(gates, rules);
+            Globals.Timer.Stop();
+            Console.WriteLine(graph.DependencyEdges.Count);
+            Console.WriteLine(Globals.Timer.Elapsed.TotalMilliseconds);
+
+
+            //foreach (var x in gates) Console.WriteLine(x);
 
             //double angle = -10;
 

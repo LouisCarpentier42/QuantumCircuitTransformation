@@ -17,7 +17,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.4
+    ///     @version:  1.5
     /// </remarks>
     public class QuantumCircuit
     {
@@ -59,28 +59,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
             NbQubits = 0;
         }
 
-        /// <summary>
-        /// Initialise a new quantum circuit with given gates. 
-        /// </summary>
-        /// <param name="layers"> The gates of this quantum circuit, divided in layers. </param>
-        /// <param name="layerSize"> The size of each layer. </param>
-        /// <param name="nbLayers"> The number of layers. </param>
-        /// <param name="nbGates"> The number of gates. </param>
-        /// <param name="nbQubits"> The number of qubits in this </param>
-        protected QuantumCircuit(List<List<PhysicalGate>> layers, List<int> layerSize, int nbLayers, int nbGates, int nbQubits)
-        {
-            Layers = layers;
-            LayerSize = layerSize;
-            NbLayers = nbLayers;
-            NbGates = nbGates;
-            NbQubits = nbQubits;
-        }
-
-        //public void AddGate(PhysicalGate newGate)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
+ 
         /// <summary>
         /// Adds a CNOT gate at the end of this quantum circuit. 
         /// </summary>
@@ -102,18 +81,6 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
             NbQubits = Math.Max(Math.Max(newCNOT.ControlQubit, newCNOT.TargetQubit), NbQubits);
         }
 
-        ///// <summary>
-        ///// Adds a list of CNOT gates to this quantum circuit using the method
-        ///// <see cref="AddGate(PhysicalGate)"/>.
-        ///// </summary>
-        ///// <param name="newGates"> The gates to add to this circuit. </param>
-        //public void AddGates(List<PhysicalGate> newGates)
-        //{
-        //    for (int i = 0; i < newGates.Count(); i++)
-        //        AddGate(newGates[i]);
-        //}
-
-
         /// <summary>
         /// Gives a string representation of this quantum circuit.  
         /// </summary>
@@ -134,32 +101,6 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
                     codeRepresenation += "\n" + Layers[i][j];
             return codeRepresenation;
         }
-    
-        /// <summary>
-        /// Clone this quantum circuit. 
-        /// </summary>
-        /// <returns>
-        /// A new quantum circuit with the properties of this quantum circuit. 
-        /// </returns>
-        public QuantumCircuit Clone()
-        {
-            (List<List<PhysicalGate>> layersCloned, List<int> layerSizeCloned) = CopyProperties();
-            return new QuantumCircuit(layersCloned, layerSizeCloned, NbLayers, NbGates, NbQubits);
-        }
 
-        /// <summary>
-        /// Copy the properties of this quantum circuit. 
-        /// </summary>
-        /// <returns>
-        /// A copy of the CNOT gates and of the sizes of each layer. 
-        /// </returns>
-        protected (List<List<PhysicalGate>>, List<int>) CopyProperties()
-        {
-            List<List<PhysicalGate>> layersCloned = new List<List<PhysicalGate>>(NbLayers);
-            for (int i = 0; i < NbLayers; i++)
-                layersCloned[i] = Layers[i].Select(gate => gate.Clone()).ToList();
-            List<int> layerSizeCloned = LayerSize.GetRange(0, NbLayers);
-            return (layersCloned, layerSizeCloned);
-        }
     }
 }
