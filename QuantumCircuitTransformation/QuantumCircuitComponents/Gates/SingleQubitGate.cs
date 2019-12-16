@@ -12,7 +12,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.5
+    ///     @version:  1.6
     /// </remarks>
     public class SingleQubitGate : PhysicalGate
     {
@@ -94,14 +94,6 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
             return new SingleQubitGate("R" + axis, qubit, Math.Abs(angle) % (2 * Math.PI));
         }
 
-
-        /// <summary>
-        /// See <see cref="PhysicalGate.Clone"/>.
-        /// </summary>
-        public PhysicalGate Clone()
-        {
-            return new SingleQubitGate(GateNameShort, Qubit, ExtraParam);
-        }
 
         /// <summary>
         /// See <see cref="PhysicalGate.ToString"/>.

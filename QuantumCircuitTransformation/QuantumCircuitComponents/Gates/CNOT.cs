@@ -14,7 +14,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.5
+    ///     @version:  1.6
     /// </remarks>
     public class CNOT : PhysicalGate
     {
@@ -39,13 +39,6 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
             TargetQubit = targetQubit;
         }
 
-        /// <summary>
-        /// See <see cref="PhysicalGate.Clone"/>.
-        /// </summary>
-        public PhysicalGate Clone()
-        {
-            return new CNOT(ControlQubit, TargetQubit);
-        }
 
         /// <summary>
         /// See <see cref="PhysicalGate.ToString"/>.

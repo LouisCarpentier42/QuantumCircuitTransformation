@@ -12,7 +12,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.2
+    ///     @version:  1.3
     /// </remarks>
     public class UndirectedArchitecture : ArchitectureGraph
     {
@@ -21,16 +21,6 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
         /// </summary>
         public UndirectedArchitecture(List<Tuple<int, int>> connections) 
             : base(connections) { }
-
-        /// <summary>
-        /// Initialise a new undirected architecture graph with given edges, 
-        /// number of nodes and cnot distances. 
-        /// </summary>
-        /// <param name="edges"> The edges for this architecture. </param>
-        /// <param name="nbNodes"> The number of nodes for this architecture. </param>
-        /// <param name="cnotDistance"> The cnot distances for this architecture. </param>
-        protected UndirectedArchitecture(List<Tuple<int, int>> edges, int nbNodes, int[,] cnotDistance)
-            : base(edges, nbNodes, cnotDistance) { }
 
 
         /// <summary>
@@ -57,14 +47,6 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
         public override int NbOfCnotGatesPerSwap()
         {
             return 3;
-        }
-
-        /// <summary>
-        /// See <see cref="ArchitectureGraph.Clone(List{Tuple{int, int}}, int, int[,])"/>.
-        /// </summary>
-        protected override ArchitectureGraph Clone(List<Tuple<int, int>> edges, int nbNodes, int[,] cnotDistance)
-        {
-            return new UndirectedArchitecture(edges, nbNodes, cnotDistance);
         }
     }
 }
