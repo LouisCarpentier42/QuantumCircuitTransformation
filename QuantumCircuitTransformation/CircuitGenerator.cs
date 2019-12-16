@@ -10,14 +10,13 @@ using System.Text.RegularExpressions;
 namespace QuantumCircuitTransformation
 {
     /// <summary>
-    /// 
-    /// CircuitGenerator:
-    ///    A static class to easily generate circuits.
-    ///    
-    /// @author:   Louis Carpentier
-    /// @version:  1.1
-    /// 
+    ///     CircuitGenerator:
+    ///         A static class to easily generate circuits.
     /// </summary>
+    /// <remarks>
+    ///     @author:   Louis Carpentier
+    ///     @version:  1.2
+    /// </remarks>
     public static class CircuitGenerator
     {
         /// <summary>
@@ -31,9 +30,9 @@ namespace QuantumCircuitTransformation
         /// control and target qubit are different. Note that it is possible (cause of the
         /// randomness) that some qubits are never used. 
         /// </returns>
-        public static QuantumCircuit RandomCircuit(int nbGates, int nbQubits)
+        public static LogicalCircuit RandomCircuit(int nbGates, int nbQubits)
         {
-            QuantumCircuit circuit = new QuantumCircuit();
+            LogicalCircuit circuit = new LogicalCircuit();
             int controlQubit, targetQubit;
             for (int gateID = 0; gateID < nbGates; gateID++)
             {
@@ -54,9 +53,9 @@ namespace QuantumCircuitTransformation
         /// <remarks>
         /// The file should be in the folder <see cref="Globals.BenchmarkFolder"/>.
         /// </remarks>
-        public static QuantumCircuit ReadFromFile(string fileName)
+        public static LogicalCircuit ReadFromFile(string fileName)
         {
-            QuantumCircuit circuit = new QuantumCircuit();
+            LogicalCircuit circuit = new LogicalCircuit();
 
             string[] file = File.ReadAllLines(Globals.BenchmarkFolder + fileName);
             for (int i = 0; i < file.Length; i++)

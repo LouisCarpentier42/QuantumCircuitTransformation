@@ -11,16 +11,18 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
 {
     /// <summary>
     ///     QuantumCircuit
-    ///         A class to represent any quantum circuit. In general this class 
-    ///         represents logical circuits. See <see cref="PhysicalCircuit"/> 
-    ///         for a class which can represent a physical circuit.
+    ///         An abstract class to represent any quantum circuit.
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.5
+    ///     @version:  2.0
     /// </remarks>
-    public class QuantumCircuit
+    public abstract class QuantumCircuit
     {
+        public readonly List<PhysicalGate> Gates;
+
+
+        // To remove
         /// <summary>
         /// Variable referring to all the gates in this quantum circuit. The
         /// gates are sorted in layers, such that the execution of a gate in
@@ -52,6 +54,9 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
         /// </summary>
         public QuantumCircuit()
         {
+            Gates = new List<PhysicalGate>();
+
+            // To remove
             Layers = new List<List<PhysicalGate>> { new List<PhysicalGate>() };
             LayerSize = new List<int> { 0 };
             NbLayers = 1;
@@ -59,7 +64,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
             NbQubits = 0;
         }
 
- 
+        // To remove
         /// <summary>
         /// Adds a CNOT gate at the end of this quantum circuit. 
         /// </summary>
