@@ -37,7 +37,7 @@ namespace QuantumCircuitTransformation.DependencyGraphs
                     }
                 }
             }
-            return new DependencyGraph(new List<PhysicalGate>(gates), edges);
+            return new DependencyGraph(gates.Count, edges);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace QuantumCircuitTransformation.DependencyGraphs
                     }
                 }
             }
-            return new DependencyGraph(new List<PhysicalGate>(gates), edges);
+            return new DependencyGraph(gates.Count, edges);
         }
 
         /// <summary>
