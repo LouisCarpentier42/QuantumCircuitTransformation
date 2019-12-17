@@ -4,6 +4,7 @@ using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -59,14 +60,27 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
             string[] file = File.ReadAllLines(Globals.BenchmarkFolder + fileName);
             for (int i = 0; i < file.Length; i++)
             {
-                if (file[i].StartsWith("cx"))
-                {
-                    int control = Convert.ToInt32(Regex.Split(file[i], @"\D+")[1]);
-                    int target = Convert.ToInt32(Regex.Split(file[i], @"\D+")[2]);
-                    gates.Add(new CNOT(control, target));
-                }
+                gates.Add(InitialiseGate(file[i]));
             }
+            gates.RemoveAll(x => x == null);
             return new LogicalCircuit(gates);
         }
+
+
+        private static PhysicalGate InitialiseGate(string code)
+        {
+            string prefix = code.Split()[0];
+            int[] numbers = Regex.Split(code, @"\D+").Where(x => !string.IsNullOrEmpty(x)).Select(x => Convert.ToInt32(x)).ToArray();
+            switch (prefix.ToLower())
+            {
+                case "cx":
+                    return new CNOT(numbers[0], numbers[1]);
+                case "h":
+                    return SingleQubitGate.GetHadamardGate(numbers[0]);
+                default:
+                    return null;
+            }
+        }
+
     }
 }

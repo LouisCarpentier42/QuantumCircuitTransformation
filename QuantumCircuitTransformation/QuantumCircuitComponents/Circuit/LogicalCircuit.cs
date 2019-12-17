@@ -40,7 +40,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
 
             for (int currentGate = 0; currentGate < gates.Count; currentGate++)
             {
-                if (Layers[NbLayers].Any(gate => gate.GetQubits().Any(gates[currentGate].GetQubits().Contains)))
+                if (!Layers[NbLayers].Any(gate => gate.GetQubits().Any(gates[currentGate].GetQubits().Contains)))
                 {
                     Layers.Add(new List<PhysicalGate> { gates[currentGate] });
                     LayerSize.Add(1);
@@ -48,7 +48,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
                 } else
                 {
                     Layers[NbLayers].Add(gates[currentGate]);
-                    LayerSize[NbLayers]++;
+                    LayerSize[NbLayers-1]++;
                 }
             }
         }

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
+using System.Text.RegularExpressions;
 
 namespace QuantumCircuitTransformation
 {
@@ -62,7 +63,14 @@ namespace QuantumCircuitTransformation
         {
             ConsoleLayout.Header("Test environment");
 
-           
+            //string s = Console.ReadLine();
+            //Console.WriteLine(s.Split()[0]);
+            //var x = Regex.Split(s, @"\D");
+            //foreach (var y in x) Console.WriteLine(y);
+
+
+            LogicalCircuit l = CircuitGenerator.ReadFromFile("test.txt");
+            Console.WriteLine(l);
 
             ConsoleLayout.Footer();
         }
