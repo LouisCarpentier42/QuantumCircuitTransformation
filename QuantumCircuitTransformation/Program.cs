@@ -62,6 +62,7 @@ namespace QuantumCircuitTransformation
         {
             ConsoleLayout.Header("Test environment");
 
+           
 
             ConsoleLayout.Footer();
         }
@@ -280,7 +281,7 @@ namespace QuantumCircuitTransformation
             for (int i = 0; i < nbRep; i++)
             {
                 Console.WriteLine("Iteration " + (i + 1));
-                QuantumCircuit circuit = CircuitGenerator.RandomCircuit(nbGates, nbQubits);
+                LogicalCircuit circuit = CircuitGenerator.RandomCircuit(nbGates, nbQubits);
                 for (int j = 0; j < AllAlgorithms.InitialMappings.Count(); j++)
                 {
                     Globals.Timer.Restart();

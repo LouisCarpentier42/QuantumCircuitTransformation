@@ -32,16 +32,15 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
         /// </returns>
         public static LogicalCircuit RandomCircuit(int nbGates, int nbQubits)
         {
-            throw new NotImplementedException();
-            //LogicalCircuit circuit = new LogicalCircuit();
-            //int controlQubit, targetQubit;
-            //for (int gateID = 0; gateID < nbGates; gateID++)
-            //{
-            //    controlQubit = Globals.Random.Next(nbQubits);
-            //    do targetQubit = Globals.Random.Next(nbQubits); while (controlQubit == targetQubit);
-            //    circuit.AddGate(new CNOT(controlQubit, targetQubit));
-            //}
-            //return circuit;
+            List<PhysicalGate> gates = new List<PhysicalGate>();
+            int controlQubit, targetQubit;
+            for (int gateID = 0; gateID < nbGates; gateID++)
+            {
+                controlQubit = Globals.Random.Next(nbQubits);
+                do targetQubit = Globals.Random.Next(nbQubits); while (controlQubit == targetQubit);
+                gates.Add(new CNOT(controlQubit, targetQubit));
+            }
+            return new LogicalCircuit(gates);
         }
 
         /// <summary>
@@ -56,21 +55,18 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
         /// </remarks>
         public static LogicalCircuit ReadFromFile(string fileName)
         {
-            throw new NotImplementedException();
-
-            // LogicalCircuit circuit = new LogicalCircuit();
-
-            //string[] file = File.ReadAllLines(Globals.BenchmarkFolder + fileName);
-            //for (int i = 0; i < file.Length; i++)
-            //{
-            //    if (file[i].StartsWith("cx"))
-            //    {
-            //        int control = Convert.ToInt32(Regex.Split(file[i], @"\D+")[1]);
-            //        int target = Convert.ToInt32(Regex.Split(file[i], @"\D+")[2]);
-            //        circuit.AddGate(new CNOT(control, target));
-            //    }
-            //}
-            //return circuit;
+            List<PhysicalGate> gates = new List<PhysicalGate>();
+            string[] file = File.ReadAllLines(Globals.BenchmarkFolder + fileName);
+            for (int i = 0; i < file.Length; i++)
+            {
+                if (file[i].StartsWith("cx"))
+                {
+                    int control = Convert.ToInt32(Regex.Split(file[i], @"\D+")[1]);
+                    int target = Convert.ToInt32(Regex.Split(file[i], @"\D+")[2]);
+                    gates.Add(new CNOT(control, target));
+                }
+            }
+            return new LogicalCircuit(gates);
         }
     }
 }

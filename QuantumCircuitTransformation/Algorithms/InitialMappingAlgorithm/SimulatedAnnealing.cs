@@ -111,9 +111,9 @@ namespace QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm
         /// <summary>
         /// Execute simulated annealing to find a mapping for the given circuit, which
         /// fits on the given architecture. 
-        /// (See <see cref="InitialMapping.Execute(Architecture, QuantumCircuit)"/>)
+        /// (See <see cref="InitialMapping.Execute(Architecture, LogicalCircuit)"/>)
         /// </summary>
-        public override (Mapping, double) Execute(Architecture architecure, QuantumCircuit circuit)
+        public override (Mapping, double) Execute(Architecture architecure, LogicalCircuit circuit)
         {
             Mapping bestMapping = GetRandomMapping(architecure.NbNodes);
             double bestCost = GetMappingCost(bestMapping, architecure, circuit);

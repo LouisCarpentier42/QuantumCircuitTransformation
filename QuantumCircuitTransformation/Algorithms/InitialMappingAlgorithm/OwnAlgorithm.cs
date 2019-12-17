@@ -177,7 +177,7 @@ namespace QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm
 
 
 
-        private void SetUp(Architecture architecture, QuantumCircuit circuit)
+        private void SetUp(Architecture architecture, LogicalCircuit circuit)
         {
             BestMapping = GetRandomMapping(architecture.NbNodes);
             BestCost = GetMappingCost(BestMapping, architecture, circuit);
@@ -195,7 +195,7 @@ namespace QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm
         
 
 
-        public override (Mapping, double) Execute(Architecture architecture, QuantumCircuit circuit)
+        public override (Mapping, double) Execute(Architecture architecture, LogicalCircuit circuit)
         {
             SetUp(architecture, circuit);
             Perturbation perturbation;

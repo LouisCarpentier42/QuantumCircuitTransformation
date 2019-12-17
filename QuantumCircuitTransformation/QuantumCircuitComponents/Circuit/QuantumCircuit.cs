@@ -34,25 +34,6 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
         public int NbQubits { get; protected set; }
 
 
-        // To remove
-        /// <summary>
-        /// Variable referring to all the gates in this quantum circuit. The
-        /// gates are sorted in layers, such that the execution of a gate in
-        /// some layer doesn't affect the outcome of any other gate in the 
-        /// same layer. 
-        /// </summary>
-        public List<List<PhysicalGate>> Layers { get; private set; }
-        /// <summary>
-        /// Variable referring to the size of each layer. At index i is the number
-        /// of gates in layer i of <see cref="Layers"/>.
-        /// </summary>
-        public List<int> LayerSize { get; private set; }
-        /// <summary>
-        /// Variable referring to the number of layers this quantum circuit has. 
-        /// </summary>
-        public int NbLayers { get; private set; }
-
-
         /// <summary>
         /// Initialise a new Quantum circuit without any gates. 
         /// </summary>
@@ -61,11 +42,6 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
             Gates = gates;
             NbGates = gates.Count;
             NbQubits = gates.Max(gate => gate.GetQubits().Max()) + 1;
-
-            // To remove
-            Layers = new List<List<PhysicalGate>> { new List<PhysicalGate>() };
-            LayerSize = new List<int> { 0 };
-            NbLayers = 1;
         }
 
 
