@@ -15,7 +15,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.4
+    ///     @version:  2.0
     /// </remarks>
     public class PhysicalCircuit : QuantumCircuit
     {
@@ -23,17 +23,21 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
         /// A variable to keep track of the architecture graph of the 
         /// physical device. 
         /// </summary>
-        public readonly ArchitectureGraph ArchitectureGraph;
+        public readonly ArchitectureGraph Architecture;
 
 
-        /// <summary>
-        /// Initialise a new physical circuit with given architecture graph.
-        /// </summary>
-        /// <param name="architectureGraph"> The architecture graph of the physical device. </param>
-        public PhysicalCircuit(ArchitectureGraph architectureGraph)
+        public PhysicalCircuit(ArchitectureGraph architecture) 
+            : this(architecture, new List<PhysicalGate>()) { }
+
+
+
+        public PhysicalCircuit(ArchitectureGraph architecture, List<PhysicalGate> gates) 
+            : base(gates)
         {
-            ArchitectureGraph = architectureGraph;
+            Architecture = architecture;
         }
+
+
 
 
         /// <summary>
@@ -43,7 +47,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
         /// <param name="cnot"> The CNOT gate to add to this circuit. </param>
         public override void AddGate(CNOT cnot)
         {
-            if (ArchitectureGraph.CanExecuteCNOT(cnot))
+            if (Architecture.CanExecuteCNOT(cnot))
                 base.AddGate(cnot);
         }
     }

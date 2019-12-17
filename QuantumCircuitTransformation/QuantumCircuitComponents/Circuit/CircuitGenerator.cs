@@ -7,7 +7,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace QuantumCircuitTransformation
+namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
 {
     /// <summary>
     ///     CircuitGenerator:
@@ -32,15 +32,16 @@ namespace QuantumCircuitTransformation
         /// </returns>
         public static LogicalCircuit RandomCircuit(int nbGates, int nbQubits)
         {
-            LogicalCircuit circuit = new LogicalCircuit();
-            int controlQubit, targetQubit;
-            for (int gateID = 0; gateID < nbGates; gateID++)
-            {
-                controlQubit = Globals.Random.Next(nbQubits);
-                do targetQubit = Globals.Random.Next(nbQubits); while (controlQubit == targetQubit);
-                circuit.AddGate(new CNOT(controlQubit, targetQubit));
-            }
-            return circuit;
+            throw new NotImplementedException();
+            //LogicalCircuit circuit = new LogicalCircuit();
+            //int controlQubit, targetQubit;
+            //for (int gateID = 0; gateID < nbGates; gateID++)
+            //{
+            //    controlQubit = Globals.Random.Next(nbQubits);
+            //    do targetQubit = Globals.Random.Next(nbQubits); while (controlQubit == targetQubit);
+            //    circuit.AddGate(new CNOT(controlQubit, targetQubit));
+            //}
+            //return circuit;
         }
 
         /// <summary>
@@ -55,19 +56,21 @@ namespace QuantumCircuitTransformation
         /// </remarks>
         public static LogicalCircuit ReadFromFile(string fileName)
         {
-            LogicalCircuit circuit = new LogicalCircuit();
+            throw new NotImplementedException();
 
-            string[] file = File.ReadAllLines(Globals.BenchmarkFolder + fileName);
-            for (int i = 0; i < file.Length; i++)
-            {
-                if (file[i].StartsWith("cx"))
-                {
-                    int control = Convert.ToInt32(Regex.Split(file[i], @"\D+")[1]);
-                    int target = Convert.ToInt32(Regex.Split(file[i], @"\D+")[2]);
-                    circuit.AddGate(new CNOT(control, target));
-                }
-            }
-            return circuit;
+            // LogicalCircuit circuit = new LogicalCircuit();
+
+            //string[] file = File.ReadAllLines(Globals.BenchmarkFolder + fileName);
+            //for (int i = 0; i < file.Length; i++)
+            //{
+            //    if (file[i].StartsWith("cx"))
+            //    {
+            //        int control = Convert.ToInt32(Regex.Split(file[i], @"\D+")[1]);
+            //        int target = Convert.ToInt32(Regex.Split(file[i], @"\D+")[2]);
+            //        circuit.AddGate(new CNOT(control, target));
+            //    }
+            //}
+            //return circuit;
         }
     }
 }

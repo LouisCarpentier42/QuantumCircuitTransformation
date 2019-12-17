@@ -11,7 +11,8 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
 {
     /// <summary>
     ///     QuantumCircuit
-    ///         An abstract class to represent any quantum circuit.
+    ///         An abstract class to represent any quantum circuit. This
+    ///         can be a logical or physical circuit. 
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
@@ -19,7 +20,18 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
     /// </remarks>
     public abstract class QuantumCircuit
     {
+        /// <summary>
+        /// A list of the physical gates in this quantum circuit. 
+        /// </summary>
         public readonly List<PhysicalGate> Gates;
+        /// <summary>
+        /// Variable referring to the number of gates in this quantum circuit. 
+        /// </summary>
+        public int NbGates { get; private set; }
+        /// <summary>
+        /// A variable to keep track of the number of qubits used in this circuit.
+        /// </summary>
+        public int NbQubits { get; private set; }
 
 
         // To remove
@@ -39,30 +51,42 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
         /// Variable referring to the number of layers this quantum circuit has. 
         /// </summary>
         public int NbLayers { get; private set; }
-        /// <summary>
-        /// Variable referring to the number of gates in this quantum circuit. 
-        /// </summary>
-        public int NbGates { get; private set; }
-        /// <summary>
-        /// A variable to keep track of the number of qubits used in this circuit.
-        /// </summary>
-        public int NbQubits { get; private set; }
 
 
         /// <summary>
         /// Initialise a new Quantum circuit without any gates. 
         /// </summary>
-        public QuantumCircuit()
+        public QuantumCircuit(List<PhysicalGate> gates)
         {
-            Gates = new List<PhysicalGate>();
+            Gates = gates;
+            NbGates = gates.Count;
+            NbQubits = gates.Max(gate => gate.GetQubits().Max()) + 1;
 
             // To remove
             Layers = new List<List<PhysicalGate>> { new List<PhysicalGate>() };
             LayerSize = new List<int> { 0 };
             NbLayers = 1;
-            NbGates = 0;
-            NbQubits = 0;
         }
+
+        /// <summary>
+        /// Gives a string representation of this quantum circuit.  
+        /// </summary>
+        /// <returns>
+        /// Initially is the command qreg given with the number of qubits
+        /// used in this quantum circuit. Next are all the gates given in 
+        /// this circuit. 
+        /// </returns>
+        public override string ToString()
+        {
+            string codeRepresenation =
+                "OPENQASM 2.0;\n" +
+                "include \"qelib1.inc\";\n\n" +
+                "qreg q[" + NbQubits + "];\n";
+            for (int i = 0; i < Gates.Count; i++)
+                codeRepresenation += "\n" + Gates[i];
+            return codeRepresenation;
+        }
+
 
         // To remove
         /// <summary>
@@ -85,27 +109,5 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
             NbGates++;
             NbQubits = Math.Max(Math.Max(newCNOT.ControlQubit, newCNOT.TargetQubit), NbQubits);
         }
-
-        /// <summary>
-        /// Gives a string representation of this quantum circuit.  
-        /// </summary>
-        /// <returns>
-        /// Initially is the command qreg given with the number of qubits
-        /// used in this quantum circuit. Next are all the gates given in 
-        /// this circuit. 
-        /// </returns>
-        public override string ToString()
-        {
-            string codeRepresenation =
-                "OPENQASM 2.0;\n" +
-                "include \"qelib1.inc\";\n\n" +
-                "qreg q[" + NbQubits + "];\n" +
-                "creg q[" + NbQubits + "];\n"; ;
-            for (int i = 0; i < NbLayers; i++)
-                for (int j = 0; j < Layers[i].Count; j++)
-                    codeRepresenation += "\n" + Layers[i][j];
-            return codeRepresenation;
-        }
-
     }
 }
