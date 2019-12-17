@@ -1,4 +1,4 @@
-﻿using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
+﻿using QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph;
 using System;
 using System.Collections.Generic;
 
@@ -44,7 +44,7 @@ namespace QuantumCircuitTransformation.Data
             new Tuple<int, int>(7,10),
             new Tuple<int, int>(9,8),
         };
-        public static readonly ArchitectureGraph IBM_QX5 = new DirectedArchitecture(IBM_QX5e_dges);
+        public static readonly Architecture IBM_QX5 = new DirectedArchitecture(IBM_QX5e_dges);
 
         /// <summary>
         /// IBM Q20 is an existing IBM device. It has an undirected architecture
@@ -96,6 +96,6 @@ namespace QuantumCircuitTransformation.Data
             new Tuple<int, int>(13,19),
             new Tuple<int, int>(14,18),
         };
-        public static readonly ArchitectureGraph IBM_Q20 = new UndirectedArchitecture(IBMQ20edges);
+        public static readonly Architecture IBM_Q20 = new UndirectedArchitecture(IBMQ20edges);
     }
 }

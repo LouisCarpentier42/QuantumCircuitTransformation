@@ -2,7 +2,7 @@
 using QuantumCircuitTransformation.Data;
 using QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Circuit;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
+using QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph;
 using QuantumCircuitTransformation.Algorithms.TransformationAlgorithm;
 using System;
 using System.Collections.Generic;
@@ -272,7 +272,7 @@ namespace QuantumCircuitTransformation
             int nbRep = 10;
             int nbQubits = 20;
             int nbGates = 500;
-            ArchitectureGraph architecture = QuantumDevices.IBM_Q20;
+            Architecture architecture = QuantumDevices.IBM_Q20;
             
             double[] totalCost = new double[AllAlgorithms.InitialMappings.Count()];
             double[] titotalTime = new double[AllAlgorithms.InitialMappings.Count()];

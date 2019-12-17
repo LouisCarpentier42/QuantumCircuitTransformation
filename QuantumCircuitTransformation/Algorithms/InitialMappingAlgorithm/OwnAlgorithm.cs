@@ -5,7 +5,7 @@ using System.Text;
 using QuantumCircuitTransformation.Exceptions;
 using QuantumCircuitTransformation.Data;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Circuit;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
+using QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph;
 using QuantumCircuitTransformation.MappingPerturbation;
 
 namespace QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm
@@ -177,7 +177,7 @@ namespace QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm
 
 
 
-        private void SetUp(ArchitectureGraph architecture, QuantumCircuit circuit)
+        private void SetUp(Architecture architecture, QuantumCircuit circuit)
         {
             BestMapping = GetRandomMapping(architecture.NbNodes);
             BestCost = GetMappingCost(BestMapping, architecture, circuit);
@@ -195,7 +195,7 @@ namespace QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm
         
 
 
-        public override (Mapping, double) Execute(ArchitectureGraph architecture, QuantumCircuit circuit)
+        public override (Mapping, double) Execute(Architecture architecture, QuantumCircuit circuit)
         {
             SetUp(architecture, circuit);
             Perturbation perturbation;

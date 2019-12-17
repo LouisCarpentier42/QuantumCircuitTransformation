@@ -2,6 +2,7 @@
 using QuantumCircuitTransformation.Exceptions;
 using System.Collections.Generic;
 using System.Text;
+using QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph;
 
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
 {
@@ -12,9 +13,9 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.6
+    ///     @version:  1.7
     /// </remarks>
-    public class SingleQubitGate : PhysicalGate
+    public sealed class SingleQubitGate : PhysicalGate
     {
         /// <summary>
         /// The short name for this single qubit gate.
@@ -126,6 +127,14 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
             if (qubit == Qubit)
                 return (GatePart)Enum.Parse(typeof(GatePart), GateNameShort);
             throw new QubitIsNotPartOfGateException(qubit, this);
+        }
+
+        /// <summary>
+        /// See <see cref="PhysicalGate.CanBeExecutedOn(Architecture)"/>.
+        /// </summary>
+        public bool CanBeExecutedOn(Architecture architecture)
+        {
+            return Qubit < architecture.NbNodes;
         }
     }
 }

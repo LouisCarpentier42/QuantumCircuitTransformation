@@ -1,7 +1,7 @@
 ﻿using QuantumCircuitTransformation.MappingPerturbation;
 using QuantumCircuitTransformation.Data;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Circuit;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
+using QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph;
 using System;
 using System.Linq;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
@@ -34,7 +34,7 @@ namespace QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm
         /// <returns>
         /// The best <see cref="Mapping"/> which has been found by the initial mapping algorithm. 
         /// </returns>
-        public abstract (Mapping,double) Execute(ArchitectureGraph architecture, QuantumCircuit circuit);
+        public abstract (Mapping,double) Execute(Architecture architecture, QuantumCircuit circuit);
 
         /// <summary>
         /// See <see cref="Algorithm.Name"/>.
@@ -78,7 +78,7 @@ namespace QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm
         private const int MAX_NB_GATES_IN_COST = 10000;
 
 
-        public static double GetMappingCost(Mapping mapping, ArchitectureGraph architecture, QuantumCircuit circuit)
+        public static double GetMappingCost(Mapping mapping, Architecture architecture, QuantumCircuit circuit)
         {
 
             int NbGatesAllowed = Math.Min(circuit.NbGates, MAX_NB_GATES_IN_COST);

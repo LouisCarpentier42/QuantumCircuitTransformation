@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using QuantumCircuitTransformation.Exceptions;
+using QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph;
 
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
 {
@@ -16,7 +17,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.5
+    ///     @version:  1.6
     /// </remarks>
     public interface PhysicalGate
     {
@@ -37,5 +38,15 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         /// <param name="qubit"> The qubit to get the gate part from. </param>
         /// <exception cref="QubitIsNotPartOfGateException"> If the given qubit is no part of the the gate. </exception>
         GatePart GetGatePart(int qubit);
+
+        /// <summary>
+        /// Checks whether or not this physical gate can be executed
+        /// on the given architecture. 
+        /// </summary>
+        /// <param name="architecture"> The architecture to check if this gate can be executed on it. </param>
+        /// <returns>
+        /// True if and only if this gate can be executed on the given architecture graph. 
+        /// </returns>
+        bool CanBeExecutedOn(ArchitectureGraph.Architecture architecture);
     }
 }

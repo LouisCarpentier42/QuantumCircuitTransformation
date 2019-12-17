@@ -4,7 +4,7 @@ using System.Text;
 using QuantumCircuitTransformation.MappingPerturbation;
 using QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Circuit;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
+using QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph;
 
 namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
 {

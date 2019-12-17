@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using QuantumCircuitTransformation.Exceptions;
+using QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph;
 
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
 {
@@ -14,7 +15,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.6
+    ///     @version:  1.7
     /// </remarks>
     public class CNOT : PhysicalGate
     {
@@ -71,6 +72,14 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
             if (qubit == TargetQubit)
                 return GatePart.Target;
             throw new QubitIsNotPartOfGateException(qubit, this);
+        }
+
+        /// <summary>
+        /// See <see cref="PhysicalGate.CanBeExecutedOn(Architecture)"/>.
+        /// </summary>
+        public bool CanBeExecutedOn(Architecture architecture)
+        {
+            return architecture.CanExecuteCNOT(this);
         }
     }
 }

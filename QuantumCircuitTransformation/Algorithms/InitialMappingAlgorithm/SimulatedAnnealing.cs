@@ -1,5 +1,5 @@
 ﻿using QuantumCircuitTransformation.QuantumCircuitComponents.Circuit;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
+using QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph;
 using QuantumCircuitTransformation.Data;
 using System;
 using QuantumCircuitTransformation.MappingPerturbation;
@@ -111,9 +111,9 @@ namespace QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm
         /// <summary>
         /// Execute simulated annealing to find a mapping for the given circuit, which
         /// fits on the given architecture. 
-        /// (See <see cref="InitialMapping.Execute(ArchitectureGraph, QuantumCircuit)"/>)
+        /// (See <see cref="InitialMapping.Execute(Architecture, QuantumCircuit)"/>)
         /// </summary>
-        public override (Mapping, double) Execute(ArchitectureGraph architecure, QuantumCircuit circuit)
+        public override (Mapping, double) Execute(Architecture architecure, QuantumCircuit circuit)
         {
             Mapping bestMapping = GetRandomMapping(architecure.NbNodes);
             double bestCost = GetMappingCost(bestMapping, architecure, circuit);

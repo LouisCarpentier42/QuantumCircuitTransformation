@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
+namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph
 {
     /// <summary>
     ///     ShortestPathFinder: 

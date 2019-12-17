@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
+using QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
+using QuantumCircuitTransformation.Exceptions;
 
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
 {
@@ -23,15 +24,15 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
         /// A variable to keep track of the architecture graph of the 
         /// physical device. 
         /// </summary>
-        public readonly ArchitectureGraph Architecture;
+        public readonly ArchitectureGraph.Architecture Architecture;
 
 
-        public PhysicalCircuit(ArchitectureGraph architecture) 
+        public PhysicalCircuit(ArchitectureGraph.Architecture architecture) 
             : this(architecture, new List<PhysicalGate>()) { }
 
 
 
-        public PhysicalCircuit(ArchitectureGraph architecture, List<PhysicalGate> gates) 
+        public PhysicalCircuit(ArchitectureGraph.Architecture architecture, List<PhysicalGate> gates) 
             : base(gates)
         {
             Architecture = architecture;
@@ -39,16 +40,13 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
 
 
 
-
-        /// <summary>
-        /// Adds the given CNOT gate only if it can be exucuted on the architecture of 
-        /// the physical device. 
-        /// </summary>
-        /// <param name="cnot"> The CNOT gate to add to this circuit. </param>
-        public override void AddGate(CNOT cnot)
+        public void AddGate(PhysicalGate gate)
         {
-            if (Architecture.CanExecuteCNOT(cnot))
-                base.AddGate(cnot);
+            if (!gate.CanBeExecutedOn(Architecture))
+                throw new InvalidGateForArchitectureException();
+            Gates.Add(gate);
+            NbGates++;
+            NbQubits = Math.Max(gate.GetQubits().Max(), NbQubits);   
         }
     }
 }

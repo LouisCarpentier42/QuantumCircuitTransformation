@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
+namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph
 {
     /// <summary>
     ///     ArchitectureGraph:
@@ -14,7 +14,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
     ///     @Author:   Louis Carpentier
     ///     @Version:  2.3
     /// </remarks>
-    public abstract class ArchitectureGraph
+    public abstract class Architecture
     {
         /// <summary>
         /// The edges between the different nodes in this architecture. 
@@ -43,7 +43,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
         /// First, the edges are normalised (see <see cref="NormaliseEdges"/>), then the
         /// number of nodes is set and the CNOT distances are computed. 
         /// </remarks>
-        public ArchitectureGraph(List<Tuple<int, int>> connections)
+        public Architecture(List<Tuple<int, int>> connections)
         {
             Edges = connections;
             NormaliseEdges();

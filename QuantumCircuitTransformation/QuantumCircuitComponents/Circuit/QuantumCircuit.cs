@@ -1,7 +1,7 @@
 ﻿using QuantumCircuitTransformation.MappingPerturbation;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 using QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Architecture;
+using QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,11 +27,11 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
         /// <summary>
         /// Variable referring to the number of gates in this quantum circuit. 
         /// </summary>
-        public int NbGates { get; private set; }
+        public int NbGates { get; protected set; }
         /// <summary>
         /// A variable to keep track of the number of qubits used in this circuit.
         /// </summary>
-        public int NbQubits { get; private set; }
+        public int NbQubits { get; protected set; }
 
 
         // To remove
@@ -68,6 +68,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
             NbLayers = 1;
         }
 
+
         /// <summary>
         /// Gives a string representation of this quantum circuit.  
         /// </summary>
@@ -85,29 +86,6 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
             for (int i = 0; i < Gates.Count; i++)
                 codeRepresenation += "\n" + Gates[i];
             return codeRepresenation;
-        }
-
-
-        // To remove
-        /// <summary>
-        /// Adds a CNOT gate at the end of this quantum circuit. 
-        /// </summary>
-        /// <param name="newCNOT"> The gate to add to this circuit. </param>
-        public virtual void AddGate(CNOT newCNOT)
-        {
-            if (Layers[0].Any(gate => ((CNOT)gate).TargetQubit == newCNOT.ControlQubit))
-            {
-                Layers.Add(new List<PhysicalGate> { newCNOT });
-                LayerSize.Add(1);
-                NbLayers++;
-            }
-            else
-            {
-                Layers[NbLayers - 1].Add(newCNOT);
-                LayerSize[NbLayers - 1]++;
-            }
-            NbGates++;
-            NbQubits = Math.Max(Math.Max(newCNOT.ControlQubit, newCNOT.TargetQubit), NbQubits);
         }
     }
 }

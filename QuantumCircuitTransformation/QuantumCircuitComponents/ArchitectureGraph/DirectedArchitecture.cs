@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
+namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph
 {
     /// <summary>
     ///     DirectedArchitecture:
@@ -14,16 +14,16 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
     ///     @author:   Louis Carpentier
     ///     @version:  1.4
     /// </remarks>
-    public class DirectedArchitecture : ArchitectureGraph
+    public class DirectedArchitecture : Architecture
     {
         /// <summary>
-        /// See <see cref="ArchitectureGraph(List{Tuple{int, int}})"/>
+        /// See <see cref="Architecture(List{Tuple{int, int}})"/>
         /// </summary>
         public DirectedArchitecture(List<Tuple<int, int>> connections) 
             : base(connections) { }
 
         /// <summary>
-        /// See <see cref="ArchitectureGraph.CanExecuteCNOT(int, int)"/>.
+        /// See <see cref="Architecture.CanExecuteCNOT(int, int)"/>.
         /// </summary>
         /// <returns>
         /// True if and only if there exists an edge which connectes the given 
@@ -36,7 +36,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
         }
 
         /// <summary>
-        /// See <see cref="ArchitectureGraph.NbOfCnotGatesPerSwap"/>.
+        /// See <see cref="Architecture.NbOfCnotGatesPerSwap"/>.
         /// </summary>
         /// <returns>
         /// A swap gate can be replaced by three cnot gates and 4 Hadamard gates. 

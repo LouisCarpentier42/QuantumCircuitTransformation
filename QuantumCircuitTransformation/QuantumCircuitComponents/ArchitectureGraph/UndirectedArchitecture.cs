@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
+namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph
 {
     /// <summary>
     ///     UndirectedArchitecture:
@@ -14,17 +14,17 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
     ///     @author:   Louis Carpentier
     ///     @version:  1.3
     /// </remarks>
-    public class UndirectedArchitecture : ArchitectureGraph
+    public class UndirectedArchitecture : Architecture
     {
         /// <summary>
-        /// See <see cref="ArchitectureGraph(List{Tuple{int, int}})"/>
+        /// See <see cref="Architecture(List{Tuple{int, int}})"/>
         /// </summary>
         public UndirectedArchitecture(List<Tuple<int, int>> connections) 
             : base(connections) { }
 
 
         /// <summary>
-        /// See <see cref="ArchitectureGraph.CanExecuteCNOT(CNOT)"/>.
+        /// See <see cref="Architecture.CanExecuteCNOT(CNOT)"/>.
         /// </summary>
         /// <returns>
         /// True if and only if there exists an edge which connectes the control  
@@ -38,7 +38,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Architecture
         }
 
         /// <summary>
-        /// See <see cref="ArchitectureGraph.NbOfCnotGatesPerSwap"/>.
+        /// See <see cref="Architecture.NbOfCnotGatesPerSwap"/>.
         /// </summary>
         /// <returns>
         /// A swap gate can be replaced by three cnot gates. First a cnot gate from a
