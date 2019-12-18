@@ -38,6 +38,15 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
 
         /// <summary>
         /// Initialise a new single qubit gate with given name and qubit
+        /// to operate on and no extra parameter. 
+        /// </summary>
+        /// <param name="gateNameShort"> The short name of this gate. </param>
+        /// <param name="qubit"> The qubit this gate operates on. </param>
+        public SingleQubitGate(string gateNameShort, int qubit)
+            : this(gateNameShort, qubit, null) { }
+
+        /// <summary>
+        /// Initialise a new single qubit gate with given name and qubit
         /// to operate on and an extra parameter. 
         /// </summary>
         /// <param name="gateNameShort"> The short name of this gate. </param>
@@ -49,15 +58,6 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
             Qubit = qubit;
             ExtraParam = extraParam;
         }
-
-        /// <summary>
-        /// Initialise a new single qubit gate with given name and qubit
-        /// to operate on and no extra parameter. 
-        /// </summary>
-        /// <param name="gateNameShort"> The short name of this gate. </param>
-        /// <param name="qubit"> The qubit this gate operates on. </param>
-        private SingleQubitGate(string gateNameShort, int qubit)
-            : this(gateNameShort, qubit, null) { }
 
 
         /// <summary>
@@ -123,9 +123,18 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         /// See <see cref="PhysicalGate.GetGatePart(int)"/>. 
         /// </summary>
         public GatePart GetGatePart(int qubit)
-        {
+        {   
             if (qubit == Qubit)
-                return (GatePart)Enum.Parse(typeof(GatePart), GateNameShort);
+            {
+                try
+                {
+                    return (GatePart)Enum.Parse(typeof(GatePart), GateNameShort);
+                }
+                catch (ArgumentException)
+                {
+                    return GatePart.None;
+                }
+            }
             throw new QubitIsNotPartOfGateException(qubit, this);
         }
 

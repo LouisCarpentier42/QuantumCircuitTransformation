@@ -64,6 +64,11 @@ namespace QuantumCircuitTransformation
         {
             ConsoleLayout.Header("Test environment");
 
+            LogicalCircuit circuit = CircuitGenerator.ReadFromFile("test.txt");
+            //Console.WriteLine(circuit);
+
+
+            // TODO add to some data class
             List<DependencyRule> rules = new List<DependencyRule>
             {
                 new DependencyRule(GatePart.Control, GatePart.Control),
@@ -72,13 +77,13 @@ namespace QuantumCircuitTransformation
                 new DependencyRule(GatePart.Target, GatePart.Target)
             };
 
-            LogicalCircuit circuit = CircuitGenerator.RandomCircuit(10000, 20);
+            //LogicalCircuit circuit = CircuitGenerator.RandomCircuit(10000, 20);
 
-            DependencyGraph graph = DependencyGraphGenerator.Generate(circuit);
-            Console.WriteLine(graph.DependencyEdges.Count);
+            //DependencyGraph graph = DependencyGraphGenerator.Generate(circuit);
+            //Console.WriteLine(graph.DependencyEdges.Count);
 
-            DependencyGraph graphRules = DependencyGraphGenerator.Generate(circuit, rules);
-            Console.WriteLine(graphRules.DependencyEdges.Count);
+            //DependencyGraph graphRules = DependencyGraphGenerator.Generate(circuit, rules);
+            //Console.WriteLine(graphRules.DependencyEdges.Count);
 
             ConsoleLayout.Footer();
         }

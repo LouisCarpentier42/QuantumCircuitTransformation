@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
@@ -16,7 +15,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.2
+    ///     @version:  1.3
     /// </remarks>
     public static class CircuitGenerator
     {
@@ -68,20 +67,37 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
         }
 
 
+        /// <summary>
+        /// Initialise a physical gate by the given line code. 
+        /// </summary>
+        /// <param name="code"> The line code which represents a gate. </param>
+        /// <returns>
+        /// The physical gate which is represented by the given line. If the given
+        /// line doesn't represent a valid gate or a gate which is not implemented,
+        /// then is null returned. 
+        /// </returns>
         private static PhysicalGate InitialiseGate(string code)
         {
-            string prefix = code.Split()[0];
-            int[] numbers = Regex.Split(code, @"\D+").Where(x => !string.IsNullOrEmpty(x)).Select(x => Convert.ToInt32(x)).ToArray();
-            switch (prefix.ToLower())
+            if (!Regex.Match(code, @"^\S+ (q[\D+],)*(q[\D])").Success || Regex.Match(code, @"^qreg\s").Success)
+                return null;
+            string prefix = code.Split()[0].ToUpper();
+            IEnumerable<double> numbers = Regex.Split(code, @"[^0-9\.]+").Where(x => !string.IsNullOrEmpty(x)).Select(x => Convert.ToDouble(x));
+            switch (prefix)
             {
-                case "cx":
-                    return new CNOT(numbers[0], numbers[1]);
-                case "h":
-                    return SingleQubitGate.GetHadamardGate(numbers[0]);
-                default:
-                    return null;
+                case "CX":
+                    return new CNOT((int)numbers.ElementAt(0), (int)numbers.ElementAt(1));
+                case "H":
+                    return SingleQubitGate.GetHadamardGate((int)numbers.ElementAt(0));
+                case "RX":
+                    return SingleQubitGate.GetRotationalGate((int)numbers.ElementAt(0), 'x', (int)numbers.ElementAt(1));
+                case "RY":
+                    return SingleQubitGate.GetRotationalGate((int)numbers.ElementAt(0), 'y', (int)numbers.ElementAt(1));
+                case "RZ":
+                    return SingleQubitGate.GetRotationalGate((int)numbers.ElementAt(0), 'z', (int)numbers.ElementAt(1));
             }
+            if (Regex.Match(code, @"^\S+\sq[\D+]").Success)
+                return new SingleQubitGate(prefix, (int)numbers.ElementAt(0));          
+            return null;
         }
-
     }
 }

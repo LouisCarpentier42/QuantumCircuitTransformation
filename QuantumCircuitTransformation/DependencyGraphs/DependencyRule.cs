@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using QuantumCircuitTransformation.Exceptions;
 
 namespace QuantumCircuitTransformation.DependencyGraphs
 {
@@ -28,8 +28,11 @@ namespace QuantumCircuitTransformation.DependencyGraphs
         /// Initialise a new dependency rule with given gateparts.
         /// </summary>
         /// <param name="gateParts"> The gate parts for this dependency rule. </param>
+        /// <exception cref="InvalidGatePartForRuleException"> If the given gateparts contain an invalid gatepart. </exception>
         public DependencyRule(List<GatePart> gateParts)
         {
+            if (gateParts.Contains(GatePart.None))
+                throw new InvalidGatePartForRuleException();
             GateParts = gateParts;
             GateParts.Sort();
         }

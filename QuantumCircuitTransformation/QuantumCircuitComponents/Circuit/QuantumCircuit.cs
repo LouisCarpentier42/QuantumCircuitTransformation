@@ -35,8 +35,9 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
 
 
         /// <summary>
-        /// Initialise a new Quantum circuit without any gates. 
+        /// Initialise a new quantum circuit with the given gates. 
         /// </summary>
+        /// <param name="gates"> The gates for this quantum circuit. </param>
         public QuantumCircuit(List<PhysicalGate> gates)
         {
             Gates = gates;

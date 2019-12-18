@@ -5,31 +5,20 @@ using System.Linq;
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
 {
     /// <summary>
-    /// 
+    ///     LogicalCircuit
+    ///         A class for logical circuits. This is a circuit which
+    ///         is independent from any physical device. 
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
     ///     @version:  2.0
     /// </remarks>
-    public class LogicalCircuit : QuantumCircuit
+    public sealed class LogicalCircuit : QuantumCircuit
     {
-        /// <summary>
-        /// Variable referring to all the gates in this quantum circuit. The
-        /// gates are sorted in layers, such that the execution of a gate in
-        /// some layer doesn't affect the outcome of any other gate in the 
-        /// same layer. 
-        /// </summary>
+        // TODO implement only dependency graph => these variables should be removed, also in constructor!!!
         public readonly List<List<PhysicalGate>> Layers;
-        /// <summary>
-        /// Variable referring to the size of each layer. At index i is the number
-        /// of gates in layer i of <see cref="Layers"/>.
-        /// </summary>
         public readonly List<int> LayerSize;
-        /// <summary>
-        /// Variable referring to the number of layers this quantum circuit has. 
-        /// </summary>
         public readonly int NbLayers;
-
 
 
         public LogicalCircuit(List<PhysicalGate> gates) : base(gates)
