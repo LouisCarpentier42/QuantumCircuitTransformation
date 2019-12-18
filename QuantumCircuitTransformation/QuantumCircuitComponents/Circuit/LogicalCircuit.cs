@@ -45,10 +45,11 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
                     Layers.Add(new List<PhysicalGate> { gates[currentGate] });
                     LayerSize.Add(1);
                     NbLayers++;
-                } else
+                }
+                else
                 {
                     Layers[NbLayers].Add(gates[currentGate]);
-                    LayerSize[NbLayers-1]++;
+                    LayerSize[NbLayers - 1]++;
                 }
             }
         }

@@ -38,7 +38,8 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
             for (int gateID = 0; gateID < nbGates; gateID++)
             {
                 controlQubit = Globals.Random.Next(nbQubits);
-                do targetQubit = Globals.Random.Next(nbQubits); while (controlQubit == targetQubit);
+                do targetQubit = Globals.Random.Next(nbQubits);
+                while (controlQubit == targetQubit);
                 gates.Add(new CNOT(controlQubit, targetQubit));
             }
             return new LogicalCircuit(gates);

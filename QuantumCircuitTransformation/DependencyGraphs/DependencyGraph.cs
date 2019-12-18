@@ -63,9 +63,9 @@ namespace QuantumCircuitTransformation.DependencyGraphs
             for (int i = 0; i < nbGates; i++)
             {
                 if (IsNotBlocked(i))
-                    GateStates[i] = GateState.Blocking;
+                    GateStates.Add(GateState.Blocking);
                 else
-                    GateStates[i] = GateState.Blocked;
+                    GateStates.Add(GateState.Blocked);
             }
         }
 

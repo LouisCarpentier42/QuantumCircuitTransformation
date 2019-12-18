@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 using System.Text.RegularExpressions;
+using QuantumCircuitTransformation.DependencyGraphs;
 
 namespace QuantumCircuitTransformation
 {
@@ -63,14 +64,21 @@ namespace QuantumCircuitTransformation
         {
             ConsoleLayout.Header("Test environment");
 
-            //string s = Console.ReadLine();
-            //Console.WriteLine(s.Split()[0]);
-            //var x = Regex.Split(s, @"\D");
-            //foreach (var y in x) Console.WriteLine(y);
+            List<DependencyRule> rules = new List<DependencyRule>
+            {
+                new DependencyRule(GatePart.Control, GatePart.Control),
+                new DependencyRule(GatePart.Rz, GatePart.Control),
+                new DependencyRule(GatePart.Rx, GatePart.Target),
+                new DependencyRule(GatePart.Target, GatePart.Target)
+            };
 
+            LogicalCircuit circuit = CircuitGenerator.RandomCircuit(10000, 20);
 
-            LogicalCircuit l = CircuitGenerator.ReadFromFile("test.txt");
-            Console.WriteLine(l);
+            DependencyGraph graph = DependencyGraphGenerator.Generate(circuit);
+            Console.WriteLine(graph.DependencyEdges.Count);
+
+            DependencyGraph graphRules = DependencyGraphGenerator.Generate(circuit, rules);
+            Console.WriteLine(graphRules.DependencyEdges.Count);
 
             ConsoleLayout.Footer();
         }
@@ -280,7 +288,7 @@ namespace QuantumCircuitTransformation
 
             int nbRep = 10;
             int nbQubits = 20;
-            int nbGates = 500;
+            int nbGates = 1000000;
             Architecture architecture = QuantumDevices.IBM_Q20;
             
             double[] totalCost = new double[AllAlgorithms.InitialMappings.Count()];
@@ -297,7 +305,7 @@ namespace QuantumCircuitTransformation
                     Globals.Timer.Stop();
                     totalCost[j] += cost;
                     titotalTime[j] += Globals.Timer.Elapsed.TotalMilliseconds;
-                    //Console.WriteLine("cost = {1} - time = {2} ({0})", AllAlgorithms.InitialMappings[j].Name(), cost, Globals.Timer.Elapsed.TotalMilliseconds);
+                    Console.WriteLine("cost = {1} - time = {2} ({0})", AllAlgorithms.InitialMappings[j].Name(), cost, Globals.Timer.Elapsed.TotalMilliseconds);
                 }
             }
 
