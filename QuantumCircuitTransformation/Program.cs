@@ -28,7 +28,7 @@ namespace QuantumCircuitTransformation
                 new Action(LoadInitialMappingAlgorithm)),
             new Tuple<string, Action>("(TODO)Load a transformation algorithm",
                 new Action(LoadTransformationAlgorithm)),
-            new Tuple<string, Action>("(TODO)Load a dependency rule",
+            new Tuple<string, Action>("Load a dependency rule",
                 new Action(LoadDependencyRule)),
             new Tuple<string, Action>("Unload a dependency rule",
                 new Action(UnloadDependencyRule)),
@@ -109,25 +109,30 @@ namespace QuantumCircuitTransformation
         {
             ConsoleLayout.Header("Select an initial mapping algorithm");
 
-            var orderedInitalMappings = AlgorithmParameters.AvailableInitialMappings.OrderBy(item => item.GetType().FullName);
-            for (int i = 0; i < orderedInitalMappings.Count(); i++)
+            if (AlgorithmParameters.AvailableInitialMappings.Count == 0)
+                Console.WriteLine("There are no available initial mapping algorithms...");
+            else
             {
-                Console.WriteLine(i+1 + ": " + orderedInitalMappings.ElementAt(i).Name());
-                Console.WriteLine(orderedInitalMappings.ElementAt(i).Parameters() + '\n');
-            }
+                var orderedInitalMappings = AlgorithmParameters.AvailableInitialMappings.OrderBy(item => item.GetType().FullName);
+                for (int i = 0; i < orderedInitalMappings.Count(); i++)
+                {
+                    Console.WriteLine(i + 1 + ": " + orderedInitalMappings.ElementAt(i).Name());
+                    Console.WriteLine(orderedInitalMappings.ElementAt(i).Parameters() + '\n');
+                }
 
-            try
-            {
-                Console.Write("Give the ID of the initial mapping to load: ");
-                int index = Convert.ToInt32(Console.ReadLine());
-                AlgorithmParameters.InitialMapping = orderedInitalMappings.ElementAt(index-1);
-                Console.WriteLine("\nInitial mapping {0} has been loaded.", index);
+                try
+                {
+                    Console.Write("Give the ID of the initial mapping to load: ");
+                    int index = Convert.ToInt32(Console.ReadLine());
+                    AlgorithmParameters.InitialMapping = orderedInitalMappings.ElementAt(index - 1);
+                    Console.WriteLine("\nInitial mapping {0} has been loaded.", index);
+                }
+                catch (Exception e) when (e is ArgumentOutOfRangeException || e is FormatException)
+                {
+                    ConsoleLayout.Error("Failed to load an initial mapping algorithm");
+                }
             }
-            catch (Exception e) when (e is ArgumentOutOfRangeException || e is FormatException)
-            {
-                ConsoleLayout.Error("Failed to load an initial mapping algorithm");
-            }
-
+            
             ConsoleLayout.Footer();
         }
 
@@ -144,7 +149,30 @@ namespace QuantumCircuitTransformation
         {
             ConsoleLayout.Header("Select a dependency rule");
 
-            Console.WriteLine("TODO"); // Remove TODO from menu
+            if (AlgorithmParameters.AvailableDependencyRules.Count == 0)
+                Console.WriteLine("There are no dependency rules available...");
+            else
+            {
+                for (int i = 0; i < AlgorithmParameters.AvailableDependencyRules.Count; i++)
+                    Console.WriteLine(i + 1 + ": " + AlgorithmParameters.AvailableDependencyRules[i]);
+
+                try
+                {
+                    Console.Write("\nGive the ID of the dependency rule to load: ");
+                    int index = Convert.ToInt32(Console.ReadLine());
+                    if (AlgorithmParameters.DependencyRules.Contains(AlgorithmParameters.AvailableDependencyRules[index - 1]))
+                        Console.WriteLine("This rule is already loaded.");
+                    else
+                    {
+                        Console.WriteLine("\nThe '{0}'-rule has been loaded.", AlgorithmParameters.AvailableDependencyRules[index - 1]);
+                        AlgorithmParameters.DependencyRules.Add(AlgorithmParameters.AvailableDependencyRules[index-1]);
+                    }
+                }
+                catch (Exception e) when (e is ArgumentOutOfRangeException || e is FormatException)
+                {
+                    ConsoleLayout.Error("Failed to load a dependency rule");
+                }
+            }
 
             ConsoleLayout.Footer();
         }
