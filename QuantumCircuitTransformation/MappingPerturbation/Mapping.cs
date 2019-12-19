@@ -6,7 +6,7 @@ using System.Linq;
 namespace QuantumCircuitTransformation.MappingPerturbation 
 {
     /// <summary>
-    ///     Mapping:
+    ///     Mapping
     ///         A class to keep track of a mapping. A mapping is a 
     ///         bijection from [0..n] to [0..n] where n is the number
     ///         of elements to map.
@@ -15,10 +15,10 @@ namespace QuantumCircuitTransformation.MappingPerturbation
     ///     @author:   Louis Carpenier
     ///     @version:  1.4   
     ///  </remarks>
-    public class Mapping : IEquatable<Mapping>
+    public sealed class Mapping : IEquatable<Mapping>
     {
         /// <summary>
-        /// Variable referring to a mapping. 
+        /// Variable referring to the bijection of this mapping. 
         /// </summary>
         public int[] Map { get; private set; }
         /// <summary>
@@ -37,11 +37,12 @@ namespace QuantumCircuitTransformation.MappingPerturbation
             NbQubits = map.Count();
         }
 
+
         /// <summary>
         /// Swaps two elements in the mapping. 
         /// </summary>
-        /// <param name="qubit1"> The first element in the swapping. </param>
-        /// <param name="qubit2"> The second element in the swapping. </param>
+        /// <param name="qubit1"> The first element in the swap. </param>
+        /// <param name="qubit2"> The second element in the swap. </param>
         public void Swap(int qubit1, int qubit2)
         {
             int temp = Map[qubit1];
@@ -66,7 +67,7 @@ namespace QuantumCircuitTransformation.MappingPerturbation
         /// Clones this mapping.
         /// </summary>
         /// <returns>
-        /// A clone of this mapping with the same value. 
+        /// A clone of this mapping with the same bijection array. 
         /// </returns>
         public Mapping Clone()
         {
