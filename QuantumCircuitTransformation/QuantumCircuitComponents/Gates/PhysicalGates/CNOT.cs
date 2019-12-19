@@ -4,7 +4,7 @@ using System.Text;
 using QuantumCircuitTransformation.Exceptions;
 using QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph;
 
-namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
+namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates.PhysicalGates
 {
     /// <summary>
     ///     CNOT:
@@ -42,7 +42,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
 
 
         /// <summary>
-        /// See <see cref="PhysicalGate.ToString"/>.
+        /// See <see cref="Gate.ToString"/>.
         /// </summary>
         /// <returns>
         /// A CNOT gate is represented with a prefix "cx". Next is the ID
@@ -55,7 +55,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         }
 
         /// <summary>
-        /// See <see cref="PhysicalGate.GetQubits"/>.
+        /// See <see cref="Gate.GetQubits"/>.
         /// </summary>
         public List<int> GetQubits()
         {

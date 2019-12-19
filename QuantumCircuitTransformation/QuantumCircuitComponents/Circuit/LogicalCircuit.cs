@@ -13,17 +13,17 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
     ///     @author:   Louis Carpentier
     ///     @version:  2.0
     /// </remarks>
-    public sealed class LogicalCircuit : QuantumCircuit
+    public sealed class LogicalCircuit : QuantumCircuit<Gate>
     {
         // TODO implement only dependency graph => these variables should be removed, also in constructor!!!
-        public readonly List<List<PhysicalGate>> Layers;
+        public readonly List<List<Gate>> Layers;
         public readonly List<int> LayerSize;
         public readonly int NbLayers;
 
 
-        public LogicalCircuit(List<PhysicalGate> gates) : base(gates)
+        public LogicalCircuit(List<Gate> gates) : base(gates)
         {
-            Layers = new List<List<PhysicalGate>> { new List<PhysicalGate>() };
+            Layers = new List<List<Gate>> { new List<Gate>() };
             LayerSize = new List<int>();
             NbLayers = 0;
 
@@ -31,7 +31,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
             {
                 if (!Layers[NbLayers].Any(gate => gate.GetQubits().Any(gates[currentGate].GetQubits().Contains)))
                 {
-                    Layers.Add(new List<PhysicalGate> { gates[currentGate] });
+                    Layers.Add(new List<Gate> { gates[currentGate] });
                     LayerSize.Add(1);
                     NbLayers++;
                 }

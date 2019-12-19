@@ -76,7 +76,7 @@ namespace QuantumCircuitTransformation.DependencyGraphs
         /// <returns>
         /// A hashset of the gate parts which overlap.
         /// </returns>
-        public static List<GatePart> GetOverlappingGateParts(PhysicalGate gate1, PhysicalGate gate2)
+        public static List<GatePart> GetOverlappingGateParts(Gate gate1, Gate gate2)
         {
             IEnumerable<int> overlappingQubits = gate1.GetQubits().Intersect(gate2.GetQubits());
             List<GatePart> overlappingGateParts = new List<GatePart>();

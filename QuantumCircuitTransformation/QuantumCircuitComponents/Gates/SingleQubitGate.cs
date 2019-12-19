@@ -7,15 +7,15 @@ using QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph;
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
 {
     /// <summary>
-    ///     SingleQubitGate:
+    ///     SingleQubitGate
     ///         A class for single qubit gates. These are gates which
     ///         only operate on 1 qubit. 
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.7
+    ///     @version:  2.0
     /// </remarks>
-    public sealed class SingleQubitGate : PhysicalGate
+    public abstract class SingleQubitGate : Gate
     {
         /// <summary>
         /// The short name for this single qubit gate.
@@ -28,12 +28,6 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         /// The qubit this single qubit gate operates on. 
         /// </summary>
         public readonly int Qubit;
-        /// <summary>
-        /// Variable referring to the extra parameter of this single
-        /// qubit gate. If this variable equals null, then there is 
-        /// no extra parameter needed. 
-        /// </summary>
-        public readonly object ExtraParam;
 
 
         /// <summary>
@@ -43,21 +37,60 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         /// <param name="gateNameShort"> The short name of this gate. </param>
         /// <param name="qubit"> The qubit this gate operates on. </param>
         public SingleQubitGate(string gateNameShort, int qubit)
-            : this(gateNameShort, qubit, null) { }
-
-        /// <summary>
-        /// Initialise a new single qubit gate with given name and qubit
-        /// to operate on and an extra parameter. 
-        /// </summary>
-        /// <param name="gateNameShort"> The short name of this gate. </param>
-        /// <param name="qubit"> The qubit this gate operates on. </param>
-        /// <param name="extraParam"> The value of the extra parameter. </param>
-        private SingleQubitGate(string gateNameShort, int qubit, object extraParam)
         {
             GateNameShort = gateNameShort;
             Qubit = qubit;
-            ExtraParam = extraParam;
         }
+
+ 
+        /// <summary>
+        /// See <see cref="Gate.ToString"/>.
+        /// </summary>
+        /// <returns>
+        /// First the gatename, followed by the qubit on which it
+        /// executes in squared brackets.
+        /// </returns>
+        public override string ToString()
+        {
+            return GateNameShort + " " + GetGateParameters() + " q[" + Qubit + "]" + ";";
+        }
+
+        /// <summary>
+        /// Return the parameters of the gate. 
+        /// </summary>
+        protected virtual string GetGateParameters()
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// See <see cref="Gate.GetQubits"/>.
+        /// </summary>
+        public List<int> GetQubits()
+        {
+            return new List<int> { Qubit };
+        }
+
+        /// <summary>
+        /// See <see cref="Gate.GetGatePart(int)"/>. 
+        /// </summary>
+        public GatePart GetGatePart(int qubit)
+        {   
+            if (qubit == Qubit)
+            {
+                try
+                {
+                    return (GatePart)Enum.Parse(typeof(GatePart), GateNameShort);
+                }
+                catch (ArgumentException)
+                {
+                    return GatePart.None;
+                }
+            }
+            throw new QubitIsNotPartOfGateException();
+        }
+
+
 
 
         /// <summary>
@@ -68,10 +101,10 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         /// A new single qubit gate which operates on the given qubit and 
         /// has the short gate name 'H'.
         /// </returns>
-        public static SingleQubitGate GetHadamardGate(int qubit)
-        {
-            return new SingleQubitGate("H", qubit);
-        }
+        //public static SingleQubitGate GetHadamardGate(int qubit)
+        //{
+        //    return new SingleQubitGate("H", qubit);
+        //}
 
         /// <summary>
         /// Get a gate which rotates the given qubit around the given axis
@@ -88,62 +121,12 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         /// <remarks>
         /// The angle is normalised to be in the interval [0,2PI).
         /// </remarks>
-        public static SingleQubitGate GetRotationalGate(int qubit, char axis, double angle)
-        {
-            if (axis != 'x' && axis != 'y' && axis != 'z')
-                throw new InvalidParameterException("The given axis is invalid!");
-            return new SingleQubitGate("R" + axis, qubit, Math.Abs(angle) % (2 * Math.PI));
-        }
+        //public static SingleQubitGate GetRotationalGate(int qubit, char axis, double angle)
+        //{
+        //    if (axis != 'x' && axis != 'y' && axis != 'z')
+        //        throw new InvalidParameterException("The given axis is invalid!");
+        //    return new SingleQubitGate("R" + axis, qubit, Math.Abs(angle) % (2 * Math.PI));
+        //}
 
-
-        /// <summary>
-        /// See <see cref="PhysicalGate.ToString"/>.
-        /// </summary>
-        /// <returns>
-        /// First the gatename, followed by the qubit on which it
-        /// executes in squared brackets.
-        /// </returns>
-        public override string ToString()
-        {
-            string extra = "";
-            if (ExtraParam != null)
-                extra += ", " + extra.ToString();
-            return GateNameShort + " q[" + Qubit + "]" + extra + ";";
-        }
-
-        /// <summary>
-        /// See <see cref="PhysicalGate.GetQubits"/>.
-        /// </summary>
-        public List<int> GetQubits()
-        {
-            return new List<int> { Qubit };
-        }
-
-        /// <summary>
-        /// See <see cref="PhysicalGate.GetGatePart(int)"/>. 
-        /// </summary>
-        public GatePart GetGatePart(int qubit)
-        {   
-            if (qubit == Qubit)
-            {
-                try
-                {
-                    return (GatePart)Enum.Parse(typeof(GatePart), GateNameShort);
-                }
-                catch (ArgumentException)
-                {
-                    return GatePart.None;
-                }
-            }
-            throw new QubitIsNotPartOfGateException(qubit, this);
-        }
-
-        /// <summary>
-        /// See <see cref="PhysicalGate.CanBeExecutedOn(Architecture)"/>.
-        /// </summary>
-        public bool CanBeExecutedOn(Architecture architecture)
-        {
-            return Qubit < architecture.NbNodes;
-        }
     }
 }

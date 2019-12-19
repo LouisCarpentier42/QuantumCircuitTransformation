@@ -6,7 +6,7 @@ using QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph;
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
 {
     /// <summary>
-    ///     PhysicalGate:
+    ///     PhysicalGate
     ///         An interface for physical gates. These are gates which
     ///         can be executed on an physical quantum device such as
     ///         those of IBM. In this project, there is no need to be
@@ -19,26 +19,8 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
     ///     @author:   Louis Carpentier
     ///     @version:  1.6
     /// </remarks>
-    public interface PhysicalGate
-    {
-        /// <summary>
-        /// Return a string representation of this executable gate. 
-        /// </summary>
-        string ToString();
-
-        /// <summary>
-        /// Return a list of all the qubits on which this physical 
-        /// gate operates. 
-        /// </summary>
-        List<int> GetQubits();
-
-        /// <summary>
-        /// Gets the gate part of the given qubit. 
-        /// </summary>
-        /// <param name="qubit"> The qubit to get the gate part from. </param>
-        /// <exception cref="QubitIsNotPartOfGateException"> If the given qubit is no part of the the gate. </exception>
-        GatePart GetGatePart(int qubit);
-
+    public interface PhysicalGate : Gate
+    { 
         /// <summary>
         /// Checks whether or not this physical gate can be executed
         /// on the given architecture. 

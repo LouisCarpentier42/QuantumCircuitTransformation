@@ -17,7 +17,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
     ///     @author:   Louis Carpentier
     ///     @version:  2.0
     /// </remarks>
-    public sealed class PhysicalCircuit : QuantumCircuit
+    public sealed class PhysicalCircuit : QuantumCircuit<PhysicalGate>
     {
         /// <summary>
         /// A variable to keep track of the architecture graph of the 

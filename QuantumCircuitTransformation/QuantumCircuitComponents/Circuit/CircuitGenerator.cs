@@ -1,6 +1,8 @@
 ﻿using QuantumCircuitTransformation.Data;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Circuit;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Gates.LogicalGates;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Gates.PhysicalGates;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +12,7 @@ using System.Text.RegularExpressions;
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
 {
     /// <summary>
-    ///     CircuitGenerator:
+    ///     CircuitGenerator
     ///         A static class to easily generate circuits.
     /// </summary>
     /// <remarks>
@@ -32,7 +34,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
         /// </returns>
         public static LogicalCircuit RandomCircuit(int nbGates, int nbQubits)
         {
-            List<PhysicalGate> gates = new List<PhysicalGate>();
+            List<Gate> gates = new List<Gate>();
             int controlQubit, targetQubit;
             for (int gateID = 0; gateID < nbGates; gateID++)
             {
@@ -56,7 +58,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
         /// </remarks>
         public static LogicalCircuit ReadFromFile(string fileName)
         {
-            List<PhysicalGate> gates = new List<PhysicalGate>();
+            List<Gate> gates = new List<Gate>();
             string[] file = File.ReadAllLines(Globals.BenchmarkFolder + fileName);
             for (int i = 0; i < file.Length; i++)
             {
@@ -68,35 +70,29 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
 
 
         /// <summary>
-        /// Initialise a physical gate by the given line code. 
+        /// Initialise a gate by the given line code. 
         /// </summary>
         /// <param name="code"> The line code which represents a gate. </param>
         /// <returns>
-        /// The physical gate which is represented by the given line. If the given
-        /// line doesn't represent a valid gate or a gate which is not implemented,
-        /// then is null returned. 
+        /// The gate which is represented by the given line. If the given
+        /// line doesn't represent a valid gate or a gate which is not 
+        /// implemented, then is null returned. 
         /// </returns>
-        private static PhysicalGate InitialiseGate(string code)
+        private static Gate InitialiseGate(string code)
         {
             if (!Regex.Match(code, @"^\S+ (q[\D+],)*(q[\D])").Success || Regex.Match(code, @"^qreg\s").Success)
                 return null;
             string prefix = code.Split()[0].ToUpper();
-            IEnumerable<double> numbers = Regex.Split(code, @"[^0-9\.]+").Where(x => !string.IsNullOrEmpty(x)).Select(x => Convert.ToDouble(x));
+            List<double> numbers = Regex.Split(code, @"[^0-9\.]+").Where(x => !string.IsNullOrEmpty(x)).Select(x => Convert.ToDouble(x)).ToList();
             switch (prefix)
             {
                 case "CX":
-                    return new CNOT((int)numbers.ElementAt(0), (int)numbers.ElementAt(1));
+                    return new CNOT((int)numbers[0], (int)numbers[1]);
                 case "H":
-                    return SingleQubitGate.GetHadamardGate((int)numbers.ElementAt(0));
-                case "RX":
-                    return SingleQubitGate.GetRotationalGate((int)numbers.ElementAt(0), 'x', (int)numbers.ElementAt(1));
-                case "RY":
-                    return SingleQubitGate.GetRotationalGate((int)numbers.ElementAt(0), 'y', (int)numbers.ElementAt(1));
-                case "RZ":
-                    return SingleQubitGate.GetRotationalGate((int)numbers.ElementAt(0), 'z', (int)numbers.ElementAt(1));
-            }
-            if (Regex.Match(code, @"^\S+\sq[\D+]").Success)
-                return new SingleQubitGate(prefix, (int)numbers.ElementAt(0));          
+                    return new Hadamard((int)numbers[0]);
+                case "U3": case "U":
+                    return new U3((int)numbers[3], numbers[0], numbers[1], numbers[2]);
+            }      
             return null;
         }
     }
