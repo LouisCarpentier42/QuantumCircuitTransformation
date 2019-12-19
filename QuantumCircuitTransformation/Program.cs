@@ -64,18 +64,24 @@ namespace QuantumCircuitTransformation
         {
             ConsoleLayout.Header("Test environment");
 
-            LogicalCircuit circuit = CircuitGenerator.ReadFromFile("test.txt");
+            //LogicalCircuit circuit = CircuitGenerator.ReadFromFile("test.txt");
             //Console.WriteLine(circuit);
 
-
-            // TODO add to some data class
-            List<DependencyRule> rules = new List<DependencyRule>
+            List<PhysicalGate> gates = new List<PhysicalGate>
             {
-                new DependencyRule(GatePart.Control, GatePart.Control),
-                new DependencyRule(GatePart.Rz, GatePart.Control),
-                new DependencyRule(GatePart.Rx, GatePart.Target),
-                new DependencyRule(GatePart.Target, GatePart.Target)
+                new CNOT(0,1),
+                new CNOT(2,3),
+                new CNOT(1,2),
+                SingleQubitGate.GetRotationalGate(1,'z',0.25),
+                new CNOT(1,0)
             };
+            LogicalCircuit circuit = new LogicalCircuit(gates);
+
+            DependencyGraph graph = DependencyGraphGenerator.Generate(circuit, AlgorithmParameters.DependencyRules);
+
+            foreach (var x in graph.DependencyEdges) Console.WriteLine(x);
+
+
 
             //LogicalCircuit circuit = CircuitGenerator.RandomCircuit(10000, 20);
 
@@ -98,7 +104,7 @@ namespace QuantumCircuitTransformation
         {
             ConsoleLayout.Header("Select an initial mapping algorithm");
 
-            var orderedInitalMappings = AllAlgorithms.InitialMappings.OrderBy(item => item.GetType().FullName);
+            var orderedInitalMappings = AlgorithmParameters.AvailableInitialMappings.OrderBy(item => item.GetType().FullName);
             for (int i = 0; i < orderedInitalMappings.Count(); i++)
             {
                 Console.WriteLine(i+1 + ": " + orderedInitalMappings.ElementAt(i).Name());
@@ -109,7 +115,7 @@ namespace QuantumCircuitTransformation
             {
                 Console.Write("Give the ID of the initial mapping: ");
                 int index = Convert.ToInt32(Console.ReadLine());
-                LoadedAlgorithms.InitialMapping = orderedInitalMappings.ElementAt(index-1);
+                AlgorithmParameters.InitialMapping = orderedInitalMappings.ElementAt(index-1);
                 Console.WriteLine("\nInitial mapping {0} has been loaded.", index);
             }
             catch (Exception e) when (e is ArgumentOutOfRangeException || e is FormatException)
@@ -180,8 +186,8 @@ namespace QuantumCircuitTransformation
                     param[i] = Convert.ChangeType(Console.ReadLine(),paramType);
                 }
                 InitialMapping initialMapping = (InitialMapping)constructorInfo.Invoke(param);
-                if (!AllAlgorithms.InitialMappings.Contains(initialMapping))
-                    AllAlgorithms.InitialMappings.Add(initialMapping);
+                if (!AlgorithmParameters.AvailableInitialMappings.Contains(initialMapping))
+                    AlgorithmParameters.AvailableInitialMappings.Add(initialMapping);
 
             }
             catch (Exception e) when (e is IndexOutOfRangeException || e is ArgumentOutOfRangeException || e is FormatException)
@@ -211,17 +217,17 @@ namespace QuantumCircuitTransformation
         {
             ConsoleLayout.Header("Loaded algorithms");
 
-            if (LoadedAlgorithms.InitialMapping == null)
+            if (AlgorithmParameters.InitialMapping == null)
                 Console.WriteLine("There is no initial mapping algorithm loaded...");
             else
-                Console.WriteLine("Initial mapping: " + LoadedAlgorithms.InitialMapping.Name() + '\n' + LoadedAlgorithms.InitialMapping.Parameters());
+                Console.WriteLine("Initial mapping: " + AlgorithmParameters.InitialMapping.Name() + '\n' + AlgorithmParameters.InitialMapping.Parameters());
 
             Console.WriteLine();
 
-            if (LoadedAlgorithms.Transformation == null)
+            if (AlgorithmParameters.Transformation == null)
                 Console.WriteLine("There is no transformation algorithm loaded...");
             else
-                Console.WriteLine("Transformation: " + LoadedAlgorithms.Transformation.Name() + '\n' + LoadedAlgorithms.Transformation.Parameters());
+                Console.WriteLine("Transformation: " + AlgorithmParameters.Transformation.Name() + '\n' + AlgorithmParameters.Transformation.Parameters());
 
             ConsoleLayout.Footer();
         }
@@ -231,20 +237,20 @@ namespace QuantumCircuitTransformation
             ConsoleLayout.Header("Available algorithms");
 
             ConsoleLayout.SubHeader("Initial Mapping Algorithms");
-            if (AllAlgorithms.InitialMappings.Count() == 0)
+            if (AlgorithmParameters.AvailableInitialMappings.Count() == 0)
                 Console.WriteLine("No initial mapping algorithms are available...");
-            var orderedInitalMappings = AllAlgorithms.InitialMappings.OrderBy(item => item.GetType().FullName);
-            for (int i = 0; i < AllAlgorithms.InitialMappings.Count(); i++)
+            var orderedInitalMappings = AlgorithmParameters.AvailableInitialMappings.OrderBy(item => item.GetType().FullName);
+            for (int i = 0; i < AlgorithmParameters.AvailableInitialMappings.Count(); i++)
             {
                 Console.WriteLine(i + 1 + ": " + orderedInitalMappings.ElementAt(i).Name());
                 Console.WriteLine(orderedInitalMappings.ElementAt(i).Parameters() + '\n');
             }
 
             ConsoleLayout.SubHeader("Transformation Algorithms");
-            if (AllAlgorithms.Transformations.Count() == 0)
+            if (AlgorithmParameters.AvailableTransformationAlgorithms.Count() == 0)
                 Console.WriteLine("No transformation algorithms are available...");
-            var orderedTransformation = AllAlgorithms.Transformations.OrderBy(item => item.GetType().FullName);
-            for (int i = 0; i < AllAlgorithms.Transformations.Count(); i++)
+            var orderedTransformation = AlgorithmParameters.AvailableTransformationAlgorithms.OrderBy(item => item.GetType().FullName);
+            for (int i = 0; i < AlgorithmParameters.AvailableTransformationAlgorithms.Count(); i++)
             {
                 Console.WriteLine(i + 1 + ": " + orderedTransformation.ElementAt(i).Name());
                 Console.WriteLine(orderedTransformation.ElementAt(i).Parameters() + '\n');
@@ -257,10 +263,10 @@ namespace QuantumCircuitTransformation
         {
             ConsoleLayout.Header("Available initial mapping algorithms");
 
-            if (AllAlgorithms.InitialMappings.Count() == 0)
+            if (AlgorithmParameters.AvailableInitialMappings.Count() == 0)
                 Console.WriteLine("No initial mapping algorithms are available...");
-            var orderedInitalMappings = AllAlgorithms.InitialMappings.OrderBy(item => item.GetType().FullName);
-            for (int i = 0; i < AllAlgorithms.InitialMappings.Count(); i++)
+            var orderedInitalMappings = AlgorithmParameters.AvailableInitialMappings.OrderBy(item => item.GetType().FullName);
+            for (int i = 0; i < AlgorithmParameters.AvailableInitialMappings.Count(); i++)
             {
                 Console.WriteLine(i + 1 + ": " + orderedInitalMappings.ElementAt(i).Name());
                 Console.WriteLine(orderedInitalMappings.ElementAt(i).Parameters() + '\n');
@@ -273,10 +279,10 @@ namespace QuantumCircuitTransformation
         {
             ConsoleLayout.Header("Available transformation algorithms");
 
-            if (AllAlgorithms.Transformations.Count() == 0)
+            if (AlgorithmParameters.AvailableTransformationAlgorithms.Count() == 0)
                 Console.WriteLine("No transformation algorithms are available...");
-            var orderedTransformation = AllAlgorithms.Transformations.OrderBy(item => item.GetType().FullName);
-            for (int i = 0; i < AllAlgorithms.Transformations.Count(); i++)
+            var orderedTransformation = AlgorithmParameters.AvailableTransformationAlgorithms.OrderBy(item => item.GetType().FullName);
+            for (int i = 0; i < AlgorithmParameters.AvailableTransformationAlgorithms.Count(); i++)
             {
                 Console.WriteLine(i + 1 + ": " + orderedTransformation.ElementAt(i).Name());
                 Console.WriteLine(orderedTransformation.ElementAt(i).Parameters() + '\n');
@@ -296,29 +302,29 @@ namespace QuantumCircuitTransformation
             int nbGates = 1000000;
             Architecture architecture = QuantumDevices.IBM_Q20;
             
-            double[] totalCost = new double[AllAlgorithms.InitialMappings.Count()];
-            double[] titotalTime = new double[AllAlgorithms.InitialMappings.Count()];
+            double[] totalCost = new double[AlgorithmParameters.AvailableInitialMappings.Count()];
+            double[] titotalTime = new double[AlgorithmParameters.AvailableInitialMappings.Count()];
 
             for (int i = 0; i < nbRep; i++)
             {
                 Console.WriteLine("Iteration " + (i + 1));
                 LogicalCircuit circuit = CircuitGenerator.RandomCircuit(nbGates, nbQubits);
-                for (int j = 0; j < AllAlgorithms.InitialMappings.Count(); j++)
+                for (int j = 0; j < AlgorithmParameters.AvailableInitialMappings.Count(); j++)
                 {
                     Globals.Timer.Restart();
-                    (_, double cost) = AllAlgorithms.InitialMappings[j].Execute(architecture, circuit);
+                    (_, double cost) = AlgorithmParameters.AvailableInitialMappings[j].Execute(architecture, circuit);
                     Globals.Timer.Stop();
                     totalCost[j] += cost;
                     titotalTime[j] += Globals.Timer.Elapsed.TotalMilliseconds;
-                    Console.WriteLine("cost = {1} - time = {2} ({0})", AllAlgorithms.InitialMappings[j].Name(), cost, Globals.Timer.Elapsed.TotalMilliseconds);
+                    Console.WriteLine("cost = {1} - time = {2} ({0})", AlgorithmParameters.AvailableInitialMappings[j].Name(), cost, Globals.Timer.Elapsed.TotalMilliseconds);
                 }
             }
 
-            for (int i = 0; i < AllAlgorithms.InitialMappings.Count(); i++)
+            for (int i = 0; i < AlgorithmParameters.AvailableInitialMappings.Count(); i++)
             {
                 Console.WriteLine();
-                Console.WriteLine(AllAlgorithms.InitialMappings[i].Name());
-                Console.WriteLine(AllAlgorithms.InitialMappings[i].Parameters());
+                Console.WriteLine(AlgorithmParameters.AvailableInitialMappings[i].Name());
+                Console.WriteLine(AlgorithmParameters.AvailableInitialMappings[i].Parameters());
                 Console.WriteLine("Result: Cost = {0} - time = {1}", totalCost[i] / nbRep, titotalTime[i] / nbRep);
             }
 
