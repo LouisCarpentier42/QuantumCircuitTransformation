@@ -11,6 +11,7 @@ using System.Reflection;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 using System.Text.RegularExpressions;
 using QuantumCircuitTransformation.DependencyGraphs;
+using System.IO;
 
 namespace QuantumCircuitTransformation
 {
@@ -40,8 +41,17 @@ namespace QuantumCircuitTransformation
             new Tuple<string, Action>("Add a new dependency rule",
                 new Action(AddDependencyRule)),
 
+            
+            new Tuple<string, Action>("Give an overview of the loaded benchmarks",
+                new Action(GiveOverviewOfLoadedBenchmarks)),
+            new Tuple<string, Action>("Give an overview of all the available benchmarks",
+                new Action(GiveOverviewOfAvailableBenchmarks)),
+            new Tuple<string, Action>("Load all the available benchmarks",
+                new Action(LoadAllAvailableBenchmarks)),
+
             new Tuple<string, Action>("Test the available initial mapping algorithms",
                 new Action(TestAvailableInitialMappings)),
+            
         };
 
 
@@ -420,6 +430,46 @@ namespace QuantumCircuitTransformation
                 Console.WriteLine(AlgorithmParameters.AvailableInitialMappings[i].Parameters());
                 Console.WriteLine("Result: Cost = {0} - time = {1}", totalCost[i] / nbRep, titotalTime[i] / nbRep);
             }
+
+            ConsoleLayout.Footer();
+        }
+
+
+        /*****************************************************************
+         * BENCHMARKS
+         *****************************************************************/
+
+
+        private static void GiveOverviewOfAvailableBenchmarks()
+        {
+            ConsoleLayout.Header("All benchmarks");
+            
+            FileInfo[] benchmarks = (new DirectoryInfo(Globals.BenchmarkFolder)).GetFiles();
+            for (int i = 0; i < benchmarks.Length; i++) 
+                Console.WriteLine(i + 1 + ": " + benchmarks[i].Name);
+
+            ConsoleLayout.Footer();
+        }
+
+
+        private static void GiveOverviewOfLoadedBenchmarks()
+        {
+            ConsoleLayout.Header("All benchmarks");
+
+            if (Benchmarks.LoadedBenchmarks.Count == 0)
+                Console.WriteLine("There are no benchmarks loaded...");
+
+            for (int i = 0; i < Benchmarks.LoadedBenchmarks.Count; i++)
+                Console.WriteLine(i + 1 + ": " + Benchmarks.LoadedBenchmarks[i].Name);
+
+            ConsoleLayout.Footer();
+        }
+
+
+        private static void LoadAllAvailableBenchmarks()
+        {
+            Benchmarks.LoadedBenchmarks = (new DirectoryInfo(Globals.BenchmarkFolder)).GetFiles().ToList();
+            Console.WriteLine("All available benchmarks are loaded.");
 
             ConsoleLayout.Footer();
         }

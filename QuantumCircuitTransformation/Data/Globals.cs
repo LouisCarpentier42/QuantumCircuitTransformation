@@ -33,7 +33,7 @@ namespace QuantumCircuitTransformation.Data
         /// name "Benchmarks". 
         /// </summary>
         public static readonly string BenchmarkFolder = 
-            Directory.GetParent(Directory.GetParent(Environment.CurrentDirectory).Parent.FullName) + "/Benchmarks/";
+            Directory.GetParent(Directory.GetParent(Environment.CurrentDirectory).Parent.FullName) + "/BenchmarkFiles/";
 
         /// <summary>
         /// Variable referring to a list of all the benchmark files in this project.
