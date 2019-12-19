@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace QuantumCircuitTransformation.MappingPerturbation
+﻿namespace QuantumCircuitTransformation.MappingPerturbation
 {
     /// <summary>
     ///     Perturbation

@@ -3,17 +3,18 @@ using QuantumCircuitTransformation.Exceptions;
 using System.Collections.Generic;
 using System.Text;
 using QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph;
+using QuantumCircuitTransformation.MappingPerturbation;
 
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
 {
     /// <summary>
-    ///     SingleQubitGate:
+    ///     SingleQubitGate
     ///         A class for single qubit gates. These are gates which
     ///         only operate on 1 qubit. 
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.7
+    ///     @version:  1.8
     /// </remarks>
     public sealed class SingleQubitGate : PhysicalGate
     {
@@ -107,7 +108,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         {
             string extra = "";
             if (ExtraParam != null)
-                extra += ", " + extra.ToString();
+                extra += ", " + ExtraParam.ToString();
             return GateNameShort + " q[" + Qubit + "]" + extra + ";";
         }
 
@@ -144,6 +145,14 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         public bool CanBeExecutedOn(Architecture architecture)
         {
             return Qubit < architecture.NbNodes;
+        }
+
+        /// <summary>
+        /// See <see cref="PhysicalGate.Map(Mapping)"/>.
+        /// </summary>
+        public PhysicalGate Map(Mapping mapping)
+        {
+            return new SingleQubitGate(GateNameShort, mapping.Map[Qubit], ExtraParam);
         }
     }
 }

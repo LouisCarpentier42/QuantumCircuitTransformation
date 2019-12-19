@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 using QuantumCircuitTransformation.Exceptions;
+using QuantumCircuitTransformation.MappingPerturbation;
 using QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph;
 
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
 {
     /// <summary>
-    ///     CNOT:
+    ///     CNOT
     ///         A class to keep track of a CNOT gate. A CNOT gate works on 
     ///         two qubits, a control qubit and a target qubit. The control 
     ///         qubit remains the same. On the target qubit is a NOT gate 
@@ -80,6 +81,14 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         public bool CanBeExecutedOn(Architecture architecture)
         {
             return architecture.CanExecuteCNOT(this);
+        }
+
+        /// <summary>
+        /// See <see cref="PhysicalGate.Map(Mapping)"/>.
+        /// </summary>
+        public PhysicalGate Map(Mapping mapping)
+        {
+            return new CNOT(mapping.Map[ControlQubit], mapping.Map[TargetQubit]);
         }
     }
 }

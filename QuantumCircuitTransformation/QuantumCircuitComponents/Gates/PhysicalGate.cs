@@ -1,12 +1,11 @@
-﻿using System;
+﻿using QuantumCircuitTransformation.Exceptions;
+using QuantumCircuitTransformation.MappingPerturbation;
 using System.Collections.Generic;
-using QuantumCircuitTransformation.Exceptions;
-using QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph;
 
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
 {
     /// <summary>
-    ///     PhysicalGate:
+    ///     PhysicalGate
     ///         An interface for physical gates. These are gates which
     ///         can be executed on an physical quantum device such as
     ///         those of IBM. In this project, there is no need to be
@@ -17,7 +16,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.6
+    ///     @version:  1.7
     /// </remarks>
     public interface PhysicalGate
     {
@@ -48,5 +47,14 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         /// True if and only if this gate can be executed on the given architecture graph. 
         /// </returns>
         bool CanBeExecutedOn(ArchitectureGraph.Architecture architecture);
+
+        /// <summary>
+        /// Returns this physical gate, but mapped according to the given mapping.
+        /// </summary>
+        /// <param name="mapping"> The mapping to use to map this physical gate. </param>
+        /// <returns>
+        /// A new physical gate, but which is mapped from this gate acoording to the mapping.
+        /// </returns>
+        PhysicalGate Map(Mapping mapping);
     }
 }
