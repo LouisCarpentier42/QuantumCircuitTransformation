@@ -1,24 +1,23 @@
-﻿using QuantumCircuitTransformation.QuantumCircuitComponents;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
+﻿using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 using System;
 using System.Linq;
 
-namespace QuantumCircuitTransformation.MappingPerturbation 
+namespace QuantumCircuitTransformation.MappingPerturbation
 {
     /// <summary>
-    ///     Mapping:
+    ///     Mapping
     ///         A class to keep track of a mapping. A mapping is a 
     ///         bijection from [0..n] to [0..n] where n is the number
     ///         of elements to map.
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpenier
-    ///     @version:  1.4   
+    ///     @version:  1.5   
     ///  </remarks>
-    public class Mapping : IEquatable<Mapping>
+    public sealed class Mapping : IEquatable<Mapping>
     {
         /// <summary>
-        /// Variable referring to a mapping. 
+        /// Variable referring to the bijection of this mapping. 
         /// </summary>
         public int[] Map { get; private set; }
         /// <summary>
@@ -37,11 +36,12 @@ namespace QuantumCircuitTransformation.MappingPerturbation
             NbQubits = map.Count();
         }
 
+
         /// <summary>
         /// Swaps two elements in the mapping. 
         /// </summary>
-        /// <param name="qubit1"> The first element in the swapping. </param>
-        /// <param name="qubit2"> The second element in the swapping. </param>
+        /// <param name="qubit1"> The first element in the swap. </param>
+        /// <param name="qubit2"> The second element in the swap. </param>
         public void Swap(int qubit1, int qubit2)
         {
             int temp = Map[qubit1];
@@ -50,23 +50,10 @@ namespace QuantumCircuitTransformation.MappingPerturbation
         }
 
         /// <summary>
-        /// Returns a CNOT gate in which the control and target qubit are 
-        /// mapped according to this mapping. 
-        /// </summary>
-        /// <param name="cnot"> The CNOT gate to map. </param>
-        /// <returns>
-        /// A new CNOT gate which is mapped according to this mapping. 
-        /// </returns>
-        public CNOT MapCNOT(CNOT cnot)
-        {
-            return new CNOT(Map[cnot.ControlQubit], Map[cnot.TargetQubit]);
-        }
-
-        /// <summary>
         /// Clones this mapping.
         /// </summary>
         /// <returns>
-        /// A clone of this mapping with the same value. 
+        /// A clone of this mapping with the same bijection array. 
         /// </returns>
         public Mapping Clone()
         {
