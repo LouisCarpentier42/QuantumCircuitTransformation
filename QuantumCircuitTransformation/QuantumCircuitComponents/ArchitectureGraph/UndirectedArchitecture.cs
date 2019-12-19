@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph
 {
     /// <summary>
-    ///     UndirectedArchitecture:
+    ///     UndirectedArchitecture
     ///         A class for undirected architecture graphs of physical quantum devices. 
     ///         In an undirected architecture can a CNOT gate be executed on any pair
     ///         of qubits that are connected, where both qubits can be the control qubit.  

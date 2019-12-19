@@ -5,7 +5,7 @@ using System.Linq;
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph
 {
     /// <summary>
-    ///     ShortestPathFinder: 
+    ///     ShortestPathFinder
     ///         A static class to find the shortest path in an unweighted, undirected
     ///         graph. The shortest path lengt between two nodes equals the minimal 
     ///         number of edges to connect the two nodes. 

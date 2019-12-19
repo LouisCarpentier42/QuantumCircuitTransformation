@@ -69,10 +69,6 @@ namespace QuantumCircuitTransformation
         {
             ConsoleLayout.Header("Test environment");
 
-            //LogicalCircuit circuit = CircuitGenerator.ReadFromFile("test.txt");
-            //Console.WriteLine(circuit);
-
-
 
             List<PhysicalGate> gates = new List<PhysicalGate>
             {
@@ -82,21 +78,7 @@ namespace QuantumCircuitTransformation
                 SingleQubitGate.GetRotationalGate(1,'z',0.25),
                 new CNOT(1,0)
             };
-            //LogicalCircuit circuit = new LogicalCircuit(gates);
 
-            //DependencyGraph graph = DependencyGraphGenerator.Generate(circuit, AlgorithmParameters.DependencyRules);
-
-            //foreach (var x in graph.DependencyEdges) Console.WriteLine(x);
-
-
-
-            //LogicalCircuit circuit = CircuitGenerator.RandomCircuit(10000, 20);
-
-            //DependencyGraph graph = DependencyGraphGenerator.Generate(circuit);
-            //Console.WriteLine(graph.DependencyEdges.Count);
-
-            //DependencyGraph graphRules = DependencyGraphGenerator.Generate(circuit, rules);
-            //Console.WriteLine(graphRules.DependencyEdges.Count);
 
             ConsoleLayout.Footer();
         }

@@ -6,7 +6,7 @@ using System.Linq;
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph
 {
     /// <summary>
-    ///     ArchitectureGraph:
+    ///     Architecture
     ///         An abstract class for the architecture graph of 
     ///         some quantum device.
     /// </summary>
