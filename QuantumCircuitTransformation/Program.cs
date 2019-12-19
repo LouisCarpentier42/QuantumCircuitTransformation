@@ -30,6 +30,8 @@ namespace QuantumCircuitTransformation
                 new Action(LoadTransformationAlgorithm)),
             new Tuple<string, Action>("(TODO)Load a dependency rule",
                 new Action(LoadDependencyRule)),
+            new Tuple<string, Action>("Unload a dependency rule",
+                new Action(UnloadDependencyRule)),
 
             new Tuple<string, Action>("Add a new initial mapping algorithm", 
                 new Action(AddInitialMappingAlgorithm)),
@@ -116,7 +118,7 @@ namespace QuantumCircuitTransformation
 
             try
             {
-                Console.Write("Give the ID of the initial mapping: ");
+                Console.Write("Give the ID of the initial mapping to load: ");
                 int index = Convert.ToInt32(Console.ReadLine());
                 AlgorithmParameters.InitialMapping = orderedInitalMappings.ElementAt(index-1);
                 Console.WriteLine("\nInitial mapping {0} has been loaded.", index);
@@ -151,7 +153,27 @@ namespace QuantumCircuitTransformation
         {
             ConsoleLayout.Header("Select a dependency rule");
 
-            Console.WriteLine("TODO"); // Remove TODO from menu
+            if (AlgorithmParameters.DependencyRules.Count == 0)
+                Console.WriteLine("There are no dependency rules loaded...");
+            else
+            {
+                for (int i = 0; i < AlgorithmParameters.DependencyRules.Count; i++)
+                {
+                    Console.WriteLine(i + 1 + ": " + AlgorithmParameters.DependencyRules[i]);
+                }
+
+                try
+                {
+                    Console.Write("\nGive the ID of the dependency rule to unload: ");
+                    int index = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("\nThe '{0}'-rule has been unloaded.", AlgorithmParameters.DependencyRules[index-1]);
+                    AlgorithmParameters.DependencyRules.RemoveAt(index - 1);
+                }
+                catch (Exception e) when (e is ArgumentOutOfRangeException || e is FormatException)
+                {
+                    ConsoleLayout.Error("Failed to unload a dependency rule");
+                }
+            }
 
             ConsoleLayout.Footer();
         }
