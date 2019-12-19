@@ -37,7 +37,7 @@ namespace QuantumCircuitTransformation
                 new Action(AddInitialMappingAlgorithm)),
             new Tuple<string, Action>("(TODO)Add a new transformation algorithm",
                 new Action(AddTransformationAlgorithm)),
-            new Tuple<string, Action>("(TODO)Add a new dependency rule",
+            new Tuple<string, Action>("Add a new dependency rule",
                 new Action(AddDependencyRule)),
 
             new Tuple<string, Action>("Test the available initial mapping algorithms",
@@ -72,6 +72,8 @@ namespace QuantumCircuitTransformation
             //LogicalCircuit circuit = CircuitGenerator.ReadFromFile("test.txt");
             //Console.WriteLine(circuit);
 
+
+
             List<PhysicalGate> gates = new List<PhysicalGate>
             {
                 new CNOT(0,1),
@@ -80,11 +82,11 @@ namespace QuantumCircuitTransformation
                 SingleQubitGate.GetRotationalGate(1,'z',0.25),
                 new CNOT(1,0)
             };
-            LogicalCircuit circuit = new LogicalCircuit(gates);
+            //LogicalCircuit circuit = new LogicalCircuit(gates);
 
-            DependencyGraph graph = DependencyGraphGenerator.Generate(circuit, AlgorithmParameters.DependencyRules);
+            //DependencyGraph graph = DependencyGraphGenerator.Generate(circuit, AlgorithmParameters.DependencyRules);
 
-            foreach (var x in graph.DependencyEdges) Console.WriteLine(x);
+            //foreach (var x in graph.DependencyEdges) Console.WriteLine(x);
 
 
 
@@ -259,6 +261,7 @@ namespace QuantumCircuitTransformation
                 InitialMapping initialMapping = (InitialMapping)constructorInfo.Invoke(param);
                 if (!AlgorithmParameters.AvailableInitialMappings.Contains(initialMapping))
                     AlgorithmParameters.AvailableInitialMappings.Add(initialMapping);
+                Console.WriteLine("The algorithm is now available.");
 
             }
             catch (Exception e) when (e is IndexOutOfRangeException || e is ArgumentOutOfRangeException || e is FormatException)
@@ -283,7 +286,30 @@ namespace QuantumCircuitTransformation
         {
             ConsoleLayout.Header("Add a dependency rule");
 
-            Console.WriteLine("TODO"); // remove TODO from menu
+            try
+            {
+                Console.Write("The number of gateparts that are involved: ");
+                int nbGateParts = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine();
+                List<GatePart> gateParts = new List<GatePart>();
+                for (int i = 0; i < nbGateParts; i++)
+                {
+                    Console.Write("Gatepart " + (i + 1) + ": ");
+                    string gatePartName = Console.ReadLine();
+                    gateParts.Add((GatePart)Enum.Parse(typeof(GatePart), gatePartName));
+                    if (gatePartName == "None")
+                        throw new ArgumentException();
+                }
+                DependencyRule rule = new DependencyRule(gateParts);
+                AlgorithmParameters.AvailableDependencyRules.Add(rule);
+                Console.WriteLine("\nThe dependency rule '{0}' has been added.", rule);
+            } catch (Exception e) when (e is ArgumentOutOfRangeException || e is FormatException)
+            {
+                ConsoleLayout.Error("Failed to add a new dependency rule");
+            } catch (ArgumentException)
+            {
+                ConsoleLayout.Error("This is no valid gatepart, the addition of a dependency rule is aborted.");
+            }
 
             ConsoleLayout.Footer();
         }
