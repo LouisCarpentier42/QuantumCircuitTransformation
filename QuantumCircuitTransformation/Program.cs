@@ -80,14 +80,6 @@ namespace QuantumCircuitTransformation
             ConsoleLayout.Header("Test environment");
 
 
-            List<PhysicalGate> gates = new List<PhysicalGate>
-            {
-                new CNOT(0,1),
-                new CNOT(2,3),
-                new CNOT(1,2),
-                SingleQubitGate.GetRotationalGate(1,'z',0.25),
-                new CNOT(1,0)
-            };
 
 
             ConsoleLayout.Footer();
