@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace QuantumCircuitTransformation.MappingPerturbation
+﻿namespace QuantumCircuitTransformation.MappingPerturbation
 {
     /// <summary>
-    ///     Perturbation:
-    ///         An interface for perturbations to apply
+    ///     Perturbation
+    ///         An interface for perturbations to apply on a mapping
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier

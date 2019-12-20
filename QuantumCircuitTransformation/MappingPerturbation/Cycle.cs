@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 
 namespace QuantumCircuitTransformation.MappingPerturbation
 {
     /// <summary>
-    ///     Cycle:
+    ///     Cycle
     ///         A class for cycle perturbations. This kind of
     ///         perturbation will change all the elements in 
     ///         the mapping according to a permutation. The 
@@ -18,7 +16,7 @@ namespace QuantumCircuitTransformation.MappingPerturbation
     ///      @author:   Louis Carpentier
     ///      @version:  1.2
     /// </remarks>
-    public class Cycle : Perturbation
+    public sealed class Cycle : Perturbation
     {
         /// <summary>
         /// Variable to keep track of the permutation for 
@@ -35,6 +33,7 @@ namespace QuantumCircuitTransformation.MappingPerturbation
         {
             Permutation = permutation;
         }
+
 
         /// <summary>
         /// Apply this cycle perturbation. 

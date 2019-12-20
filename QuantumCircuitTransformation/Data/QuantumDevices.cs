@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace QuantumCircuitTransformation.Data
 {
     /// <summary>
-    ///     QuantumDevices:
+    ///     QuantumDevices
     ///         A static class to keep track of different quantum devices. These 
     ///         can be real life machines or imaginary ones. 
     /// </summary>

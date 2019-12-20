@@ -7,7 +7,7 @@ using QuantumCircuitTransformation.Exceptions;
 namespace QuantumCircuitTransformation.DependencyGraphs
 {
     /// <summary>
-    ///     DependencyRule:
+    ///     DependencyRule
     ///         A struct to keep track of a dependency rule. If two gates
     ///         have an overlapping qubit, then a rule can say if it is 
     ///         no problem that the qubits may be switched.
@@ -16,7 +16,7 @@ namespace QuantumCircuitTransformation.DependencyGraphs
     ///     @author:   Louis Carpentier
     ///     @version:  1.3
     /// </remarks>
-    public class DependencyRule
+    public class DependencyRule : IEquatable<DependencyRule>
     {
         /// <summary>
         /// The gate parts which may overlap. These are sorted. 
@@ -60,6 +60,33 @@ namespace QuantumCircuitTransformation.DependencyGraphs
         public bool CanBeSwitched(List<GatePart> overlappingGateParts)
         {
             return GateParts.SequenceEqual(overlappingGateParts);
+        }
+
+        /// <summary>
+        /// Return a string representation of this dependency rule. 
+        /// </summary>
+        /// <returns>
+        /// All the gateparts in this dependency rule, seperated with '-'
+        /// </returns>
+        public override string ToString()
+        {
+            string result = GateParts[0].ToString();
+            for (int i = 1; i < GateParts.Count; i++)
+                result += '-' + GateParts[i].ToString();
+            return result;
+        }
+
+        /// <summary>
+        /// Checks whether or not a given dependency rule equals this rule. 
+        /// </summary>
+        /// <param name="other"> The other dependency rule to check. </param>
+        /// <returns>
+        /// True if and only if this rule has the same gateparts as the 
+        /// given dependency rule. 
+        /// </returns>
+        public bool Equals(DependencyRule other)
+        {
+            return GateParts.SequenceEqual(other.GateParts);
         }
     }
 }

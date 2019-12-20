@@ -19,6 +19,7 @@ namespace QuantumCircuitTransformation
 
         public static void SubHeader(string subTitle)
         {
+            Console.WriteLine();
             string title = "";
             foreach (string s in subTitle.Split())
                 title += s.Substring(0, 1).ToUpper() + s.Substring(1).ToLower() + ' ';

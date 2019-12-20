@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph
 {
     /// <summary>
-    ///     DirectedArchitecture:
+    ///     DirectedArchitecture
     ///         A class for directed architecture graphs of physical quantum devices.
     ///         In an directed architecture can a CNOT gate only be executed if there 
     ///         is a directed connection from the control qubit to the target qubit.

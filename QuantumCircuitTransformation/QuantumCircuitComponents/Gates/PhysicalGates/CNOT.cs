@@ -10,7 +10,7 @@ using Architecture = QuantumCircuitTransformation.QuantumCircuitComponents.Archi
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates.PhysicalGates
 {
     /// <summary>
-    ///     CNOT:
+    ///     CNOT
     ///         A class to keep track of a CNOT gate. A CNOT gate works on 
     ///         two qubits, a control qubit and a target qubit. The control 
     ///         qubit remains the same. On the target qubit is a NOT gate 
@@ -91,6 +91,14 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates.PhysicalGa
         public bool CanBeExecutedOn(Architecture architecture, Mapping map)
         {
             return architecture.CanExecuteCNOT(map.MapCNOT(this));
+        }
+
+        /// <summary>
+        /// See <see cref="PhysicalGate.Map(Mapping)"/>.
+        /// </summary>
+        public PhysicalGate Map(Mapping mapping)
+        {
+            return new CNOT(mapping.Map[ControlQubit], mapping.Map[TargetQubit]);
         }
     }
 }
