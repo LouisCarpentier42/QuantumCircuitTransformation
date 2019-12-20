@@ -293,7 +293,7 @@ namespace QuantumCircuitTransformation
 
             int nbRep = 10;
             int nbQubits = 20;
-            int nbGates = 1000000;
+            int nbGates = 5000;
             Architecture architecture = QuantumDevices.IBM_Q20;
             
             double[] totalCost = new double[AllAlgorithms.InitialMappings.Count()];

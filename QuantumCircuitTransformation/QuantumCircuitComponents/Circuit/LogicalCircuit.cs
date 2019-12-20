@@ -1,4 +1,5 @@
 ﻿using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Gates.PhysicalGates;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,32 +16,16 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
     /// </remarks>
     public sealed class LogicalCircuit : QuantumCircuit<Gate>
     {
-        // TODO implement only dependency graph => these variables should be removed, also in constructor!!!
-        public readonly List<List<Gate>> Layers;
-        public readonly List<int> LayerSize;
-        public readonly int NbLayers;
 
+        public readonly List<CNOT> CnotGates;
+        public readonly int NbCnotGates;
 
         public LogicalCircuit(List<Gate> gates) : base(gates)
         {
-            Layers = new List<List<Gate>> { new List<Gate>() };
-            LayerSize = new List<int>();
-            NbLayers = 0;
-
-            for (int currentGate = 0; currentGate < gates.Count; currentGate++)
-            {
-                if (!Layers[NbLayers].Any(gate => gate.GetQubits().Any(gates[currentGate].GetQubits().Contains)))
-                {
-                    Layers.Add(new List<Gate> { gates[currentGate] });
-                    LayerSize.Add(1);
-                    NbLayers++;
-                }
-                else
-                {
-                    Layers[NbLayers].Add(gates[currentGate]);
-                    LayerSize[NbLayers - 1]++;
-                }
-            }
+            CnotGates = new List<CNOT>();
+            foreach (CNOT cnot in gates)
+                CnotGates.Add(cnot);
+            NbCnotGates = CnotGates.Count();
         }
     }
 }

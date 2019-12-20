@@ -5,6 +5,7 @@ using QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph;
 using System;
 using System.Linq;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Gates.PhysicalGates;
 
 namespace QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm
 {
@@ -80,32 +81,25 @@ namespace QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm
 
         public static double GetMappingCost(Mapping mapping, Architecture architecture, LogicalCircuit circuit)
         {
-
-            int NbGatesAllowed = Math.Min(circuit.NbGates, MAX_NB_GATES_IN_COST);
-            double cost = 0;
-            double weight;
-            // p1 could mayb be better, p2 is just so there can be divided by 0
-            double p1 = circuit.NbGates * circuit.NbLayers / NbGatesAllowed;
+            // Parameters to calculate the weight of each gate
+            double p1 = circuit.NbCnotGates / Math.Min(circuit.NbGates, MAX_NB_GATES_IN_COST);
             double p2 = 0.1;
 
-            //double param = 1;
-            //weight = (-param / circuit.NbGates) * i + param;
-            //cost += (weight*architecture.CNOTDistance[mapping[circuit.Gates[i].ControlQubit], mapping[circuit.Gates[i].TargetQubit]]);
-
+            double cost = 0;
             int NbOfGatesLookedAt = 0;
-            int CurrentLayer = 0;
-            while (NbOfGatesLookedAt < NbGatesAllowed)
+
+            for (int i = 0; i < circuit.NbCnotGates; i++)
             {
-                weight = 1 / (CurrentLayer / p1 + p2);
-                foreach (CNOT gate in circuit.Layers[CurrentLayer])
-                {
-                    cost += architecture.CNOTDistance[mapping.Map[gate.ControlQubit], mapping.Map[gate.TargetQubit]];
-                }
-                NbOfGatesLookedAt += circuit.LayerSize[CurrentLayer++];
+                double weight = 1 / (++NbOfGatesLookedAt / p1 + p2);
+                cost += architecture.CNOTDistance[mapping.Map[circuit.CnotGates[i].ControlQubit], mapping.Map[circuit.CnotGates[i].TargetQubit]];
+                if (NbOfGatesLookedAt > MAX_NB_GATES_IN_COST)
+                    return cost;
             }
 
             return cost;
         }
+
+
 
     }
 }

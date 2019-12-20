@@ -27,7 +27,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
 
 
         /// <summary>
-        /// Initialise a new physical circuit with given architecture. 
+        /// Initialise a new, empty physical circuit with given architecture. 
         /// </summary>
         /// <param name="architecture"> The architecture for this physical circuit. </param>
         public PhysicalCircuit(Architecture architecture) 
@@ -39,26 +39,42 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
         /// </summary>
         /// <param name="architecture"> The architecture for this physical circuit. </param>
         /// <param name="gates"> The gates which should already be in this physical circuit. </param>
-        /// <exception cref="InvalidGateForArchitectureException"> If any gate can't be executed on the given architecture. </exception>
+        /// <remarks>
+        /// All the given gates should be executable on the given architecture. 
+        /// </remarks>
         public PhysicalCircuit(Architecture architecture, List<PhysicalGate> gates) : base(gates)
         {
-            if (gates.Any(gate => !gate.CanBeExecutedOn(architecture)))
-                throw new InvalidGateForArchitectureException();
             Architecture = architecture;
         }
+
 
         /// <summary>
         /// Adds the given gate to this physical circuit. 
         /// </summary>
         /// <param name="gate"> The gate to add to this circuit. </param>
-        /// <exception cref="InvalidGateForArchitectureException"> If the given gate can' be executed on <see cref="Architecture"/>. </exception>
+        /// <remarks>
+        /// The given gate should be able to be executed on the the architecture
+        /// of this physical circuit. 
+        /// </remarks>
         public void AddGate(PhysicalGate gate)
         {
-            if (!gate.CanBeExecutedOn(Architecture))
-                throw new InvalidGateForArchitectureException();
             Gates.Add(gate);
             NbGates++;
             NbQubits = Math.Max(gate.GetQubits().Max(), NbQubits);   
+        }
+
+        /// <summary>
+        /// Adds a range of gates to this physical circuit. 
+        /// </summary>
+        /// <param name="gates"> The gates to add to this circuit. </param>
+        /// <remarks> 
+        /// This method calls <see cref="AddGate(PhysicalGate)"/> for every gate 
+        /// in the given list of gates. 
+        /// </remarks>
+        public void AddGate(List<PhysicalGate> gates)
+        {
+            for (int i = 0; i < gates.Count; i++)
+                AddGate(gates[i]);
         }
     }
 }
