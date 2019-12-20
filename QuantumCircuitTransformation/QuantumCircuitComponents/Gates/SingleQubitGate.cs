@@ -3,6 +3,7 @@ using QuantumCircuitTransformation.Exceptions;
 using System.Collections.Generic;
 using System.Text;
 using QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph;
+using QuantumCircuitTransformation.MappingPerturbation;
 
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
 {
@@ -58,6 +59,13 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         /// <summary>
         /// Return the parameters of the gate. 
         /// </summary>
+        /// <returns>
+        /// The gate specific parameters. These should be between parentheses
+        /// and each parameter should be seperated with a comma. 
+        /// </returns>
+        /// <remarks>
+        /// The default implementation is no extra parameters. 
+        /// </remarks>
         protected virtual string GetGateParameters()
         {
             return "";
@@ -90,43 +98,17 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
             throw new QubitIsNotPartOfGateException();
         }
 
-
-
+        /// <summary>
+        /// See <see cref="Gate.CompileToPhysical"/>.
+        /// </summary>
+        public abstract List<PhysicalGate> CompileToPhysical();
 
         /// <summary>
-        /// Return a Hadamard gate. 
+        /// See <see cref="Gate.CanBeExecutedOn(Architecture, Mapping)"/>.
         /// </summary>
-        /// <param name="qubit"> The qubit on which this hadamard gate should operate. </param>
-        /// <returns>
-        /// A new single qubit gate which operates on the given qubit and 
-        /// has the short gate name 'H'.
-        /// </returns>
-        //public static SingleQubitGate GetHadamardGate(int qubit)
-        //{
-        //    return new SingleQubitGate("H", qubit);
-        //}
-
-        /// <summary>
-        /// Get a gate which rotates the given qubit around the given axis
-        /// with a given angle. 
-        /// </summary>
-        /// <param name="qubit"> The qubit for the gate to return. </param>
-        /// <param name="axis"> The axis for the gate to return. </param>
-        /// <param name="angle"> The angle in radians to rotate. </param>
-        /// <returns>
-        /// A new single qubit gate with given for rotating the qubit around
-        /// the given axis with the given angle. 
-        /// </returns>
-        /// <exception cref="InvalidParameterException"> If the given axis is not the x, y or z axis. </exception>
-        /// <remarks>
-        /// The angle is normalised to be in the interval [0,2PI).
-        /// </remarks>
-        //public static SingleQubitGate GetRotationalGate(int qubit, char axis, double angle)
-        //{
-        //    if (axis != 'x' && axis != 'y' && axis != 'z')
-        //        throw new InvalidParameterException("The given axis is invalid!");
-        //    return new SingleQubitGate("R" + axis, qubit, Math.Abs(angle) % (2 * Math.PI));
-        //}
-
+        public bool CanBeExecutedOn(Architecture architecture, Mapping map)
+        {
+            return Qubit < architecture.NbNodes;
+        }
     }
 }

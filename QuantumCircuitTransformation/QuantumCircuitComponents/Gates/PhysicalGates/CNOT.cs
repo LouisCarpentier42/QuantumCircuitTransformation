@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using QuantumCircuitTransformation.Exceptions;
+using QuantumCircuitTransformation.MappingPerturbation;
 using QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph;
+using Architecture = QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph.Architecture;
 
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates.PhysicalGates
 {
@@ -63,7 +66,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates.PhysicalGa
         }
 
         /// <summary>
-        /// See <see cref="PhysicalGate.GetGatePart(int)"/>. 
+        /// See <see cref="Gate.GetGatePart(int)"/>. 
         /// </summary>
         public GatePart GetGatePart(int qubit)
         {
@@ -75,11 +78,19 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates.PhysicalGa
         }
 
         /// <summary>
-        /// See <see cref="PhysicalGate.CanBeExecutedOn(Architecture)"/>.
+        /// See <see cref="Gate.CompileToPhysical"/>.
         /// </summary>
-        public bool CanBeExecutedOn(Architecture architecture)
+        public List<PhysicalGate> CompileToPhysical()
         {
-            return architecture.CanExecuteCNOT(this);
+            return new List<PhysicalGate> { this };
+        }
+
+        /// <summary>
+        /// See <see cref="Gate.CanBeExecutedOn(Architecture)"/>.
+        /// </summary>
+        public bool CanBeExecutedOn(Architecture architecture, Mapping map)
+        {
+            return architecture.CanExecuteCNOT(map.MapCNOT(this));
         }
     }
 }

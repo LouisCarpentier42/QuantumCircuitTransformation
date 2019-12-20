@@ -4,13 +4,14 @@ using System.Text;
 
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates.LogicalGates
 {
-    public class Hadamard : SingleQubitGate
+    public class RotationZ : RotationGate
     {
         /// <summary>
-        /// Initialise a new Hadamard gate. 
+        /// Initialise a new Rz gate. 
         /// </summary>
-        /// <param name="qubit"> The qubit on which this gate should operate. </param>
-        public Hadamard(int qubit) : base("H", qubit) { }
+        /// <param name="qubit"> The qubit this gate should operate on. </param>
+        /// <param name="angle"> The angle to rotate over. </param>
+        public RotationZ(int qubit, double angle) : base(qubit, 'z', angle) { }
 
         /// <summary>
         /// See <see cref="Gate.CompileToPhysical"/>.

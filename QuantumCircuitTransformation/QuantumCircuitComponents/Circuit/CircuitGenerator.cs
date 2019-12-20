@@ -92,6 +92,12 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
                     return new Hadamard((int)numbers[0]);
                 case "U3": case "U":
                     return new U3((int)numbers[3], numbers[0], numbers[1], numbers[2]);
+                case "RX":
+                    return new RotationX((int)numbers[1], numbers[0]);
+                case "RY":
+                    return new RotationY((int)numbers[1], numbers[0]);
+                case "RZ":
+                    return new RotationZ((int)numbers[1], numbers[0]);
             }      
             return null;
         }
