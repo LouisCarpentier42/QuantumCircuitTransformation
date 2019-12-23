@@ -39,11 +39,11 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates.PhysicalGa
         }
 
         /// <summary>
-        /// See <see cref="Gate.CompileToPhysical"/>.
+        /// See <see cref="Gate.CompileToPhysicalGate"/>.
         /// </summary>
-        public override List<PhysicalGate> CompileToPhysical()
+        public override PhysicalGate CompileToPhysicalGate()
         {
-            return new List<PhysicalGate> { this };
+            return this;
         }
     }
 }

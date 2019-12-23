@@ -80,8 +80,6 @@ namespace QuantumCircuitTransformation
             ConsoleLayout.Header("Test environment");
 
 
-
-
             ConsoleLayout.Footer();
         }
 

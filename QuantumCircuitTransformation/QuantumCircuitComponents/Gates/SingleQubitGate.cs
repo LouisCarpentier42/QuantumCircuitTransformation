@@ -99,9 +99,9 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         }
 
         /// <summary>
-        /// See <see cref="Gate.CompileToPhysical"/>.
+        /// See <see cref="Gate.CompileToPhysicalGate"/>.
         /// </summary>
-        public abstract List<PhysicalGate> CompileToPhysical();
+        public abstract PhysicalGate CompileToPhysicalGate();
 
         /// <summary>
         /// See <see cref="Gate.CanBeExecutedOn(Architecture, Mapping)"/>.

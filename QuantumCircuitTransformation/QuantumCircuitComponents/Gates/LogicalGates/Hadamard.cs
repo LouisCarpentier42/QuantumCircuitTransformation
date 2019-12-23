@@ -13,9 +13,9 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates.LogicalGat
         public Hadamard(int qubit) : base("H", qubit) { }
 
         /// <summary>
-        /// See <see cref="Gate.CompileToPhysical"/>.
+        /// See <see cref="Gate.CompileToPhysicalGate"/>.
         /// </summary>
-        public override List<PhysicalGate> CompileToPhysical()
+        public override PhysicalGate CompileToPhysicalGate()
         {
             throw new NotImplementedException();
         }

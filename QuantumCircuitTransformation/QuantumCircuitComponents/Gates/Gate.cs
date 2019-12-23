@@ -40,9 +40,9 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         /// Compile the gate to a physical equivalent. 
         /// </summary>
         /// <returns>
-        /// The ohysical gates which do an equivalent operation as this gate.
+        /// The physical gate which do an equivalent operation as this gate.
         /// </returns>
-        List<PhysicalGate> CompileToPhysical();
+        PhysicalGate CompileToPhysicalGate();
 
         /// <summary>
         /// Checks whether or not this physical gate can be executed

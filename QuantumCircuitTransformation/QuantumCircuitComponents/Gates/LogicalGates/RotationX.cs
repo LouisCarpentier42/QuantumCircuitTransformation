@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuantumCircuitTransformation.QuantumCircuitComponents.Gates.PhysicalGates;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -14,11 +15,11 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates.LogicalGat
         public RotationX(int qubit, double angle) : base(qubit, 'x', angle) { }
 
         /// <summary>
-        /// See <see cref="Gate.CompileToPhysical"/>.
+        /// See <see cref="Gate.CompileToPhysicalGate"/>.
         /// </summary>
-        public override List<PhysicalGate> CompileToPhysical()
+        public override PhysicalGate CompileToPhysicalGate()
         {
-            throw new NotImplementedException();
+            return new U3(Qubit, Angle, -Math.PI / 2, Math.PI / 2);
         }
     }
 }
