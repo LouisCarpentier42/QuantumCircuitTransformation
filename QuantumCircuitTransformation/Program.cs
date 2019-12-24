@@ -66,7 +66,7 @@ namespace QuantumCircuitTransformation
                     if (selection == 0) return;
                     else if (selection == 42) Test();
                     else MainMenu[selection-1].Item2.Invoke();
-                } catch (ArgumentOutOfRangeException)
+                } catch (InvalidCastException)
                 {
                     ConsoleLayout.Error();
                     ConsoleLayout.Footer();
@@ -78,6 +78,29 @@ namespace QuantumCircuitTransformation
         private static void Test()
         {
             ConsoleLayout.Header("Test environment");
+
+
+            LogicalCircuit circuit = CircuitGenerator.ReadFromFile("rd84_142.qasm");
+            Console.WriteLine("Gate imported with {0} gates", circuit.NbGates);
+            DependencyGraph g = DependencyGraphGenerator.Generate(circuit);
+            int nbDependencies = 0;
+            for (int i = 0; i < g.ExecuteBefore.Count(); i++)
+            {
+                nbDependencies += g.ExecuteBefore[i].Count();
+                try
+                {
+                    Console.Write(i + ": ");
+                    Console.Write(g.ExecuteBefore[i][0]);
+                    for (int j = 1; j < g.ExecuteBefore[i].Count; j++)
+                    {
+                        Console.Write(", " + g.ExecuteBefore[i][j]);
+                    }
+                }
+                catch { }
+                Console.Write('\n');
+            }
+
+            Console.WriteLine(nbDependencies);
 
 
             ConsoleLayout.Footer();

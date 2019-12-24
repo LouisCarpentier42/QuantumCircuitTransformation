@@ -1,14 +1,11 @@
 ﻿using QuantumCircuitTransformation.Exceptions;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace QuantumCircuitTransformation.DependencyGraphs
 {
     /// <summary>
-    ///     DependencyGraph:
+    ///     DependencyGraph
     ///         A dependency graph has a list of gates and a set of
     ///         edges, which connenct the gates that depend on eachother.
     ///         Gate g1 depends on gate g2 if g2 has to be exectuted
@@ -16,7 +13,7 @@ namespace QuantumCircuitTransformation.DependencyGraphs
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.5
+    ///     @version:  1.6
     /// </remarks>
     public class DependencyGraph
     {
@@ -31,10 +28,17 @@ namespace QuantumCircuitTransformation.DependencyGraphs
         }
 
         /// <summary>
-        /// The dependency edges of this dependency graph. A connection (i,j) 
-        /// means that <see cref="Gates"/>[j] depends on <see cref="Gates"/>[i].
+        /// The gates which must be executed before the gates in the 
+        /// corresponding list. Gate i must be executed before gate j, 
+        /// if ExecuteBefore[i].contains(j).
         /// </summary>
-        public readonly List<Tuple<int, int>> DependencyEdges;
+        public List<List<int>> ExecuteBefore;
+        /// <summary>
+        /// The gates which must be executed after the gates in the 
+        /// corresponding list. Gate i must be executed before gate j, 
+        /// if ExecuteAfter[j].contains(i).
+        /// </summary>
+        public List<List<int>> ExecuteAfter;
         /// <summary>
         /// Variable referring to the state of each gate. 
         /// </summary>
@@ -45,19 +49,20 @@ namespace QuantumCircuitTransformation.DependencyGraphs
         /// Initialise a new dependency graph with given gates and dependencies.
         /// </summary>
         /// <param name="nbGates"> The number of gates for this dependency graph. </param>
-        /// <param name="dependencyEdges"> The edges for this dependency graph. </param>
-        public DependencyGraph(int nbGates, List<Tuple<int, int>> dependencyEdges)
+        /// <param name="executeBefore"> The dependencies of gates to execute before. </param>
+        /// <param name="executeAfter"> The dependencies of gates to execute after. </param>
+        public DependencyGraph(int nbGates, List<List<int>> executeBefore, List<List<int>> executeAfter)
         {
-            DependencyEdges = dependencyEdges;
-            SetUpGateStates(nbGates, dependencyEdges);
+            ExecuteBefore = executeBefore;
+            ExecuteAfter = executeAfter;
+            SetUpGateStates(nbGates);
         }
 
         /// <summary>
         /// Set the states of the gates correctly. 
         /// </summary>
         /// <param name="nbGates"> The number of gates for this dependency graph. </param>
-        /// <param name="dependencyEdges"> The dependency edges of this dependency graph. </param>
-        private void SetUpGateStates(int nbGates, List<Tuple<int, int>> dependencyEdges)
+        private void SetUpGateStates(int nbGates)
         {
             GateStates = new List<GateState>();
             for (int i = 0; i < nbGates; i++)
@@ -82,13 +87,16 @@ namespace QuantumCircuitTransformation.DependencyGraphs
                 throw new GateIsNotBlockingException();
             GateStates[gateID] = GateState.Resolved;
 
-            for (int i = 0; i < GateStates.Count; i++)
+            foreach (int i in ExecuteBefore[gateID])
             {
-                if (GateStates[i] == GateState.Blocked && IsNotBlocked(i))
+                ExecuteAfter[i].Remove(gateID);
+                if (IsNotBlocked(i) && GateStates[i] == GateState.Blocked)
                 {
                     GateStates[i] = GateState.Blocking;
                 }
             }
+
+            ExecuteBefore[gateID] = null;
         }
 
         /// <summary>
@@ -96,12 +104,12 @@ namespace QuantumCircuitTransformation.DependencyGraphs
         /// </summary>
         /// <param name="gateID"> The ID of the gate to check. </param>
         /// <returns>
-        /// True if and only if the gate at the given ID has only edges directed 
-        /// to it from gates which are resolved. 
+        /// True if and only if the given gate ID has no gates after which it 
+        /// must be executed. 
         /// </returns>
         private bool IsNotBlocked(int gateID)
         {
-            return !DependencyEdges.Any(edge => edge.Item2 == gateID && GateStates[edge.Item1] != GateState.Resolved);
+            return ExecuteAfter[gateID].Count == 0;
         }
     }
 }

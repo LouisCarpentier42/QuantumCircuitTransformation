@@ -1,5 +1,6 @@
 ﻿using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Gates.PhysicalGates;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,8 +24,16 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
         public LogicalCircuit(List<Gate> gates) : base(gates)
         {
             CnotGates = new List<CNOT>();
-            foreach (CNOT cnot in gates)
-                CnotGates.Add(cnot);
+            for (int i = 0; i < gates.Count; i++)
+            {
+                try
+                {
+                    CnotGates.Add((CNOT)gates[i]);
+                } catch (InvalidCastException)
+                {
+
+                }
+            }
             NbCnotGates = CnotGates.Count();
         }
     }

@@ -7,39 +7,20 @@ using System.Linq;
 namespace QuantumCircuitTransformation.DependencyGraphs
 {
     /// <summary>
-    ///     DependencyGraphGenerator:
+    ///     DependencyGraphGenerator
     ///         A static class for constructing dependency graphs.
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.3
+    ///     @version:  1.4
     /// </remarks>
     public static class DependencyGraphGenerator
     {
         /// <summary>
-        /// Creates a dependency graph for the given gates.
+        /// Variables referring to the parameters of the dependency graph
+        /// to generate. 
         /// </summary>
-        /// <param name="circuit"> The logical circuit to create the dependency graph for. </param>
-        /// <returns>
-        /// A new dependency graph with the given gates and connections
-        /// but taking no rules into account. 
-        /// </returns>
-        public static DependencyGraph Generate(LogicalCircuit circuit)
-        {
-            List<Tuple<int, int>> edges = new List<Tuple<int, int>>();
-            for (int i = 0; i < circuit.NbGates; i++)
-            {
-                for (int j = i + 1; j < circuit.NbGates; j++)
-                {
-                    List<GatePart> overlappingGateParts = GetOverlappingGateParts(circuit.Gates[i], circuit.Gates[j]);
-                    if (GatesAreDependent(overlappingGateParts))
-                    {
-                        edges.Add(new Tuple<int, int>(i, j));
-                    }
-                }
-            }
-            return new DependencyGraph(circuit.NbGates, edges);
-        }
+        private static List<List<int>> Dependencies;
 
         /// <summary>
         /// Creates a dependency graph for the given gates, based on
@@ -51,21 +32,44 @@ namespace QuantumCircuitTransformation.DependencyGraphs
         /// A new dependency graph with the given gates and connections
         /// according to the given rules. 
         /// </returns>
-        public static DependencyGraph Generate(LogicalCircuit circuit, List<DependencyRule> rules)
+        public static DependencyGraph Generate(LogicalCircuit circuit, List<DependencyRule> rules = null)
         {
-            List<Tuple<int, int>> edges = new List<Tuple<int, int>>();
+            Dependencies = new List<List<int>>();
+            List<List<int>> executeBefore = new List<List<int>>();
+            List<List<int>> executeAfter = new List<List<int>>();
             for (int i = 0; i < circuit.NbGates; i++)
             {
-                for (int j = i + 1; j < circuit.NbGates; j++)
+                Dependencies.Add(new List<int>());
+                executeBefore.Add(new List<int>());
+                executeAfter.Add(new List<int>());
+            }
+            for (int i = 0; i <circuit.NbGates; i++)
+            {
+                for (int j = i+1; j < circuit.NbGates; j++)
                 {
                     List<GatePart> overlappingGateParts = GetOverlappingGateParts(circuit.Gates[i], circuit.Gates[j]);
                     if (GatesAreDependent(overlappingGateParts, rules))
                     {
-                        edges.Add(new Tuple<int, int>(i, j));
+                        Dependencies[i].Add(j);
                     }
                 }
             }
-            return new DependencyGraph(circuit.NbGates, edges);
+            Console.WriteLine("Dependencies are set");
+
+            for (int i = 0; i < circuit.NbGates; i++)
+            {
+                foreach (int j in Dependencies[i])
+                {
+                    if (!PathExists(i, j, i))
+                    {
+                        executeBefore[i].Add(j);
+                        executeAfter[j].Add(i);
+                    }
+                }
+            }
+
+            Dependencies = null;
+            return new DependencyGraph(circuit.NbGates, executeBefore, executeAfter);
         }
 
         /// <summary>
@@ -94,19 +98,6 @@ namespace QuantumCircuitTransformation.DependencyGraphs
         /// and the dependency rule. 
         /// </summary>
         /// <param name="overlappingGateParts"> The overlapping gate parts. </param>
-        /// <returns>
-        /// True if and only if there are overlapping gate parts.
-        /// </returns>
-        private static bool GatesAreDependent(List<GatePart> overlappingGateParts)
-        {
-            return overlappingGateParts.Count > 0;
-        }
-
-        /// <summary>
-        /// Checks if two gates are dependent based on their overlapping gate parts
-        /// and the dependency rule. 
-        /// </summary>
-        /// <param name="overlappingGateParts"> The overlapping gate parts. </param>
         /// <param name="rules"> The dependency rules to take into account. </param>
         /// <returns>
         /// True if and only if there are overlapping gate parts and no rule allows 
@@ -114,12 +105,17 @@ namespace QuantumCircuitTransformation.DependencyGraphs
         /// </returns>
         private static bool GatesAreDependent(List<GatePart> overlappingGateParts, List<DependencyRule> rules)
         {
-            return overlappingGateParts.Count > 0 && !rules.Any(rule => rule.CanBeSwitched(overlappingGateParts));
+            return overlappingGateParts.Count > 0 && (rules == null || !rules.Any(rule => rule.CanBeSwitched(overlappingGateParts)));
         }
 
-
-
-
-
+        private static bool PathExists(int start, int goal, int forbiddenStart)
+        {
+            if (start == goal)
+                return true;
+            else if (start > goal)
+                return false;
+            else
+                return Dependencies[start].Any(nextNode => !(start == forbiddenStart && nextNode == goal) && PathExists(nextNode, goal, forbiddenStart));
+        }
     }
 } 
