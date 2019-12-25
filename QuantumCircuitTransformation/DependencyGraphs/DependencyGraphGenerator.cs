@@ -54,21 +54,33 @@ namespace QuantumCircuitTransformation.DependencyGraphs
                     }
                 }
             }
-            Console.WriteLine("Dependencies are set");
 
+
+            Console.WriteLine("Dependencies are set");
+            int nbDependencies = 0;
             for (int i = 0; i < circuit.NbGates; i++)
             {
-                foreach (int j in Dependencies[i])
-                {
-                    if (!PathExists(i, j, i))
-                    {
-                        executeBefore[i].Add(j);
-                        executeAfter[j].Add(i);
-                    }
-                }
+                nbDependencies += Dependencies[i].Count();
             }
+            Console.WriteLine("In total there are {0} dependencies", nbDependencies);
+
+
+            //for (int i = 0; i < circuit.NbGates; i++)
+            //{
+            //    Console.WriteLine(i);
+            //    foreach (int j in Dependencies[i])
+            //    {
+            //        if (!PathExists(i, j, i))
+            //        {
+            //            executeBefore[i].Add(j);
+            //            executeAfter[j].Add(i);
+            //        }
+            //    }
+            //}
+
 
             Dependencies = null;
+            GC.Collect();
             return new DependencyGraph(circuit.NbGates, executeBefore, executeAfter);
         }
 

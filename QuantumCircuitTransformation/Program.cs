@@ -80,27 +80,27 @@ namespace QuantumCircuitTransformation
             ConsoleLayout.Header("Test environment");
 
 
-            LogicalCircuit circuit = CircuitGenerator.ReadFromFile("rd84_142.qasm");
+            LogicalCircuit circuit = CircuitGenerator.ReadFromFile("urf4_187.qasm");
             Console.WriteLine("Gate imported with {0} gates", circuit.NbGates);
-            DependencyGraph g = DependencyGraphGenerator.Generate(circuit);
-            int nbDependencies = 0;
-            for (int i = 0; i < g.ExecuteBefore.Count(); i++)
-            {
-                nbDependencies += g.ExecuteBefore[i].Count();
-                try
-                {
-                    Console.Write(i + ": ");
-                    Console.Write(g.ExecuteBefore[i][0]);
-                    for (int j = 1; j < g.ExecuteBefore[i].Count; j++)
-                    {
-                        Console.Write(", " + g.ExecuteBefore[i][j]);
-                    }
-                }
-                catch { }
-                Console.Write('\n');
-            }
+            //DependencyGraph g = DependencyGraphGenerator.Generate(circuit);
+            //int nbDependencies = 0;
+            //for (int i = 0; i < g.ExecuteBefore.Count(); i++)
+            //{
+            //    nbDependencies += g.ExecuteBefore[i].Count();
+            //    try
+            //    {
+            //        Console.Write(i + ": ");
+            //        Console.Write(g.ExecuteBefore[i][0]);
+            //        for (int j = 1; j < g.ExecuteBefore[i].Count; j++)
+            //        {
+            //            Console.Write(", " + g.ExecuteBefore[i][j]);
+            //        }
+            //    }
+            //    catch { }
+            //    Console.Write('\n');
+            //}
 
-            Console.WriteLine(nbDependencies);
+            //Console.WriteLine(nbDependencies);
 
 
             ConsoleLayout.Footer();

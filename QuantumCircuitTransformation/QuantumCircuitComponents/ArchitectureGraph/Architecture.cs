@@ -1,4 +1,5 @@
-﻿using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
+﻿using QuantumCircuitTransformation.MappingPerturbation;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Gates.PhysicalGates;
 using System;
 using System.Collections.Generic;
@@ -102,6 +103,17 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGrap
             for (int i = 0; i < NbNodes; i++)
                 for (int j = 0; j < NbNodes; j++)
                     CNOTDistance[i, j] = Math.Max(0, NbOfCnotGatesPerSwap() * (pathLength[i, j] - 1));
+        }
+
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="cnot"></param>
+        /// <returns></returns>
+        public int GetGateCost(CNOT cnot)
+        {
+            return CNOTDistance[cnot.ControlQubit, cnot.TargetQubit];
         }
 
 

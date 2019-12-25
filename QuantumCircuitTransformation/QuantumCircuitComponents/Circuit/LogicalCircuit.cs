@@ -18,23 +18,18 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
     public sealed class LogicalCircuit : QuantumCircuit<Gate>
     {
 
-        public readonly List<CNOT> CnotGates;
+        public readonly List<int> CnotGatesID;
         public readonly int NbCnotGates;
 
         public LogicalCircuit(List<Gate> gates) : base(gates)
         {
-            CnotGates = new List<CNOT>();
+            CnotGatesID = new List<int>();
             for (int i = 0; i < gates.Count; i++)
             {
-                try
-                {
-                    CnotGates.Add((CNOT)gates[i]);
-                } catch (InvalidCastException)
-                {
-
-                }
+                if (gates[i] is CNOT)
+                    CnotGatesID.Add(i);
             }
-            NbCnotGates = CnotGates.Count();
+            NbCnotGates = CnotGatesID.Count();
         }
     }
 }

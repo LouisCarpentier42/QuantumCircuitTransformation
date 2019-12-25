@@ -13,7 +13,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
 {
     /// <summary>
     ///     CircuitGenerator
-    ///         A static class to easily generate circuits.
+    ///         A static class to easily generate logical circuits.
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
@@ -62,9 +62,12 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
             string[] file = File.ReadAllLines(Globals.BenchmarkFolder + fileName);
             for (int i = 0; i < file.Length; i++)
             {
-                gates.Add(InitialiseGate(file[i]));
+                Gate gate = InitialiseGate(file[i]);
+                if (gate != null)
+                    gates.Add(gate);
             }
-            gates.RemoveAll(x => x == null);
+            file = null;
+            GC.Collect();
             return new LogicalCircuit(gates);
         }
 

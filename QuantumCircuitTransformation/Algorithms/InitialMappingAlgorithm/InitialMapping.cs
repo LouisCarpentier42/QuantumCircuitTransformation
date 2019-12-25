@@ -91,7 +91,8 @@ namespace QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm
             for (int i = 0; i < circuit.NbCnotGates; i++)
             {
                 double weight = 1 / (++NbOfGatesLookedAt / p1 + p2);
-                cost += architecture.CNOTDistance[mapping.Map[circuit.CnotGates[i].ControlQubit], mapping.Map[circuit.CnotGates[i].TargetQubit]];
+                if (circuit.Gates[i] is CNOT)
+                    cost += architecture.GetGateCost(mapping.MapCNOT((CNOT)circuit.Gates[i]));
                 if (NbOfGatesLookedAt > MAX_NB_GATES_IN_COST)
                     return cost;
             }
