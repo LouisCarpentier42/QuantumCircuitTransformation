@@ -79,28 +79,54 @@ namespace QuantumCircuitTransformation
         {
             ConsoleLayout.Header("Test environment");
 
+            string fileName = "hwb7_59";
 
-            LogicalCircuit circuit = CircuitGenerator.ReadFromFile("urf4_187.qasm");
-            Console.WriteLine("Gate imported with {0} gates", circuit.NbGates);
-            //DependencyGraph g = DependencyGraphGenerator.Generate(circuit);
-            //int nbDependencies = 0;
-            //for (int i = 0; i < g.ExecuteBefore.Count(); i++)
+            Globals.Timer.Restart();
+            LogicalCircuit circuit = CircuitGenerator.ReadFromFile(fileName + ".qasm");
+            Globals.Timer.Stop();
+            Console.WriteLine("Gate imported with {0} gates in {1} milliseconds.", 
+                circuit.NbGates, Globals.Timer.Elapsed.TotalMilliseconds);
+
+            Globals.Timer.Restart();
+            DependencyGraph g = DependencyGraphGenerator.Generate(circuit);
+            Globals.Timer.Stop();
+
+            int nbDependencies = 0;
+            for (int i = 0; i < g.ExecuteBefore.Count(); i++)
+            {
+                nbDependencies += g.ExecuteBefore[i].Count();
+                //try
+                //{
+                //    Console.Write(i + ": ");
+                //    Console.Write(g.ExecuteBefore[i][0]);
+                //    for (int j = 1; j < g.ExecuteBefore[i].Count; j++)
+                //    {
+                //        Console.Write(", " + g.ExecuteBefore[i][j]);
+                //    }
+                //}
+                //catch { }
+                //Console.Write('\n');
+            }
+            Console.WriteLine("Dependency graph with {0} dependencies is genereated in {1} milliseconds",
+                nbDependencies, Globals.Timer.Elapsed.TotalMilliseconds);
+
+            //nbDependencies = 0;
+            //for (int i = 0; i < g.ExecuteAfter.Count(); i++)
             //{
-            //    nbDependencies += g.ExecuteBefore[i].Count();
+            //    nbDependencies += g.ExecuteAfter[i].Count();
             //    try
             //    {
             //        Console.Write(i + ": ");
-            //        Console.Write(g.ExecuteBefore[i][0]);
-            //        for (int j = 1; j < g.ExecuteBefore[i].Count; j++)
+            //        Console.Write(g.ExecuteAfter[i][0]);
+            //        for (int j = 1; j < g.ExecuteAfter[i].Count; j++)
             //        {
-            //            Console.Write(", " + g.ExecuteBefore[i][j]);
+            //            Console.Write(", " + g.ExecuteAfter[i][j]);
             //        }
             //    }
             //    catch { }
             //    Console.Write('\n');
             //}
-
-            //Console.WriteLine(nbDependencies);
+            ////Console.WriteLine(nbDependencies);
 
 
             ConsoleLayout.Footer();
