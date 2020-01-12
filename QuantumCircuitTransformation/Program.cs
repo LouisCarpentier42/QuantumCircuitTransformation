@@ -79,6 +79,10 @@ namespace QuantumCircuitTransformation
         {
             ConsoleLayout.Header("Test environment");
 
+            for (int i = 1; i < 10; i++)
+                Console.WriteLine(Math.Pow(i / 2, i));
+
+
             string fileName = "hwb7_59";
 
             Globals.Timer.Restart();
@@ -87,46 +91,29 @@ namespace QuantumCircuitTransformation
             Console.WriteLine("Gate imported with {0} gates in {1} milliseconds.", 
                 circuit.NbGates, Globals.Timer.Elapsed.TotalMilliseconds);
 
-            Globals.Timer.Restart();
-            DependencyGraph g = DependencyGraphGenerator.Generate(circuit);
-            Globals.Timer.Stop();
+            //Globals.Timer.Restart();
+            //DependencyGraph g = DependencyGraphGenerator.Generate(circuit);
+            //Globals.Timer.Stop();
 
-            int nbDependencies = 0;
-            for (int i = 0; i < g.ExecuteBefore.Count(); i++)
-            {
-                nbDependencies += g.ExecuteBefore[i].Count();
-                //try
-                //{
-                //    Console.Write(i + ": ");
-                //    Console.Write(g.ExecuteBefore[i][0]);
-                //    for (int j = 1; j < g.ExecuteBefore[i].Count; j++)
-                //    {
-                //        Console.Write(", " + g.ExecuteBefore[i][j]);
-                //    }
-                //}
-                //catch { }
-                //Console.Write('\n');
-            }
-            Console.WriteLine("Dependency graph with {0} dependencies is genereated in {1} milliseconds",
-                nbDependencies, Globals.Timer.Elapsed.TotalMilliseconds);
-
-            //nbDependencies = 0;
-            //for (int i = 0; i < g.ExecuteAfter.Count(); i++)
+            //int nbDependencies = 0;
+            //for (int i = 0; i < g.ExecuteBefore.Count(); i++)
             //{
-            //    nbDependencies += g.ExecuteAfter[i].Count();
+            //    nbDependencies += g.ExecuteBefore[i].Count();
             //    try
             //    {
             //        Console.Write(i + ": ");
-            //        Console.Write(g.ExecuteAfter[i][0]);
-            //        for (int j = 1; j < g.ExecuteAfter[i].Count; j++)
+            //        Console.Write(g.ExecuteBefore[i][0]);
+            //        for (int j = 1; j < g.ExecuteBefore[i].Count; j++)
             //        {
-            //            Console.Write(", " + g.ExecuteAfter[i][j]);
+            //            Console.Write(", " + g.ExecuteBefore[i][j]);
             //        }
             //    }
             //    catch { }
             //    Console.Write('\n');
             //}
-            ////Console.WriteLine(nbDependencies);
+            //Console.WriteLine("Dependency graph with {0} dependencies is genereated in {1} milliseconds",
+            //    nbDependencies, Globals.Timer.Elapsed.TotalMilliseconds);
+
 
 
             ConsoleLayout.Footer();

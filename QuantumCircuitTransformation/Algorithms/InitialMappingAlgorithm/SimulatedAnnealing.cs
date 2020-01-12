@@ -7,21 +7,20 @@ using QuantumCircuitTransformation.MappingPerturbation;
 namespace QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm
 {
     /// <summary>
-    /// 
-    /// SimulatedAnnealing:
-    ///    A class for finding an initial mapping of logical qubits on a given
-    ///    physical architecture. (See <see cref="InitialMapping"/>).
-    ///    Simmulated Annealing tries to find a solution with minimal cost. This
-    ///    is done by generating a new mapping from a some mapping. If this new 
-    ///    mapping is better, it is chosen. To escape from local a local optima, 
-    ///    the algorithm will accept a certain mapping even though it is worse 
-    ///    than the current mapping. This is done with a probability corresponding
-    ///    to the current temperature, which is declined during the algorithm. 
-    ///    
-    /// @author:   Louis Carpentier
-    /// @version:  1.2
-    /// 
+    ///     SimulatedAnnealing
+    ///         A class for finding an initial mapping of logical qubits on a given
+    ///         physical architecture. (See <see cref="InitialMapping"/>).
+    ///         Simmulated Annealing tries to find a solution with minimal cost. This
+    ///         is done by generating a new mapping from a some mapping. If this new 
+    ///         mapping is better, it is chosen. To escape from local a local optima, 
+    ///         the algorithm will accept a certain mapping even though it is worse 
+    ///         than the current mapping. This is done with a probability corresponding
+    ///         to the current temperature, which is declined during the algorithm. 
     /// </summary>
+    /// <remarks>
+    ///     @author:   Louis Carpentier
+    ///     @version:  1.2
+    /// </remarks>  
     public class SimulatedAnnealing : InitialMapping
     {
         /// <summary>

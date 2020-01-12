@@ -105,17 +105,17 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGrap
                     CNOTDistance[i, j] = Math.Max(0, NbOfCnotGatesPerSwap() * (pathLength[i, j] - 1));
         }
 
-
         /// <summary>
-        /// TODO
+        /// Returns the cost of the given CNOT gate. 
         /// </summary>
-        /// <param name="cnot"></param>
-        /// <returns></returns>
+        /// <param name="cnot"> The cnot gate to give the cost of. </param>
+        /// <returns>
+        /// A value proportional to the cnot distance of the given gate. 
+        /// </returns>
         public int GetGateCost(CNOT cnot)
         {
             return CNOTDistance[cnot.ControlQubit, cnot.TargetQubit];
         }
-
 
         /// <summary>
         /// Returns the number of swap gates that is needed to replace one 
