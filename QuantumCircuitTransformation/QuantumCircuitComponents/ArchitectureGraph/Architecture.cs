@@ -133,5 +133,21 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGrap
         /// such that <paramref name="cnot"/> can be executed. 
         /// </returns>
         public abstract bool CanExecuteCNOT(CNOT cnot);
+
+
+
+        // Test
+        public void CanExecute(Gate gate)
+        {
+            Console.WriteLine("Gate");
+        }
+
+        public void CanExecute(CNOT cnot)
+        {
+            Console.WriteLine("CNOT");
+        }
+
+
+
     }
 }

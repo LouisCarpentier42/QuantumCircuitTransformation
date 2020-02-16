@@ -18,10 +18,7 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
     public class HeuristicSearch : Transformation
     {
 
-        public HeuristicSearch()
-        {
-
-        }
+        public HeuristicSearch() { }
 
         /// <summary>
         /// See <see cref="Algorithm.Equals(object)"/>.
@@ -70,8 +67,14 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
         /// </summary>
         protected override void Execute()
         {
-            throw new NotImplementedException();
+            while (LogicalCircuit.NbGates > 0)
+            {
+                Swap move = GetBestMove();
+                move.Apply(Mapping);
+                Transform();
+            }
         }
+
 
     }
 }

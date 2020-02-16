@@ -12,6 +12,8 @@ using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 using System.Text.RegularExpressions;
 using QuantumCircuitTransformation.DependencyGraphs;
 using System.IO;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Gates.PhysicalGates;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Gates.LogicalGates;
 
 namespace QuantumCircuitTransformation
 {
@@ -82,7 +84,13 @@ namespace QuantumCircuitTransformation
                     ConsoleLayout.Footer();
                 }
             }
-        } 
+        }
+
+
+
+
+
+
 
 
         private static void Test()
@@ -90,19 +98,34 @@ namespace QuantumCircuitTransformation
             ConsoleLayout.Header("Test environment");
 
 
-            string fileName = "hwb7_59";
 
-            Globals.Timer.Restart();
-            LogicalCircuit circuit = CircuitGenerator.ReadFromFile(fileName + ".qasm");
-            Globals.Timer.Stop();
-            Console.WriteLine("Gate imported with {0} gates in {1} milliseconds.", 
-                circuit.NbGates, Globals.Timer.Elapsed.TotalMilliseconds);
+            List<Gate> gates = new List<Gate>
+            {
+                new CNOT(1,2),
+                new Hadamard(2)
+            };
 
-            Globals.Timer.Restart();
-            DependencyGraph g = DependencyGraphGenerator.Generate(circuit);
-            Globals.Timer.Stop();
-            Console.WriteLine("Dependency graph generated in {0} milliseconds.",
-                Globals.Timer.Elapsed.TotalMilliseconds);
+            QuantumDevices.IBM_Q20.CanExecute(new CNOT(1, 2));
+            QuantumDevices.IBM_Q20.CanExecute(new Hadamard(2));
+
+            foreach (Gate x in gates)
+                QuantumDevices.IBM_Q20.CanExecute(x);
+
+
+
+            //string fileName = "hwb7_59";
+
+            //Globals.Timer.Restart();
+            //LogicalCircuit circuit = CircuitGenerator.ReadFromFile(fileName + ".qasm");
+            //Globals.Timer.Stop();
+            //Console.WriteLine("Gate imported with {0} gates in {1} milliseconds.", 
+            //    circuit.NbGates, Globals.Timer.Elapsed.TotalMilliseconds);
+
+            //Globals.Timer.Restart();
+            //DependencyGraph g = DependencyGraphGenerator.Generate(circuit);
+            //Globals.Timer.Stop();
+            //Console.WriteLine("Dependency graph generated in {0} milliseconds.",
+            //    Globals.Timer.Elapsed.TotalMilliseconds);
 
             //int nbDependencies = 0;
             //for (int i = 0; i < g.ExecuteBefore.Count(); i++)

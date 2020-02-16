@@ -5,6 +5,7 @@ using QuantumCircuitTransformation.MappingPerturbation;
 using QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Circuit;
 using QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 
 namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
 {
@@ -29,8 +30,6 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
         public abstract string Parameters();
 
 
-
-
         /// <summary>
         /// Transform the given circuit for the given architecture with given 
         /// initial mapping. 
@@ -44,28 +43,93 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
         /// </returns>
         public PhysicalCircuit Execute(LogicalCircuit circuit, Architecture architecture, Mapping mapping)
         {
-            return null;
+            SetUp(circuit, architecture, mapping);
+            Execute();
+            return PhysicalCircuit;
         }
 
+        /// <summary>
+        /// Abstract method which implements the transformation algorithm, making 
+        /// use of the data stored in this class. 
+        /// </summary>
         protected abstract void Execute();
 
+        /// <summary>
+        /// Checks whether or not the circuit is fully transformed
+        /// </summary>
+        /// <returns>
+        /// True if and only if there are no more gates who are no more
+        /// gates to be resolved. 
+        /// </returns>
+        protected bool CircuitIsTransformed()
+        {
+            return GatesToResolve.Count == 0;
+        }
+
+        /// <summary>  
+        /// Set up the data to execute the algorithm. 
+        /// </summary>
+        /// <param name="circuit"> The logical circuit to transform. </param>
+        /// <param name="architecture"> The architecture to be used. </param>
+        /// <param name="mapping"> The initial mapping to use during transformation. </param>
+        private void SetUp(LogicalCircuit circuit, Architecture architecture, Mapping mapping)
+        {
+            PhysicalCircuit = new PhysicalCircuit(architecture);
+            LogicalCircuit = circuit;
+            Architecture = architecture;
+            Mapping = mapping;
+        }
+
+        
+
+
+        protected PhysicalCircuit PhysicalCircuit;
+        protected LogicalCircuit LogicalCircuit;
+        protected Architecture Architecture;
+        protected Mapping Mapping;
 
 
 
-        protected List<Swap> GetValidMoves(Architecture architecture)
+        /// <summary>
+        /// Variable referring to the gates which should be resolved, but only 
+        /// those which are not blocking any other gate. 
+        /// </summary>
+        protected List<int> GatesToResolve;
+
+
+
+        /// <summary>
+        /// Returns the best swap move.
+        /// </summary>
+        /// <returns></returns>
+        protected Swap GetBestMove()
         {
             List<Swap> swaps = new List<Swap>();
-            for (int i = 0; i < architecture.NbNodes; i++)
+            for (int i = 0; i < Architecture.NbNodes; i++)
             {
                 for (int j = 0; j < i; j++)
                 {
                     swaps.Add(new Swap(i, j));
                 }
             }
-            return swaps;
+            //return swaps;
+            throw new NotImplementedException(); // TODO
         }
 
 
-
+        /// <summary>
+        /// Transforms as mucht as possible from the logical circuit 
+        /// into the physical circuit.
+        /// </summary>
+        protected void Transform()
+        {
+            int i = 0; 
+            while (i++ < GatesToResolve.Count)
+            {
+                // Normal execution
+                // bridge execution
+            }
+            throw new NotImplementedException(); // TODO 
+        }
     }
 }
