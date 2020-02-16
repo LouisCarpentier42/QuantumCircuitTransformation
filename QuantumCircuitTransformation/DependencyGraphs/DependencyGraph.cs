@@ -20,12 +20,12 @@ namespace QuantumCircuitTransformation.DependencyGraphs
         /// <summary>
         /// The different states in which a gate can be. 
         /// </summary>
-        private enum GateState
-        {
-            Resolved,
-            Blocking,
-            Blocked
-        }
+        //private enum GateState
+        //{
+        //    Resolved,
+        //    Blocking,
+        //    Blocked
+        //}
 
         /// <summary>
         /// The gates which must be executed before the gates in the 
@@ -42,7 +42,7 @@ namespace QuantumCircuitTransformation.DependencyGraphs
         /// <summary>
         /// Variable referring to the state of each gate. 
         /// </summary>
-        private List<GateState> GateStates;
+        //private List<GateState> GateStates;
 
 
         /// <summary>
@@ -55,24 +55,24 @@ namespace QuantumCircuitTransformation.DependencyGraphs
         {
             ExecuteBefore = executeBefore;
             ExecuteAfter = executeAfter;
-            SetUpGateStates(nbGates);
+            //SetUpGateStates(nbGates);
         }
 
-        /// <summary>
-        /// Set the states of the gates correctly. 
-        /// </summary>
-        /// <param name="nbGates"> The number of gates for this dependency graph. </param>
-        private void SetUpGateStates(int nbGates)
-        {
-            GateStates = new List<GateState>();
-            for (int i = 0; i < nbGates; i++)
-            {
-                if (IsNotBlocked(i))
-                    GateStates.Add(GateState.Blocking);
-                else
-                    GateStates.Add(GateState.Blocked);
-            }
-        }
+        ///// <summary>
+        ///// Set the states of the gates correctly. 
+        ///// </summary>
+        ///// <param name="nbGates"> The number of gates for this dependency graph. </param>
+        //private void SetUpGateStates(int nbGates)
+        //{
+        //    GateStates = new List<GateState>();
+        //    for (int i = 0; i < nbGates; i++)
+        //    {
+        //        if (IsNotBlocked(i))
+        //            GateStates.Add(GateState.Blocking);
+        //        else
+        //            GateStates.Add(GateState.Blocked);
+        //    }
+        //}
 
 
         /// <summary>
@@ -81,35 +81,35 @@ namespace QuantumCircuitTransformation.DependencyGraphs
         /// </summary>
         /// <param name="gateID"> The ID of the gate to resolve. </param>
         /// <exception cref="GateIsNotBlockingException"> If the given gate is not in the blocking state. </exception>
-        private void ResolveGate(int gateID)
-        {
-            if (GateStates[gateID] != GateState.Blocking)
-                throw new GateIsNotBlockingException();
-            GateStates[gateID] = GateState.Resolved;
+        //private void ResolveGate(int gateID)
+        //{
+        //    if (GateStates[gateID] != GateState.Blocking)
+        //        throw new GateIsNotBlockingException();
+        //    GateStates[gateID] = GateState.Resolved;
 
-            foreach (int i in ExecuteBefore[gateID])
-            {
-                ExecuteAfter[i].Remove(gateID);
-                if (IsNotBlocked(i) && GateStates[i] == GateState.Blocked)
-                {
-                    GateStates[i] = GateState.Blocking;
-                }
-            }
+        //    foreach (int i in ExecuteBefore[gateID])
+        //    {
+        //        ExecuteAfter[i].Remove(gateID);
+        //        if (IsNotBlocked(i) && GateStates[i] == GateState.Blocked)
+        //        {
+        //            GateStates[i] = GateState.Blocking;
+        //        }
+        //    }
 
-            ExecuteBefore[gateID] = null;
-        }
+        //    ExecuteBefore[gateID] = null;
+        //}
 
-        /// <summary>
-        /// Checks if the gate at the given gateID is blocked.
-        /// </summary>
-        /// <param name="gateID"> The ID of the gate to check. </param>
-        /// <returns>
-        /// True if and only if the given gate ID has no gates after which it 
-        /// must be executed. 
-        /// </returns>
-        private bool IsNotBlocked(int gateID)
-        {
-            return ExecuteAfter[gateID].Count == 0;
-        }
+        ///// <summary>
+        ///// Checks if the gate at the given gateID is blocked.
+        ///// </summary>
+        ///// <param name="gateID"> The ID of the gate to check. </param>
+        ///// <returns>
+        ///// True if and only if the given gate ID has no gates after which it 
+        ///// must be executed. 
+        ///// </returns>
+        //private bool IsNotBlocked(int gateID)
+        //{
+        //    return ExecuteAfter[gateID] == null;
+        //}
     }
 }

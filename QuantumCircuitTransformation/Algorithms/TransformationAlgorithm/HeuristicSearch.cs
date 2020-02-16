@@ -26,9 +26,18 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
         /// <summary>
         /// See <see cref="Algorithm.Equals(object)"/>.
         /// </summary>
-        public override bool Equals(object heuristic)
+        public override bool Equals(object other)
         {
-            throw new NotImplementedException();
+            if (other == null) return false;
+            try
+            {
+                HeuristicSearch o = (HeuristicSearch)other;
+                return true;
+            }
+            catch (InvalidCastException)
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -36,7 +45,7 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
         /// </summary>
         public override int GetHashCode()
         {
-            throw new NotImplementedException();
+            return base.GetHashCode();
         }
 
         /// <summary>
@@ -44,7 +53,7 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
         /// </summary>
         public override string Name()
         {
-            throw new NotImplementedException();
+            return "Heuristic Search";
         }
 
         /// <summary>
@@ -52,11 +61,17 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
         /// </summary>
         public override string Parameters()
         {
-            throw new NotImplementedException();
+            return "";
         }
 
 
+        /// <summary>
+        /// See <see cref="Transformation.Execute()"/>.
+        /// </summary>
+        protected override void Execute()
+        {
+            throw new NotImplementedException();
+        }
 
-       
     }
 }

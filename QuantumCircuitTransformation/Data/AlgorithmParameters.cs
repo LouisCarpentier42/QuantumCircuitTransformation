@@ -51,7 +51,10 @@ namespace QuantumCircuitTransformation.Data
         /// <summary>
         /// A list of all the available transformation algorithms. 
         /// </summary>
-        public static List<Transformation> AvailableTransformationAlgorithms = new List<Transformation>();
+        public static List<Transformation> AvailableTransformationAlgorithms = new List<Transformation>
+        {
+            new HeuristicSearch(),
+        };
 
         /// <summary>
         /// A list of all the available dependency rules to generate a dependency graph.
