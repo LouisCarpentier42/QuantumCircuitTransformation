@@ -19,7 +19,7 @@ namespace QuantumCircuitTransformation.Exceptions
     {
         public GateIsNotBlockingException() { }
 
-        public GateIsNotBlockingException(PhysicalGate gate)
+        public GateIsNotBlockingException(Gate gate)
             : base("Gate '" + gate.ToString() + "' is blocked") { }
 
         public GateIsNotBlockingException(string message) : base(message) { }

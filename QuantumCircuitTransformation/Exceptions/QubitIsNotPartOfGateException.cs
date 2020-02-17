@@ -18,7 +18,7 @@ namespace QuantumCircuitTransformation.Exceptions
     {
         public QubitIsNotPartOfGateException() { }
 
-        public QubitIsNotPartOfGateException(int Qubit, PhysicalGate gate)
+        public QubitIsNotPartOfGateException(int Qubit, Gate gate)
             : base(Qubit + " is no part of gate '" + gate.ToString() + "'") { }
 
         public QubitIsNotPartOfGateException(string message) : base(message) { }

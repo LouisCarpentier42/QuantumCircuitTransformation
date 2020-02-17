@@ -1,6 +1,4 @@
-﻿using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Gates.PhysicalGates;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph
@@ -23,31 +21,15 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGrap
         public UndirectedArchitecture(List<Tuple<int, int>> connections) 
             : base(connections) { }
 
-
         /// <summary>
-        /// See <see cref="Architecture.CanExecuteCNOT(CNOT)"/>.
+        /// See <see cref="Architecture.HasConnection(int, int)"/>.
         /// </summary>
         /// <returns>
-        /// True if and only if there exists an edge which connectes the control  
-        /// and target qubit of the given CNOT gate in any direction. In all other 
-        /// cases is false returned. 
+        /// True if and only if there exists a connection in any direction. 
         /// </returns>
-        public override bool CanExecuteCNOT(CNOT cnot)
+        public override bool HasConnection(int from, int to)
         {
-            return Edges.Contains(new Tuple<int, int>(cnot.ControlQubit, cnot.TargetQubit)) ||
-                   Edges.Contains(new Tuple<int, int>(cnot.TargetQubit, cnot.ControlQubit));
-        }
-
-        /// <summary>
-        /// See <see cref="Architecture.NbOfCnotGatesPerSwap"/>.
-        /// </summary>
-        /// <returns>
-        /// A swap gate can be replaced by three cnot gates. First a cnot gate from a
-        /// to be, then a cnot gate from b to a and finally a cnot gate from a to b. 
-        /// </returns>
-        public override int NbOfCnotGatesPerSwap()
-        {
-            return 3;
+            return Edges[from].Contains(to) || Edges[to].Contains(from);
         }
     }
 }

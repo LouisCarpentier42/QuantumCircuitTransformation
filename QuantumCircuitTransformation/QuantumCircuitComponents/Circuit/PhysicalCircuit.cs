@@ -17,7 +17,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
     ///     @author:   Louis Carpentier
     ///     @version:  2.0
     /// </remarks>
-    public sealed class PhysicalCircuit : QuantumCircuit<PhysicalGate>
+    public sealed class PhysicalCircuit : QuantumCircuit
     {
         /// <summary>
         /// A variable to keep track of the architecture graph of the 
@@ -31,7 +31,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
         /// </summary>
         /// <param name="architecture"> The architecture for this physical circuit. </param>
         public PhysicalCircuit(Architecture architecture) 
-            : this(architecture, new List<PhysicalGate>()) { }
+            : this(architecture, new List<Gate>()) { }
 
         /// <summary>
         /// Initialise a new physical circuit with given architecture and a 
@@ -42,7 +42,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
         /// <remarks>
         /// All the given gates should be executable on the given architecture. 
         /// </remarks>
-        public PhysicalCircuit(Architecture architecture, List<PhysicalGate> gates) : base(gates)
+        public PhysicalCircuit(Architecture architecture, List<Gate> gates) : base(gates)
         {
             Architecture = architecture;
         }
@@ -56,11 +56,11 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
         /// The given gate should be able to be executed on the the architecture
         /// of this physical circuit. 
         /// </remarks>
-        public void AddGate(PhysicalGate gate)
+        public void AddGate(Gate gate)
         {
             Gates.Add(gate);
             NbGates++;
-            NbQubits = Math.Max(gate.GetQubits().Max(), NbQubits);   
+            NbQubits = Math.Max(gate.GetMaxQubit(), NbQubits);   
         }
 
         /// <summary>
@@ -68,10 +68,10 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
         /// </summary>
         /// <param name="gates"> The gates to add to this circuit. </param>
         /// <remarks> 
-        /// This method calls <see cref="AddGate(PhysicalGate)"/> for every gate 
+        /// This method calls <see cref="AddGate(Gate)"/> for every gate 
         /// in the given list of gates. 
         /// </remarks>
-        public void AddGate(List<PhysicalGate> gates)
+        public void AddGate(List<Gate> gates)
         {
             for (int i = 0; i < gates.Count; i++)
                 AddGate(gates[i]);

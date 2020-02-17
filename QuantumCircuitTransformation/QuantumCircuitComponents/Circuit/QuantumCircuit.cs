@@ -18,12 +18,12 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
     ///     @author:   Louis Carpentier
     ///     @version:  2.0
     /// </remarks>
-    public abstract class QuantumCircuit<G> where G : Gate
+    public abstract class QuantumCircuit
     {
         /// <summary>
         /// A list of the physical gates in this quantum circuit. 
         /// </summary>
-        public readonly List<G> Gates;
+        public readonly List<Gate> Gates;
         /// <summary>
         /// Variable referring to the number of gates in this quantum circuit. 
         /// </summary>
@@ -38,13 +38,12 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
         /// Initialise a new quantum circuit with the given gates. 
         /// </summary>
         /// <param name="gates"> The gates for this quantum circuit. </param>
-        public QuantumCircuit(List<G> gates)
+        public QuantumCircuit(List<Gate> gates)
         {
             Gates = gates;
             NbGates = gates.Count;
-            NbQubits = gates.Max(gate => gate.GetQubits().Max()) + 1;
+            NbQubits = gates.Max(gate => gate.GetMaxQubit()) + 1;
         }
-
 
         /// <summary>
         /// Gives a string representation of this quantum circuit.  

@@ -65,7 +65,7 @@ namespace QuantumCircuitTransformation.DependencyGraphs
 
             PathExists = null;
             GC.Collect();
-            return new DependencyGraph(circuit.NbGates, ExecuteBefore, ExecuteAfter);
+            return new DependencyGraph(ExecuteBefore, ExecuteAfter);
         }
 
         /// <summary>

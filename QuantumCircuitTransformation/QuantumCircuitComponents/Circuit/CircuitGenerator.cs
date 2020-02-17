@@ -1,8 +1,6 @@
 ﻿using QuantumCircuitTransformation.Data;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Circuit;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Gates.LogicalGates;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Gates.PhysicalGates;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -91,27 +89,28 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
             {
                 case "CX": // CNOT gate
                     return new CNOT((int)numbers[0], (int)numbers[1]);
-                case "H": // Hadamard gate
-                    return new Hadamard((int)numbers[0]);
-                case "U3": case "U": // U3 rotation gate
-                    return new U3((int)numbers[3], numbers[0], numbers[1], numbers[2]);
+                case "H": // todo Hadamard gate
+                    throw new NotImplementedException(); //return new Hadamard((int)numbers[0]);
+                case "U3":
+                case "U": // U3 rotation gate
+                    return new U3((int)numbers[3], numbers[0], numbers[1], numbers[2], GatePart.U3);
                 case "RX": // Rotation over x axis
-                    return new RotationX((int)numbers[1], numbers[0]);
+                    return new U3((int)numbers[1], numbers[0], -Math.PI / 2, Math.PI / 2, GatePart.Rx);
                 case "RY": // Rotation over y axis
-                    return new RotationY((int)numbers[1], numbers[0]);
+                    return new U3((int)numbers[1], numbers[0], 0, 0, GatePart.Ry);
                 case "RZ": // Rotation over z axis
-                    return new RotationZ((int)numbers[1], numbers[0]);
+                    return new U3((int)numbers[1], 0, numbers[0], 0, GatePart.Rz);
                 case "X": // Pauli X gate
-                    return new RotationX((int)numbers[0], Math.PI);
+                    return new U3((int)numbers[0], Math.PI, -Math.PI / 2, Math.PI / 2, GatePart.X);
                 case "Y": // Pauli Y gate
-                    return new RotationY((int)numbers[0], Math.PI);
+                    return new U3((int)numbers[0], Math.PI, 0, 0, GatePart.Y);
                 case "Z": // Pauli Z gate
-                    return new RotationZ((int)numbers[0], Math.PI);
+                    return new U3((int)numbers[0], 0, Math.PI, 0, GatePart.Z);
                 case "T": // T gate
-                    return new RotationZ((int)numbers[0], Math.PI/4);
+                    return new U3((int)numbers[0], 0, Math.PI / 4, 0, GatePart.T);
                 case "TDG": // Invers of t gate
-                    return new RotationZ((int)numbers[0], -Math.PI / 4);
-            }      
+                    return new U3((int)numbers[0], 0, -Math.PI / 4, 0, GatePart.TDG);
+            }
             return null;
         }
     }

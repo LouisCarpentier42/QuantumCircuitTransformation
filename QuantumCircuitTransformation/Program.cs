@@ -12,8 +12,6 @@ using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 using System.Text.RegularExpressions;
 using QuantumCircuitTransformation.DependencyGraphs;
 using System.IO;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Gates.PhysicalGates;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Gates.LogicalGates;
 
 namespace QuantumCircuitTransformation
 {
@@ -96,21 +94,6 @@ namespace QuantumCircuitTransformation
         private static void Test()
         {
             ConsoleLayout.Header("Test environment");
-
-
-
-            List<Gate> gates = new List<Gate>
-            {
-                new CNOT(1,2),
-                new Hadamard(2)
-            };
-
-            QuantumDevices.IBM_Q20.CanExecute(new CNOT(1, 2));
-            QuantumDevices.IBM_Q20.CanExecute(new Hadamard(2));
-
-            foreach (Gate x in gates)
-                QuantumDevices.IBM_Q20.CanExecute(x);
-
 
 
             //string fileName = "hwb7_59";

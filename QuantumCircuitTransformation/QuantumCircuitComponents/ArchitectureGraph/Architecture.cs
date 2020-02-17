@@ -1,6 +1,5 @@
 ﻿using QuantumCircuitTransformation.MappingPerturbation;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Gates.PhysicalGates;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,13 +18,13 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGrap
     public abstract class Architecture
     {
         /// <summary>
-        /// The edges between the different nodes in this architecture. 
-        /// </summary>
-        protected readonly List<Tuple<int, int>> Edges;
-        /// <summary>
         /// The number of nodes in this architecture. 
         /// </summary>
-        public int NbNodes { get; private set; }
+        public readonly int NbNodes;
+        /// <summary>
+        /// The edges between the different nodes in this architecture. 
+        /// </summary>
+        protected readonly List<int>[] Edges;
         /// <summary>
         /// The CNOT distance between all pairs of nodes in this architecture.  
         /// </summary>
@@ -34,7 +33,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGrap
         /// added to make sure that a CNOT gate can be executed from the first to the 
         /// second qubit. 
         /// </remarks>
-        public int[,] CNOTDistance { get; private set; }
+        private readonly int[,] CNOTDistance;
 
 
         /// <summary>
@@ -42,112 +41,45 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGrap
         /// </summary>
         /// <param name="connections"> The connections in this architecture graph. </param>
         /// <remarks>
-        /// First, the edges are normalised (see <see cref="NormaliseEdges"/>), then the
-        /// number of nodes is set and the CNOT distances are computed. 
+        /// The edges should be normalised, this means that no ID's may be skipped. 
         /// </remarks>
         public Architecture(List<Tuple<int, int>> connections)
         {
-            Edges = connections;
-            NormaliseEdges();
-            SetNbNodes();
-            SetCNOTDistance();
-        }
-
-        /// <summary>
-        /// Normalise all the edges in this architecture graph. This is making 
-        /// sure that all no nodes are skipped (and thus never used) while some
-        /// greater ID's are used. 
-        /// </summary>
-        /// <remarks>
-        /// The edges are normalised by first getting all the different ID's and 
-        /// sort them. Next can all ID's be replaced by their index in the sorted
-        /// array. This makes sure that the order of the different ID's remains 
-        /// the same. 
-        /// </remarks>
-        private void NormaliseEdges()
-        {
-            HashSet<int> allNodeIDs = new HashSet<int>();
-            allNodeIDs.UnionWith(Edges.Select(x => x.Item1));
-            allNodeIDs.UnionWith(Edges.Select(x => x.Item2));
-
-            List<int> sortedNodeIDs = allNodeIDs.ToList();
-            sortedNodeIDs.Sort();
-
-            for (int i = 0; i < Edges.Count(); i++)
-            {
-                Edges[i] = new Tuple<int, int>(
-                    sortedNodeIDs.IndexOf(Edges[i].Item1),
-                    sortedNodeIDs.IndexOf(Edges[i].Item2)
-                );
-            }
-        }
-
-        /// <summary>
-        /// Set the number of nodes to the highest used ID in <see cref="Edges"/> added with one. 
-        /// </summary>
-        /// <remarks> 
-        /// The edges should be normalised first (see <see cref="NormaliseEdges"/>). 
-        /// </remarks>
-        private void SetNbNodes()
-        {
-            NbNodes = Edges.Max(x => Math.Max(x.Item1, x.Item2)) + 1;
-        }
-
-        /// <summary>
-        /// Sets the cnot distances of this architecture graph. 
-        /// </summary>
-        private void SetCNOTDistance()
-        {
-            CNOTDistance = new int[NbNodes, NbNodes];
-            int[,] pathLength = ShortestPathFinder.Dijkstra(NbNodes, Edges);
+            // Set The number of nodes
+            NbNodes = connections.Max(edge => Math.Max(edge.Item1, edge.Item2)) + 1;
+            // Add the connections to the edges
+            Edges = new List<int>[NbNodes];
             for (int i = 0; i < NbNodes; i++)
-                for (int j = 0; j < NbNodes; j++)
-                    CNOTDistance[i, j] = Math.Max(0, NbOfCnotGatesPerSwap() * (pathLength[i, j] - 1));
+                Edges[i] = new List<int>();
+            foreach (Tuple<int, int> edge in connections)
+                Edges[edge.Item1].Add(edge.Item2);
+            // Se t the CNOT distance
+            CNOTDistance = ShortestPathFinder.Dijkstra(connections);
         }
 
         /// <summary>
-        /// Returns the cost of the given CNOT gate. 
+        /// Returns the cost of a CNOT gate with given control and target qubit. 
         /// </summary>
-        /// <param name="cnot"> The cnot gate to give the cost of. </param>
+        /// <param name="controlQubit"> The control qubit of the CNOT gate. </param>
+        /// <param name="TargetQubit"> The target qubit of the CNOT gate. </param>
         /// <returns>
-        /// A value proportional to the cnot distance of the given gate. 
+        /// The path distance between two nodes. 
         /// </returns>
-        public int GetGateCost(CNOT cnot)
+        public int GetCost(int controlQubit, int TargetQubit)
         {
-            return CNOTDistance[cnot.ControlQubit, cnot.TargetQubit];
+            return CNOTDistance[controlQubit, TargetQubit];
         }
 
         /// <summary>
-        /// Returns the number of swap gates that is needed to replace one 
-        /// swap gate in this architecture. 
+        /// Checks whether or not there exists a connection between 
+        /// the two given id's.
         /// </summary>
-        public abstract int NbOfCnotGatesPerSwap();
-
-        /// <summary>
-        /// Check whether or not a CNOT gate with given control and target qubit 
-        /// can be executed on this architecture. 
-        /// </summary>
-        /// <param name="cnot"> The CNOT gate to check. </param>
+        /// <param name="from"> The id from where the connection should start. </param>
+        /// <param name="to"> The id to where the connection should go. </param>
         /// <returns>
-        /// True if and only if there exists a connection in the architecture 
-        /// such that <paramref name="cnot"/> can be executed. 
+        /// True if and only if there exists a connection from the 'from' id to
+        /// the 'to' id. 
         /// </returns>
-        public abstract bool CanExecuteCNOT(CNOT cnot);
-
-
-
-        // Test
-        public void CanExecute(Gate gate)
-        {
-            Console.WriteLine("Gate");
-        }
-
-        public void CanExecute(CNOT cnot)
-        {
-            Console.WriteLine("CNOT");
-        }
-
-
-
+        public abstract bool HasConnection(int from, int to);
     }
 }

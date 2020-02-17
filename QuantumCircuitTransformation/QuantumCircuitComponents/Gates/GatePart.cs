@@ -15,13 +15,16 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
     /// </example>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.1
+    ///     @version:  1.2
     /// </remarks>
     public enum GatePart
     {
         None, // for gates which ar not implemented
         Control, Target, // CNOT gate
+        U3, // Physical gate
         H, // Hadamard gate
-        Rx, Ry, Rz // Rotational gates
+        Rx, Ry, Rz, // Rotational gates
+        X, Y, Z, // Pauli Gates
+        T, TDG // Other gates
     }
 }

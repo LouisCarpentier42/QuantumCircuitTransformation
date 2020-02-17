@@ -5,7 +5,6 @@ using QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph;
 using System;
 using System.Linq;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Gates.PhysicalGates;
 
 namespace QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm
 {
@@ -92,7 +91,7 @@ namespace QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm
             {
                 double weight = 1 / (++NbOfGatesLookedAt / p1 + p2);
                 if (circuit.Gates[i] is CNOT)
-                    cost += architecture.GetGateCost(mapping.MapCNOT((CNOT)circuit.Gates[i]));
+                    cost += architecture.GetCost(mapping.Map[((CNOT)circuit.Gates[i]).GetControlQubit()], mapping.Map[((CNOT)circuit.Gates[i]).GetTargetQubit()]);
                 if (NbOfGatesLookedAt > MAX_NB_GATES_IN_COST)
                     return cost;
             }

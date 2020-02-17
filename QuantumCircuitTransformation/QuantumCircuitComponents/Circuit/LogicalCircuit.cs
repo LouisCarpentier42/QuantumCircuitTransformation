@@ -1,5 +1,4 @@
 ﻿using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Gates.PhysicalGates;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +14,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
     ///     @author:   Louis Carpentier
     ///     @version:  2.0
     /// </remarks>
-    public sealed class LogicalCircuit : QuantumCircuit<Gate>
+    public sealed class LogicalCircuit : QuantumCircuit
     {
 
         public readonly List<int> CnotGatesID;

@@ -1,6 +1,5 @@
 ﻿using QuantumCircuitTransformation.QuantumCircuitComponents;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Gates.PhysicalGates;
 using System;
 using System.Linq;
 
@@ -48,19 +47,6 @@ namespace QuantumCircuitTransformation.MappingPerturbation
             int temp = Map[qubit1];
             Map[qubit1] = Map[qubit2];
             Map[qubit2] = temp; 
-        }
-
-        /// <summary>
-        /// Returns a CNOT gate in which the control and target qubit are 
-        /// mapped according to this mapping. 
-        /// </summary>
-        /// <param name="cnot"> The CNOT gate to map. </param>
-        /// <returns>
-        /// A new CNOT gate which is mapped according to this mapping. 
-        /// </returns>
-        public CNOT MapCNOT(CNOT cnot)
-        {
-            return new CNOT(Map[cnot.ControlQubit], Map[cnot.TargetQubit]);
         }
 
         /// <summary>

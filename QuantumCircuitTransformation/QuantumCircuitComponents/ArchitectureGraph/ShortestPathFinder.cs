@@ -48,7 +48,6 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGrap
         /// <summary>
         /// Executes the Dijkstra-algorithm to find all shortest paths in the graph. 
         /// </summary>
-        /// <param name="nbNodes"> The number of nodes in the graph. </param>
         /// <param name="edges"> The edges in the graph. </param>
         /// <remarks>
         /// To calculate the path from a source to all other nodes is an path length 
@@ -71,9 +70,9 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGrap
         /// <returns>
         /// The <see cref="PathLength"/> variable, with all shortest paths in it. 
         /// </returns>
-        public static int[,] Dijkstra(int nbNodes, List<Tuple<int, int>> edges)
+        public static int[,] Dijkstra(List<Tuple<int, int>> edges)
         {
-            SetUp(nbNodes);
+            SetUp(edges.Max(edge => Math.Max(edge.Item1, edge.Item2)) + 1);
             while (Source > 0)
             {
                 SetSource();
