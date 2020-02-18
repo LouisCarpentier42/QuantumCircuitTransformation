@@ -23,15 +23,13 @@ namespace QuantumCircuitTransformation
             // Overview of the algorithms
             new Tuple<string, Action>("Give an overview of the loaded algorithms and rules",
                 new Action(GiveOverviewOfLoadedAlgorithm)),
-            new Tuple<string, Action>("Give an overview of all the available algorithms and rules\n",
+            new Tuple<string, Action>("Give an overview of all the available algorithms and rules",
                 new Action(GiveOverviewOfAvailableAlgorithms)),
-
             // Initial mapping algorithms
             new Tuple<string, Action>("Load an initial mapping algorithm", 
                 new Action(LoadInitialMappingAlgorithm)),
-            new Tuple<string, Action>("Add a new initial mapping algorithm\n",
+            new Tuple<string, Action>("Add a new initial mapping algorithm",
                 new Action(AddInitialMappingAlgorithm)),
-
             // Transformation algorithms
             new Tuple<string, Action>("Load a transformation algorithm",
                 new Action(LoadTransformationAlgorithm)),
@@ -47,17 +45,26 @@ namespace QuantumCircuitTransformation
                 new Action(LoadDependencyRule)),
             new Tuple<string, Action>("Unload a dependency rule",
                 new Action(UnloadDependencyRule)),
-            new Tuple<string, Action>("Add a new dependency rule\n",
-                new Action(AddDependencyRule)),
+            new Tuple<string, Action>("Add a new dependency rule",
+                new Action(AddNewRandomBenchmark)),
+            new Tuple<string, Action>("Load all the available dependency rules",
+                new Action(LoadAllAvailableDependencyRules)),
+            new Tuple<string, Action>("Clear all the loaded dependency rules\n",
+                new Action(ClearLoadedDependencyRules)),
 
             // Benchmarks
             new Tuple<string, Action>("Give an overview of the loaded benchmarks",
                 new Action(GiveOverviewOfLoadedBenchmarks)),
             new Tuple<string, Action>("Give an overview of the available benchmarks",
                 new Action(GiveOverviewOfAvailableBenchmarks)),
-            new Tuple<string, Action>("Load all the available benchmarks\n",
+            new Tuple<string, Action>("Load a benchmark",
+                new Action(LoadBenchmark)),
+            new Tuple<string, Action>("Unload a benchmark",
+                new Action(UnloadBenchmark)),
+            new Tuple<string, Action>("Load all the available benchmarks",
                 new Action(LoadAllAvailableBenchmarks)),
-            // TODO loading/unloading
+            new Tuple<string, Action>("Clear all the loaded benchmarks\n",
+                new Action(ClearLoadedBenchmarks)),
 
             // Testing 
             new Tuple<string, Action>("Test the available initial mapping algorithms\n",
@@ -101,7 +108,7 @@ namespace QuantumCircuitTransformation
             //Globals.Timer.Restart();
             //LogicalCircuit circuit = CircuitGenerator.ReadFromFile(fileName + ".qasm");
             //Globals.Timer.Stop();
-            //Console.WriteLine("Gate imported with {0} gates in {1} milliseconds.", 
+            //Console.WriteLine("Gate imported with {0} gates in {1} milliseconds.",
             //    circuit.NbGates, Globals.Timer.Elapsed.TotalMilliseconds);
 
             //Globals.Timer.Restart();
@@ -180,11 +187,11 @@ namespace QuantumCircuitTransformation
             else
             {
                 var orderedInitalMappings = AlgorithmParameters.AvailableInitialMappings.OrderBy(item => item.GetType().FullName);
-                Console.WriteLine('\n' + 1 + ": " + orderedInitalMappings.ElementAt(0).Name());
+                Console.WriteLine("\n" + 1 + ": " + orderedInitalMappings.ElementAt(0).Name());
                 Console.WriteLine(orderedInitalMappings.ElementAt(0).Parameters());
                 for (int i = 1; i < AlgorithmParameters.AvailableInitialMappings.Count(); i++)
                 {
-                    Console.WriteLine('\n' + (i + 1) + ": " + orderedInitalMappings.ElementAt(i).Name());
+                    Console.WriteLine("\n" + (i + 1) + ": " + orderedInitalMappings.ElementAt(i).Name());
                     Console.WriteLine(orderedInitalMappings.ElementAt(i).Parameters());
                 }
             }
@@ -195,11 +202,11 @@ namespace QuantumCircuitTransformation
             else
             {
                 var orderedTransformation = AlgorithmParameters.AvailableTransformationAlgorithms.OrderBy(item => item.GetType().FullName);
-                Console.WriteLine(1 + ": " + orderedTransformation.ElementAt(0).Name());
-                Console.WriteLine(orderedTransformation.ElementAt(0).Parameters() + '\n');
+                Console.WriteLine("\n" + 1 + ": " + orderedTransformation.ElementAt(0).Name());
+                Console.WriteLine(orderedTransformation.ElementAt(0).Parameters());
                 for (int i = 1; i < AlgorithmParameters.AvailableTransformationAlgorithms.Count(); i++)
                 {
-                    Console.WriteLine('\n' + (i + 1) + ": " + orderedTransformation.ElementAt(i).Name());
+                    Console.WriteLine("\n" + (i + 1) + ": " + orderedTransformation.ElementAt(i).Name());
                     Console.WriteLine(orderedTransformation.ElementAt(i).Parameters());
                 }
             }
@@ -524,9 +531,9 @@ namespace QuantumCircuitTransformation
         /// <summary>
         /// Add a new dependency rule. 
         /// </summary>
-        private static void AddDependencyRule()
+        private static void AddNewRandomBenchmark()
         {
-            ConsoleLayout.Header("Add a dependency rule");
+            ConsoleLayout.Header("Add a new dependency rule");
 
             try
             {
@@ -552,6 +559,28 @@ namespace QuantumCircuitTransformation
             {
                 ConsoleLayout.Error("This is no valid gatepart, the addition of a dependency rule is aborted.");
             }
+
+            ConsoleLayout.Footer();
+        }
+
+        /// <summary>
+        /// Load all available dependency rules. 
+        /// </summary>
+        private static void LoadAllAvailableDependencyRules()
+        {
+            AlgorithmParameters.DependencyRules = AlgorithmParameters.AvailableDependencyRules.Select(rule => rule).ToList();
+            Console.WriteLine("All available dependency rules are loaded.");
+
+            ConsoleLayout.Footer();
+        }
+
+        /// <summary>
+        /// Clear all the loaded dependency rules. 
+        /// </summary>
+        private static void ClearLoadedDependencyRules()
+        {
+            AlgorithmParameters.DependencyRules = new List<DependencyRule>();
+            Console.WriteLine("All loaded dependency rules are cleared.");
 
             ConsoleLayout.Footer();
         }
@@ -586,10 +615,73 @@ namespace QuantumCircuitTransformation
         {
             ConsoleLayout.Header("All benchmarks");
             
-            FileInfo[] benchmarks = (new DirectoryInfo(Globals.BenchmarkFolder)).GetFiles();
+            FileInfo[] benchmarks = (new DirectoryInfo(Benchmarks.BenchmarkFolder)).GetFiles();
             for (int i = 0; i < benchmarks.Length; i++) 
                 Console.WriteLine(i + 1 + ": " + benchmarks[i].Name);
 
+            ConsoleLayout.Footer();
+        }
+
+        /// <summary>
+        /// Load a benchmark to memory. 
+        /// </summary>
+        private static void LoadBenchmark()
+        {
+            ConsoleLayout.Header("Select a benchmark");
+
+            List<FileInfo> files = (new DirectoryInfo(Benchmarks.BenchmarkFolder)).GetFiles().ToList();
+
+            for (int i = 0; i < files.Count; i++)
+                Console.WriteLine(i + 1 + ": " + files[i].Name);
+
+            try
+            {
+                Console.Write("\nGive the ID of the benchmark to load: ");
+                int index = Convert.ToInt32(Console.ReadLine());
+                if (Benchmarks.LoadedBenchmarks.Contains(files[index - 1]))
+                    Console.WriteLine("This benchmark is already loaded.");
+                else
+                {
+                    Console.WriteLine("\nThe benchmark '{0}'  has been loaded.", files[index - 1].Name);
+                    Benchmarks.LoadedBenchmarks.Add(files[index - 1]);
+                }
+            }
+            catch (Exception e) when (e is ArgumentOutOfRangeException || e is FormatException)
+            {
+                ConsoleLayout.Error("Failed to load a benchmark");
+            }
+
+            ConsoleLayout.Footer();
+        }
+
+        /// <summary>
+        /// Unload a benchmark from memory. 
+        /// </summary>
+        private static void UnloadBenchmark()
+        {
+            ConsoleLayout.Header("Select a benchmark");
+
+            if (Benchmarks.LoadedBenchmarks.Count == 0)
+                Console.WriteLine("There are no benchmarks loaded...");
+            else
+            {
+                for (int i = 0; i < Benchmarks.LoadedBenchmarks.Count; i++)
+                {
+                    Console.WriteLine(i + 1 + ": " + Benchmarks.LoadedBenchmarks[i].Name);
+                }
+
+                try
+                {
+                    Console.Write("\nGive the ID of the benchmark to unload: ");
+                    int index = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("\nThe bencmark '{0}' has been unloaded.", Benchmarks.LoadedBenchmarks[index - 1].Name);
+                    Benchmarks.LoadedBenchmarks.RemoveAt(index - 1);
+                }
+                catch (Exception e) when (e is ArgumentOutOfRangeException || e is FormatException)
+                {
+                    ConsoleLayout.Error("Failed to unload a benchmark");
+                }
+            }
             ConsoleLayout.Footer();
         }
 
@@ -598,8 +690,19 @@ namespace QuantumCircuitTransformation
         /// </summary>
         private static void LoadAllAvailableBenchmarks()
         {
-            Benchmarks.LoadedBenchmarks = (new DirectoryInfo(Globals.BenchmarkFolder)).GetFiles().ToList();
+            Benchmarks.LoadedBenchmarks = (new DirectoryInfo(Benchmarks.BenchmarkFolder)).GetFiles().ToList();
             Console.WriteLine("All available benchmarks are loaded.");
+
+            ConsoleLayout.Footer();
+        }
+
+        /// <summary>
+        /// Clear all loaded benchmarks from memory. 
+        /// </summary>
+        private static void ClearLoadedBenchmarks()
+        {
+            Benchmarks.LoadedBenchmarks = new List<FileInfo>();
+            Console.WriteLine("All loaded benchmarks are cleared.");
 
             ConsoleLayout.Footer();
         }
@@ -616,7 +719,7 @@ namespace QuantumCircuitTransformation
         {
             ConsoleLayout.Header("Initial mapping test");
 
-            int nbRep = 10;
+            int nbRep = 10; // todo add testing in console
             int nbQubits = 20;
             int nbGates = 5000;
             Architecture architecture = QuantumDevices.IBM_Q20;

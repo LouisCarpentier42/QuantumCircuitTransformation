@@ -57,7 +57,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
         public static LogicalCircuit ReadFromFile(string fileName)
         {
             List<Gate> gates = new List<Gate>();
-            string[] file = File.ReadAllLines(Globals.BenchmarkFolder + fileName);
+            string[] file = File.ReadAllLines(Benchmarks.BenchmarkFolder + fileName);
             for (int i = 0; i < file.Length; i++)
             {
                 Gate gate = InitialiseGate(file[i]);
@@ -90,8 +90,8 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
                 case "CX": // CNOT gate
                     return new CNOT((int)numbers[0], (int)numbers[1]);
                 case "H": // todo Hadamard gate
-                    throw new NotImplementedException(); //return new Hadamard((int)numbers[0]);
-                case "U3":
+                    return new U3((int)numbers[0], 0, -Math.PI / 4, 0, GatePart.H); // throw new NotImplementedException(); //return new Hadamard((int)numbers[0]);
+                case "U3": 
                 case "U": // U3 rotation gate
                     return new U3((int)numbers[3], numbers[0], numbers[1], numbers[2], GatePart.U3);
                 case "RX": // Rotation over x axis

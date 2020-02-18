@@ -113,7 +113,7 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
                 }
             }
             //return swaps;
-            throw new NotImplementedException(); // TODO
+            throw new NotImplementedException(); // TODO best move
         }
 
 
@@ -123,13 +123,13 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
         /// </summary>
         protected void Transform()
         {
-            int i = 0; 
-            while (i++ < GatesToResolve.Count)
+            List<Gate> executableGates = new List<Gate>(); 
+            while (executableGates.Count > 0)
             {
                 // Normal execution
                 // bridge execution
             }
-            throw new NotImplementedException(); // TODO 
+            throw new NotImplementedException(); // TODO transform circuit
         }
     }
 }
