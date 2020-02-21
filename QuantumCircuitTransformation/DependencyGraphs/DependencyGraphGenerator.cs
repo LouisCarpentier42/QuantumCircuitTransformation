@@ -43,7 +43,7 @@ namespace QuantumCircuitTransformation.DependencyGraphs
         /// <param name="circuit"> The logical circuit to create the dependency graph for. </param>
         /// <param name="rules"> The rules for the dependencies. </param>
         /// <returns>
-        /// A new dependency graph with the given gates and connections
+        /// A new dependency graph for the given circuit and connections
         /// according to the given rules. 
         /// </returns>
         public static DependencyGraph Generate(LogicalCircuit circuit, List<DependencyRule> rules = null)
@@ -65,7 +65,7 @@ namespace QuantumCircuitTransformation.DependencyGraphs
 
             PathExists = null;
             GC.Collect();
-            return new DependencyGraph(ExecuteBefore, ExecuteAfter);
+            return new DependencyGraph(ExecuteBefore, ExecuteAfter, circuit);
         }
 
         /// <summary>

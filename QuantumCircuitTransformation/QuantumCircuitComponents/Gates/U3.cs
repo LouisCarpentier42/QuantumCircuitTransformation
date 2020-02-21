@@ -56,6 +56,14 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
 
 
         /// <summary>
+        /// See <see cref="Gate.Map(Mapping)"/>.
+        /// </summary>
+        public override Gate Map(Mapping mapping)
+        {
+            return new U3(mapping.Map[Qubits[0]], Theta, Phi, Lambda, GatePart);
+        }
+
+        /// <summary>
         /// See <see cref="Gate.CanBeExecutedOn(Architecture, Mapping)"/>.
         /// </summary>
         /// <returns>

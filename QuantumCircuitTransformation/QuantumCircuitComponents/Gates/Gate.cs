@@ -32,7 +32,6 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
             Qubits = qubits;
         }
 
-
         /// <summary>
         /// Return the Qubits of this quantum gate. 
         /// </summary>
@@ -41,6 +40,16 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         {
             return Qubits;
         }
+
+
+        /// <summary>
+        /// Gives a mapping of this gate according to the given mapping.  
+        /// </summary>
+        /// <param name="mapping"> The mapping according which should be mapped. </param>
+        /// <return>
+        /// A new gate in which all qubits are mapped according to the given mapping. 
+        /// </return>
+        public abstract Gate Map(Mapping mapping);
 
         /// <summary>
         /// Checks whether or not this physical gate can be executed

@@ -58,7 +58,14 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         {
             return "cx q[" + Qubits[0] + "], q[" + Qubits[1] + "];";
         }
-        
+
+        /// <summary>
+        /// See <see cref="Gate.Map(Mapping)"/>.
+        /// </summary>
+        public override Gate Map(Mapping mapping)
+        {
+            return new CNOT(mapping.Map[Qubits[0]], mapping.Map[Qubits[1]]);
+        }
 
         /// <summary>
         /// See <see cref="Gate.CanBeExecutedOn(Architecture)"/>.

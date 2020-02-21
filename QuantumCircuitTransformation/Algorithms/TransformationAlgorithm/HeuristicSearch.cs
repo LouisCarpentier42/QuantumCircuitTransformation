@@ -67,11 +67,12 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
         /// </summary>
         protected override void Execute()
         {
-            while (LogicalCircuit.NbGates > 0)
+            while (!CircuitIsTransformed())
             {
                 Swap move = GetBestMove();
                 move.Apply(Mapping);
-                Transform();
+                AddMoveToCircuit(move);
+                ExecuteAllPossibleGates();
             }
         }
 

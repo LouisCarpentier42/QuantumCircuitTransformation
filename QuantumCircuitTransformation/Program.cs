@@ -103,6 +103,20 @@ namespace QuantumCircuitTransformation
             ConsoleLayout.Header("Test environment");
 
 
+            List<int> x = new List<int> { 1, 2, 3, 4, 5, 6 };
+            List<int> y = new List<int>(x);
+
+
+            y[2] = 100000;
+            
+
+
+            foreach (var i in x)
+                Console.WriteLine(i);
+            foreach (var i in y)
+                Console.WriteLine(i);
+
+
             //string fileName = "hwb7_59";
 
             //Globals.Timer.Restart();
