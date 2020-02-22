@@ -1,4 +1,5 @@
 ﻿using QuantumCircuitTransformation.MappingPerturbation;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Circuit;
 using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 using System;
 using System.Collections.Generic;
@@ -81,5 +82,12 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGrap
         /// the 'to' id. 
         /// </returns>
         public abstract bool HasConnection(int from, int to);
+
+        /// <summary>
+        /// Adds the gates needed to execute the given swap on the given circuit.
+        /// </summary>
+        /// <param name="circuit"> The circuit to execute the swap on. </param>
+        /// <param name="swap"> The swap to execute on the circuit. </param>
+        public abstract void AddSwapGates(PhysicalCircuit circuit, Swap swap);
     }
 }

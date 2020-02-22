@@ -89,8 +89,8 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
             {
                 case "CX": // CNOT gate
                     return new CNOT((int)numbers[0], (int)numbers[1]);
-                case "H": // todo Hadamard gate
-                    return new U3((int)numbers[0], 0, -Math.PI / 4, 0, GatePart.H); // throw new NotImplementedException(); //return new Hadamard((int)numbers[0]);
+                case "H": // Hadamard gate
+                    return U3.GetHadamardGate((int)numbers[0]);
                 case "U3": 
                 case "U": // U3 rotation gate
                     return new U3((int)numbers[3], numbers[0], numbers[1], numbers[2], GatePart.U3);

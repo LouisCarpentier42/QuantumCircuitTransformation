@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using QuantumCircuitTransformation.MappingPerturbation;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Circuit;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 
 namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph
 {
@@ -30,6 +33,33 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGrap
         public override bool HasConnection(int from, int to)
         {
             return Edges[from].Contains(to);
+        }
+
+        /// <summary>
+        /// See <see cref="Architecture.AddSwapGates(PhysicalCircuit, Swap)"/>.
+        /// </summary>
+        public override void AddSwapGates(PhysicalCircuit circuit, Swap swap)
+        {
+            if (HasConnection(swap.Qubit1, swap.Qubit2))
+            {
+                circuit.AddGate(new CNOT(swap.Qubit1, swap.Qubit2));
+                circuit.AddGate(U3.GetHadamardGate(swap.Qubit1));
+                circuit.AddGate(U3.GetHadamardGate(swap.Qubit2));
+                circuit.AddGate(new CNOT(swap.Qubit1, swap.Qubit2));
+                circuit.AddGate(U3.GetHadamardGate(swap.Qubit1));
+                circuit.AddGate(U3.GetHadamardGate(swap.Qubit2));
+                circuit.AddGate(new CNOT(swap.Qubit1, swap.Qubit2));
+            } else
+            {
+                circuit.AddGate(new CNOT(swap.Qubit2, swap.Qubit1));
+                circuit.AddGate(U3.GetHadamardGate(swap.Qubit1));
+                circuit.AddGate(U3.GetHadamardGate(swap.Qubit2));
+                circuit.AddGate(new CNOT(swap.Qubit2, swap.Qubit1));
+                circuit.AddGate(U3.GetHadamardGate(swap.Qubit1));
+                circuit.AddGate(U3.GetHadamardGate(swap.Qubit2));
+                circuit.AddGate(new CNOT(swap.Qubit2, swap.Qubit1));
+            }
+            
         }
     }
 }

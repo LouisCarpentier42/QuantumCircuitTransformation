@@ -60,7 +60,7 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
 
             FirstLayer = new List<int>();
             for (int i = 0; i < dependencyGraph.Circuit.NbGates; i++)
-                if (dependencyGraph.ExecuteAfter[i].Count == 0)
+                if (dependencyGraph.CanBeExecuted(i))
                     FirstLayer.Add(i);
 
             ExecuteAllPossibleGates();
@@ -108,7 +108,6 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
             return FirstLayer.Count == 0;
         }
 
-
         /// <summary>
         /// Returns the best swap move.
         /// </summary>
@@ -133,9 +132,8 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
         /// <param name="swap"> The swap to add to the physical circuit. </param>
         protected void AddMoveToCircuit(Swap swap)
         {
-
+            Architecture.AddSwapGates(PhysicalCircuit, swap);
         }
-
 
         /// <summary>
         /// Transforms as mucht as possible from the logical circuit 
@@ -163,6 +161,7 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
                 }
                 // TODO maybe bridge gates.
             }
+            FirstLayer = new List<int>(gatesToCheck);
         }
     }
 }
