@@ -46,6 +46,11 @@ namespace QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm
         /// </summary>
         public abstract string Parameters();
 
+        /// <summary>
+        /// Return the full name of this algorithm in a short version.
+        /// </summary>
+        public abstract string GetFullShort();
+
 
         /// <summary>
         /// Get a random mapping with the given number of nodes. 

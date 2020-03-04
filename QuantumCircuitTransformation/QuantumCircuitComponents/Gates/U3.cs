@@ -52,8 +52,9 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         /// <param name="qubit"> The qubit for the hadamard gate. </param>
         public static U3 GetHadamardGate(int qubit)
         {
-            // TODO return new U3(qubit, ..., ..., ..., GatePart.H);
-            throw new NotImplementedException();
+            //TODO Hadamard
+            return new U3(qubit, Math.PI, Math.PI, Math.PI, GatePart.H);
+            // throw new NotImplementedException();
         }
 
         /// <summary>

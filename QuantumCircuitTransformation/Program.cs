@@ -12,6 +12,7 @@ using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
 using System.Text.RegularExpressions;
 using QuantumCircuitTransformation.DependencyGraphs;
 using System.IO;
+using OfficeOpenXml;
 
 namespace QuantumCircuitTransformation
 {
@@ -731,40 +732,139 @@ namespace QuantumCircuitTransformation
         /// </summary>
         private static void TestAvailableInitialMappings()
         {
-            ConsoleLayout.Header("Initial mapping test");
-
-            int nbRep = 10; // todo add testing in console
-            int nbQubits = 20;
-            int nbGates = 5000;
-            Architecture architecture = QuantumDevices.IBM_Q20;
-
-            double[] totalCost = new double[AlgorithmParameters.AvailableInitialMappings.Count()];
-            double[] titotalTime = new double[AlgorithmParameters.AvailableInitialMappings.Count()];
-
-            for (int i = 0; i < nbRep; i++)
+            int nbRep = -1;
+            while (nbRep <= 0)
             {
-                Console.WriteLine("Iteration " + (i + 1));
-                LogicalCircuit circuit = CircuitGenerator.RandomCircuit(nbGates, nbQubits);
-                for (int j = 0; j < AlgorithmParameters.AvailableInitialMappings.Count(); j++)
+                try
                 {
-                    Globals.Timer.Restart();
-                    (_, double cost) = AlgorithmParameters.AvailableInitialMappings[j].Execute(architecture, circuit);
-                    Globals.Timer.Stop();
-                    totalCost[j] += cost;
-                    titotalTime[j] += Globals.Timer.Elapsed.TotalMilliseconds;
-                    Console.WriteLine("cost = {1} - time = {2} ({0})", AlgorithmParameters.AvailableInitialMappings[j].Name(), cost, Globals.Timer.Elapsed.TotalMilliseconds);
+                    ConsoleLayout.Header("Initial mapping test");
+                    Console.Write("The number of times to repeat each algorithm: ");
+                    nbRep = Convert.ToInt32(Console.ReadLine());
+                    if (nbRep <= 0)
+                        throw new FormatException();
+                } catch (FormatException)
+                {
+                    ConsoleLayout.Error();
+                    Console.WriteLine("PRESS ENTER TO CONTINUE ...");
+                    Console.ReadLine();
                 }
+                
             }
 
-            for (int i = 0; i < AlgorithmParameters.AvailableInitialMappings.Count(); i++)
+
+
+            string path = @"C:\Users\User\Documents\GitHub\QuantumCircuitTransformation\QuantumCircuitTransformation\Results";
+            Console.Write("The name for the excel file: ");
+            string fileName = Console.ReadLine();
+            Architecture architecture = QuantumDevices.IBM_Q20;
+            
+
+
+
+
+            using (ExcelPackage e = new ExcelPackage())
             {
-                Console.WriteLine();
-                Console.WriteLine(AlgorithmParameters.AvailableInitialMappings[i].Name());
-                Console.WriteLine(AlgorithmParameters.AvailableInitialMappings[i].Parameters());
-                Console.WriteLine("Result: Cost = {0} - time = {1}", totalCost[i] / nbRep, titotalTime[i] / nbRep);
+                
+                Mapping mapping;
+                LogicalCircuit lCircuit;
+                PhysicalCircuit pCircuit;
+                DependencyGraph dg;
+                ExcelWorksheet ws;
+                double timeInitialMapping, timeTransforamtion;
+                int nbGatesPhysical;
+
+                foreach (InitialMapping im in AlgorithmParameters.AvailableInitialMappings)  
+                {
+                    e.Workbook.Worksheets.Add(im.GetFullShort());
+                    ws = e.Workbook.Worksheets[im.GetFullShort()];
+                    ws.Cells["A1"].Value = "Benchmark";
+                    ws.Cells["B1"].Value = "Initial nb gates";
+                    ws.Cells["C1"].Value = "Initial mapping time";
+                    ws.Cells["D1"].Value = "Transformation time";
+                    ws.Cells["E1"].Value = "Extra nb gates";
+
+
+                    for (int i = 0; i < Benchmarks.LoadedBenchmarks.Count; i++)
+                    {
+                        lCircuit = CircuitGenerator.ReadFromFile(Benchmarks.LoadedBenchmarks[i].Name);
+                        ws.Cells["A" + (i + 2)].Value = Benchmarks.LoadedBenchmarks[i].Name;
+                        ws.Cells["B" + i + 2].Value = lCircuit.NbGates;
+
+                        Console.WriteLine(Benchmarks.LoadedBenchmarks[i].Name);
+
+                        timeInitialMapping = 0;
+                        timeTransforamtion = 0;
+                        nbGatesPhysical = 0;
+
+                        foreach (Transformation tr in AlgorithmParameters.AvailableTransformationAlgorithms)
+                        {
+                            Globals.Timer.Restart();
+                            dg = DependencyGraphGenerator.Generate(lCircuit, AlgorithmParameters.AvailableDependencyRules);
+                            Globals.Timer.Stop();
+                            
+
+                            for (int j = 0; j < nbRep; j++)
+                            {
+                                Globals.Timer.Restart();
+                                (mapping, _) = im.Execute(architecture, lCircuit);
+                                Globals.Timer.Stop();
+                                timeInitialMapping += Globals.Timer.Elapsed.TotalMilliseconds;
+
+                                Globals.Timer.Restart();
+                                //pCircuit = tr.Execute(dg, architecture, mapping);
+                                Globals.Timer.Stop();
+                                timeTransforamtion += Globals.Timer.Elapsed.TotalMilliseconds;
+                                //nbGatesPhysical += pCircuit.NbGates;
+
+                            }
+                        }
+                        ws.Cells["C" + i + 2].Value = timeInitialMapping/nbRep;
+                        ws.Cells["D" + i + 2].Value = timeTransforamtion / nbRep;
+                        ws.Cells["E" + i + 2].Value = nbGatesPhysical/nbRep - lCircuit.NbGates;
+                    }
+                }
+
+
+
+                e.SaveAs(new FileInfo(@path + @"\" + fileName + ".xlsx")); // Save excel
             }
 
             ConsoleLayout.Footer();
+
+            
+
+
+
+            //int nbQubits = 20;
+            //int nbGates = 5000;
+            
+
+            //double[] totalCost = new double[AlgorithmParameters.AvailableInitialMappings.Count()];
+            //double[] titotalTime = new double[AlgorithmParameters.AvailableInitialMappings.Count()];
+
+            //for (int i = 0; i < nbRep; i++)
+            //{
+            //    Console.WriteLine("Iteration " + (i + 1));
+            //    LogicalCircuit circuit = CircuitGenerator.RandomCircuit(nbGates, nbQubits);
+            //    for (int j = 0; j < AlgorithmParameters.AvailableInitialMappings.Count(); j++)
+            //    {
+            //        Globals.Timer.Restart();
+            //        (_, double cost) = AlgorithmParameters.AvailableInitialMappings[j].Execute(architecture, circuit);
+            //        Globals.Timer.Stop();
+            //        totalCost[j] += cost;
+            //        titotalTime[j] += Globals.Timer.Elapsed.TotalMilliseconds;
+            //        Console.WriteLine("cost = {1} - time = {2} ({0})", AlgorithmParameters.AvailableInitialMappings[j].Name(), cost, Globals.Timer.Elapsed.TotalMilliseconds);
+            //    }
+            //}
+
+            //for (int i = 0; i < AlgorithmParameters.AvailableInitialMappings.Count(); i++)
+            //{
+            //    Console.WriteLine();
+            //    Console.WriteLine(AlgorithmParameters.AvailableInitialMappings[i].Name());
+            //    Console.WriteLine(AlgorithmParameters.AvailableInitialMappings[i].Parameters());
+            //    Console.WriteLine("Result: Cost = {0} - time = {1}", totalCost[i] / nbRep, titotalTime[i] / nbRep);
+            //}
+
         }
 
 

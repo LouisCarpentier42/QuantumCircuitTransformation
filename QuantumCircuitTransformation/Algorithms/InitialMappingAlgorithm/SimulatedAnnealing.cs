@@ -106,6 +106,13 @@ namespace QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm
                 " > The number of repetitions for given temperature: " + NbRepetitions;
         }
 
+        /// <summary>
+        /// See <see cref="InitialMapping.GetFullShort"/>. 
+        /// </summary>
+        public override string GetFullShort()
+        {
+            return "SA(" + MaxTemperature + ", " + MinTemperature + ", " + CoolingFactor + ", " + NbRepetitions + ")";
+        }
 
         /// <summary>
         /// Execute simulated annealing to find a mapping for the given circuit, which

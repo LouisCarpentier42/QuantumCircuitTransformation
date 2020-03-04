@@ -130,7 +130,7 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
         /// the architecture.
         /// </summary>
         /// <param name="swap"> The swap to add to the physical circuit. </param>
-        protected void AddMoveToCircuit(Swap swap)
+        protected void AddSwapToCircuit(Swap swap)
         {
             Architecture.AddSwapGates(PhysicalCircuit, swap);
         }
@@ -141,7 +141,6 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
         /// </summary>
         protected void ExecuteAllPossibleGates()
         {
-            // TODO optimise: only get gates from first layer on which the swap has been applied. 
             int gateID = 0;
             List<int> gatesToCheck = new List<int>(FirstLayer);
             while (gatesToCheck.Count > gateID)
@@ -159,7 +158,6 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
                             gatesToCheck.Add(newGateToCheck);
                     }
                 }
-                // TODO maybe bridge gates.
             }
             FirstLayer = new List<int>(gatesToCheck);
         }

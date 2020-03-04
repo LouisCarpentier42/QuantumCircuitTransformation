@@ -169,9 +169,17 @@ namespace QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm
             return
                 " > The late acceptance size: " + LateAcceptanceTime + '\n' +
                 " > The number of tabus: " + NbTabus + '\n' +
-                " > The maximal number of iterations: " + MaxNbIterations + DiversificationRate;
+                " > The maximal number of iterations: " + MaxNbIterations + '\n' + 
+                " > The diversification rate: " + DiversificationRate;
         }
 
+        /// <summary>
+        /// See <see cref="InitialMapping.GetFullShort"/>. 
+        /// </summary>
+        public override string GetFullShort()
+        {
+            return "OA(" + LateAcceptanceTime + ", " + NbTabus + ", " + MaxNbIterations + ", " + DiversificationRate + ")";
+        }
 
 
         /// <summary>

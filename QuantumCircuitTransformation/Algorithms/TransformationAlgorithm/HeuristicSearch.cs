@@ -71,7 +71,7 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
             {
                 Swap move = GetBestMove();
                 move.Apply(Mapping);
-                AddMoveToCircuit(move);
+                AddSwapToCircuit(move);
                 ExecuteAllPossibleGates();
             }
         }
