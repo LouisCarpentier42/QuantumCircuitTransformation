@@ -53,7 +53,7 @@ namespace QuantumCircuitTransformation.Data
         /// </summary>
         public static List<Transformation> AvailableTransformationAlgorithms = new List<Transformation>
         {
-            new HeuristicSearch(),
+            new NaiveTransformation(),
         };
 
         /// <summary>

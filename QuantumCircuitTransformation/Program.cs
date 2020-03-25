@@ -752,23 +752,17 @@ namespace QuantumCircuitTransformation
             }
 
 
-
             string path = @"C:\Users\User\Documents\GitHub\QuantumCircuitTransformation\QuantumCircuitTransformation\Results";
             Console.Write("The name for the excel file: ");
             string fileName = Console.ReadLine();
             Architecture architecture = QuantumDevices.IBM_Q20;
             
-
-
-
-
             using (ExcelPackage e = new ExcelPackage())
             {
                 
                 Mapping mapping;
                 LogicalCircuit lCircuit;
                 PhysicalCircuit pCircuit;
-                DependencyGraph dg;
                 ExcelWorksheet ws;
                 double timeInitialMapping, timeTransforamtion;
                 int nbGatesPhysical;
@@ -780,7 +774,7 @@ namespace QuantumCircuitTransformation
                     ws.Cells["A1"].Value = "Benchmark";
                     ws.Cells["B1"].Value = "Initial nb gates";
                     ws.Cells["C1"].Value = "Initial mapping time";
-                    ws.Cells["D1"].Value = "Transformation time";
+                    ws.Cells["D1"].Value = "Total Transformation time";
                     ws.Cells["E1"].Value = "Extra nb gates";
 
 
@@ -797,12 +791,7 @@ namespace QuantumCircuitTransformation
                         nbGatesPhysical = 0;
 
                         foreach (Transformation tr in AlgorithmParameters.AvailableTransformationAlgorithms)
-                        {
-                            Globals.Timer.Restart();
-                            dg = DependencyGraphGenerator.Generate(lCircuit, AlgorithmParameters.AvailableDependencyRules);
-                            Globals.Timer.Stop();
-                            
-
+                        {                          
                             for (int j = 0; j < nbRep; j++)
                             {
                                 Globals.Timer.Restart();
@@ -811,11 +800,10 @@ namespace QuantumCircuitTransformation
                                 timeInitialMapping += Globals.Timer.Elapsed.TotalMilliseconds;
 
                                 Globals.Timer.Restart();
-                                //pCircuit = tr.Execute(dg, architecture, mapping);
+                                pCircuit = tr.Execute(lCircuit, architecture, mapping);
                                 Globals.Timer.Stop();
                                 timeTransforamtion += Globals.Timer.Elapsed.TotalMilliseconds;
-                                //nbGatesPhysical += pCircuit.NbGates;
-
+                                nbGatesPhysical += pCircuit.NbGates;
                             }
                         }
                         ws.Cells["C" + i + 2].Value = timeInitialMapping/nbRep;
@@ -824,47 +812,10 @@ namespace QuantumCircuitTransformation
                     }
                 }
 
-
-
                 e.SaveAs(new FileInfo(@path + @"\" + fileName + ".xlsx")); // Save excel
             }
 
             ConsoleLayout.Footer();
-
-            
-
-
-
-            //int nbQubits = 20;
-            //int nbGates = 5000;
-            
-
-            //double[] totalCost = new double[AlgorithmParameters.AvailableInitialMappings.Count()];
-            //double[] titotalTime = new double[AlgorithmParameters.AvailableInitialMappings.Count()];
-
-            //for (int i = 0; i < nbRep; i++)
-            //{
-            //    Console.WriteLine("Iteration " + (i + 1));
-            //    LogicalCircuit circuit = CircuitGenerator.RandomCircuit(nbGates, nbQubits);
-            //    for (int j = 0; j < AlgorithmParameters.AvailableInitialMappings.Count(); j++)
-            //    {
-            //        Globals.Timer.Restart();
-            //        (_, double cost) = AlgorithmParameters.AvailableInitialMappings[j].Execute(architecture, circuit);
-            //        Globals.Timer.Stop();
-            //        totalCost[j] += cost;
-            //        titotalTime[j] += Globals.Timer.Elapsed.TotalMilliseconds;
-            //        Console.WriteLine("cost = {1} - time = {2} ({0})", AlgorithmParameters.AvailableInitialMappings[j].Name(), cost, Globals.Timer.Elapsed.TotalMilliseconds);
-            //    }
-            //}
-
-            //for (int i = 0; i < AlgorithmParameters.AvailableInitialMappings.Count(); i++)
-            //{
-            //    Console.WriteLine();
-            //    Console.WriteLine(AlgorithmParameters.AvailableInitialMappings[i].Name());
-            //    Console.WriteLine(AlgorithmParameters.AvailableInitialMappings[i].Parameters());
-            //    Console.WriteLine("Result: Cost = {0} - time = {1}", totalCost[i] / nbRep, titotalTime[i] / nbRep);
-            //}
-
         }
 
 

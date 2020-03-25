@@ -59,7 +59,6 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGrap
                 circuit.AddGate(U3.GetHadamardGate(swap.Qubit2));
                 circuit.AddGate(new CNOT(swap.Qubit2, swap.Qubit1));
             }
-            
         }
     }
 }

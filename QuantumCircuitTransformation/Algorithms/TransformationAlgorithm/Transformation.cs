@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using QuantumCircuitTransformation.MappingPerturbation;
-using QuantumCircuitTransformation.Algorithms.InitialMappingAlgorithm;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Circuit;
+﻿using QuantumCircuitTransformation.MappingPerturbation;
 using QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGraph;
-using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
-using QuantumCircuitTransformation.DependencyGraphs;
+using QuantumCircuitTransformation.QuantumCircuitComponents.Circuit;
 
 namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
 {
@@ -16,24 +10,36 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.1
+    ///     @version:  2.0
     /// </remarks>
     public abstract class Transformation : Algorithm
     {
         /// <summary>
-        /// Transform the given circuit for the given architecture with given 
-        /// initial mapping. 
+        /// Variables in regards of the algorithm. 
         /// </summary>
-        /// <param name="dependencyGraph"> The dependency graph of the circuit to transform. </param>
+        protected LogicalCircuit LogicalCircuit;
+        protected Architecture Architecture;
+        protected Mapping Mapping;
+        protected int NbGatesTransformed;
+        protected PhysicalCircuit PhysicalCircuit;
+
+        /// <summary>
+        /// Transform the given circuit for the given architecture with given mapping. 
+        /// </summary>
+        /// <param name="circuit"> The dependency graph of the circuit to transform. </param>
         /// <param name="architecture"> The architecture to be used. </param>
         /// <param name="mapping"> The initial mapping to use during transformation. </param>
         /// <returns>
         /// A physical circuit which is equivalent to the given logical circuit
         /// and fits on the given architecture using the given mapping.  
         /// </returns>
-        public PhysicalCircuit Execute(DependencyGraph dependencyGraph, Architecture architecture, Mapping mapping)
+        public PhysicalCircuit Execute(LogicalCircuit circuit, Architecture architecture, Mapping mapping)
         {
-            SetUp(dependencyGraph, architecture, mapping);
+            LogicalCircuit = circuit;
+            Architecture = architecture;
+            Mapping = mapping;
+            NbGatesTransformed = 0;
+            SetUp();
             Execute();
             return PhysicalCircuit;
         }
@@ -44,28 +50,10 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
         /// </summary>
         protected abstract void Execute();
 
-        /// <summary>  
-        /// Set up the data to execute the algorithm. 
+        /// <summary>
+        /// A method for algorithm specific setup. 
         /// </summary>
-        /// <param name="circuit"> The dependency graph of the circuit to transform. </param>
-        /// <param name="architecture"> The architecture to be used. </param>
-        /// <param name="mapping"> The initial mapping to use during transformation. </param>
-        private void SetUp(DependencyGraph dependencyGraph, Architecture architecture, Mapping mapping)
-        {
-            DependencyGraph = dependencyGraph;
-            Architecture = architecture;
-            Mapping = mapping;
-
-            PhysicalCircuit = new PhysicalCircuit(architecture);
-
-            FirstLayer = new List<int>();
-            for (int i = 0; i < dependencyGraph.Circuit.NbGates; i++)
-                if (dependencyGraph.CanBeExecuted(i))
-                    FirstLayer.Add(i);
-
-            ExecuteAllPossibleGates();
-        }
-
+        protected virtual void SetUp() { }
 
         /// <summary>
         /// See <see cref="Algorithm.Name"/>.
@@ -77,52 +65,15 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
         /// </summary>
         public abstract string Parameters();
 
-
-        // in
-        protected DependencyGraph DependencyGraph;
-        protected Architecture Architecture;
-        protected Mapping Mapping;
-
-        // out
-        protected PhysicalCircuit PhysicalCircuit;
-
-
-        /// <summary>
-        /// Variable referring to the gates in the first layer of the circuit 
-        /// to be transformed. 
-        /// </summary>
-        protected List<int> FirstLayer;
-
-
-
-
         /// <summary>
         /// Checks whether or not the circuit is fully transformed
         /// </summary>
         /// <returns>
-        /// True if and only if there are no more gates who are no more
-        /// gates to be resolved, thus no gates in the first layer.  
+        /// True if and only all gates in the logical circuit are transformed.
         /// </returns>
         protected bool CircuitIsTransformed()
         {
-            return FirstLayer.Count == 0;
-        }
-
-        /// <summary>
-        /// Returns the best swap move.
-        /// </summary>
-        /// <returns></returns>
-        protected Swap GetBestMove()
-        {
-            List<Swap> swaps = new List<Swap>();
-            for (int i = 0; i < Architecture.NbNodes; i++)
-            {
-                for (int j = 0; j < i; j++)
-                {
-                    swaps.Add(new Swap(i, j));
-                }
-            }
-            return swaps[0]; // TODO best move
+            return NbGatesTransformed >= LogicalCircuit.NbGates;
         }
 
         /// <summary>
@@ -133,33 +84,6 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
         protected void AddSwapToCircuit(Swap swap)
         {
             Architecture.AddSwapGates(PhysicalCircuit, swap);
-        }
-
-        /// <summary>
-        /// Transforms as mucht as possible from the logical circuit 
-        /// into the physical circuit.
-        /// </summary>
-        protected void ExecuteAllPossibleGates()
-        {
-            int gateID = 0;
-            List<int> gatesToCheck = new List<int>(FirstLayer);
-            while (gatesToCheck.Count > gateID)
-            {
-                Gate gate = DependencyGraph.Circuit.Gates[gatesToCheck[gateID]];
-                gatesToCheck.RemoveAt(gateID);
-
-                if (gate.CanBeExecutedOn(Architecture, Mapping))
-                {
-                    PhysicalCircuit.AddGate(gate.Map(Mapping));
-                    DependencyGraph.SimulateExecution(gatesToCheck[gateID]);
-                    foreach (int newGateToCheck in DependencyGraph.ExecuteAfter[gateID])
-                    {
-                        if (!gatesToCheck.Contains(newGateToCheck) && DependencyGraph.CanBeExecuted(newGateToCheck))
-                            gatesToCheck.Add(newGateToCheck);
-                    }
-                }
-            }
-            FirstLayer = new List<int>(gatesToCheck);
         }
     }
 }
