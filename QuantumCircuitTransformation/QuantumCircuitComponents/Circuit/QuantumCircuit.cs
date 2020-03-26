@@ -42,7 +42,13 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
         {
             Gates = gates;
             NbGates = gates.Count;
-            NbQubits = gates.Max(gate => gate.GetMaxQubit()) + 1;
+            if (gates.Count == 0)
+            {
+                NbQubits = 0;
+            } else
+            {
+                NbQubits = gates.Max(gate => gate.GetMaxQubit()) + 1;
+            }
         }
 
         /// <summary>

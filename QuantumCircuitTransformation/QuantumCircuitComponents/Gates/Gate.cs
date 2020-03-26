@@ -74,6 +74,5 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         /// Returns the maximum highest qubit id this gate operates on. 
         /// </summary>
         public abstract int GetMaxQubit();
-
     }
 }

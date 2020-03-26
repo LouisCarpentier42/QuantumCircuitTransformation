@@ -50,7 +50,7 @@ namespace QuantumCircuitTransformation.Data
         /// IBM Q20 is an existing IBM device. It has an undirected architecture
         /// graph and exists of 20 qubits. 
         /// </summary>
-        private static readonly List<Tuple<int, int>> IBMQ20edges = new List<Tuple<int, int>>
+        public static readonly List<Tuple<int, int>> IBMQ20edges = new List<Tuple<int, int>>
         {
             new Tuple<int, int>(0,1),
             new Tuple<int, int>(1,2),

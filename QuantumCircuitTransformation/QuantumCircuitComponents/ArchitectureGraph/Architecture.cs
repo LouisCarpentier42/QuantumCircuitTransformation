@@ -35,6 +35,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGrap
         /// second qubit. 
         /// </remarks>
         private readonly int[,] CNOTDistance;
+        private readonly List<int>[,] ShortestPaths;
 
 
         /// <summary>
@@ -55,7 +56,8 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGrap
             foreach (Tuple<int, int> edge in connections)
                 Edges[edge.Item1].Add(edge.Item2);
             // Se t the CNOT distance
-            CNOTDistance = ShortestPathFinder.Dijkstra(connections);
+            CNOTDistance = ShortestPathFinder.Dijkstra_PathLengths(connections);
+            ShortestPaths = ShortestPathFinder.Dijkstra_Paths(connections);
         }
 
         /// <summary>
@@ -70,6 +72,20 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGrap
         {
             return CNOTDistance[controlQubit, TargetQubit];
         }
+
+        /// <summary>
+        /// Returns the shortest path between the given nodes. 
+        /// </summary>
+        /// <param name="from"> The starting node. </param>
+        /// <param name="to"> The ending node. </param>
+        /// <returns>
+        /// A list containing the shortest path. 
+        /// </returns>
+        public List<int> GetShortestPath(int from, int to)
+        {
+            return ShortestPaths[from, to];
+        }
+
 
         /// <summary>
         /// Checks whether or not there exists a connection between 

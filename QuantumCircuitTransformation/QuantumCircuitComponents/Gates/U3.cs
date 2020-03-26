@@ -54,7 +54,6 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Gates
         {
             //TODO Hadamard
             return new U3(qubit, Math.PI, Math.PI, Math.PI, GatePart.H);
-            // throw new NotImplementedException();
         }
 
         /// <summary>

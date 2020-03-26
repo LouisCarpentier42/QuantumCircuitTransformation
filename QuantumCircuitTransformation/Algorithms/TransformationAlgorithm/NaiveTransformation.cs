@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuantumCircuitTransformation.QuantumCircuitComponents.Gates;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -37,7 +38,18 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
         protected override void Execute()
         {
             // TODO naive transformation
-            throw new NotImplementedException();
+            foreach (Gate g in LogicalCircuit.Gates)
+            {
+                if (!g.CanBeExecutedOn(Architecture, Mapping))
+                {
+                    List<int> path = Architecture.GetShortestPath(g.GetQubits()[0], g.GetQubits()[1]); // Is always a cnot gate normally
+                    for (int i = path.Count - 1; i >= 1; i--)
+                    {
+                        AddSwapToCircuit(Mapping.Map[path[i]], Mapping.Map[path[i - 1]]);
+                    }
+                }
+                PhysicalCircuit.AddGate(g.Map(Mapping));
+            }
         }
     }
 }

@@ -12,10 +12,14 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGrap
     /// </summary>
     /// <remarks>
     ///     @author:   Louis Carpentier
-    ///     @version:  1.1
+    ///     @version:  2.0
     /// </remarks>
     public static class ShortestPathFinder
     {
+        /// <summary>
+        /// Variable referring to the shortest path between two nodes. 
+        /// </summary>
+        private static List<int>[,] Paths;
         /// <summary>
         /// Variable to keep track of the shortest path between two nodes.  
         /// The shortest path between the nodes i and j is at entry [i,j].
@@ -70,7 +74,7 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGrap
         /// <returns>
         /// The <see cref="PathLength"/> variable, with all shortest paths in it. 
         /// </returns>
-        public static int[,] Dijkstra(List<Tuple<int, int>> edges)
+        public static int[,] Dijkstra_PathLengths(List<Tuple<int, int>> edges)
         {
             SetUp(edges.Max(edge => Math.Max(edge.Item1, edge.Item2)) + 1);
             while (Source > 0)
@@ -82,7 +86,9 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGrap
                     SetValidNeighbours(edges);
                     foreach (int neighbour in ValidNeighboursOfCurrentNode)
                     {
+                        Paths[Source, neighbour].Add(CurrentNode);
                         PathLength[Source, neighbour] = PathLength[Source, CurrentNode] + 1;
+                        Paths[Source, neighbour].Add(CurrentNode);
                         PathLength[neighbour, Source] = PathLength[CurrentNode, Source] + 1;
                         PathFound[neighbour] = true;
                     }
@@ -90,6 +96,113 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGrap
                 }
             }
             return PathLength;
+        }
+
+        /// <summary>
+        /// Executes the Dijkstra algorithm <see cref="Dijkstra_PathLengths(List{Tuple{int, int}})"/>
+        /// but finds the specific paths and not only the pathlengths. 
+        /// </summary>
+        /// <param name="edges"> The edges of the graph to find the paths in. </param>
+        /// <returns>
+        /// A matrix containing the shortest paths. 
+        /// </returns>
+        public static List<int>[,] Dijkstra_Paths(List<Tuple<int, int>> edges)
+        {
+            int maxNode = edges.Max(edge => Math.Max(edge.Item1, edge.Item2));
+            Paths = new List<int>[maxNode + 1, maxNode + 1];
+
+            for (int i = 0; i <= maxNode; i++)
+                Paths[i, i] = new List<int>();
+
+            for (int source = 0; source < maxNode; source++)
+            {
+                for (int target = source + 1; target <= maxNode; target++)
+                {
+                    List<int> s = FindShortestPath(source, target, edges, maxNode);
+                    Paths[source, target] = s;
+                    Paths[target, source] = s;
+                }
+            }
+
+            return Paths;
+        }
+
+        /// <summary>
+        /// Finds the shortest path between the two given nodes. 
+        /// </summary>
+        /// <param name="from"> The starting node. </param>
+        /// <param name="to"> The ending node. </param>
+        /// <param name="edges"> The edges of the graph. </param>
+        /// <param name="maxNode"> The highest node id. </param>
+        /// <returns>
+        /// A list containing the shortest path between the two nodes.
+        /// </returns>
+        private static List<int> FindShortestPath(int from, int to, List<Tuple<int, int>> edges, int maxNode)
+        {
+            // Setup
+            List<int> q = new List<int>();
+            int[] dist = new int[maxNode + 1];
+            int[] prev = new int[maxNode + 1];
+            for (int i = 0; i <= maxNode; i++)
+            {
+                dist[i] = int.MaxValue;
+                prev[i] = -1;
+                q.Add(i);
+            }
+            dist[from] = 0;
+
+            // Find path
+            while (q.Count >= 0)
+            {
+                int u = q[0];
+                for (int i = 0; i < q.Count; i++)
+                {
+                    if (dist[q[i]] < dist[u])
+                    {
+                        u = q[i];
+                    }
+                }
+                
+                if (u == to)
+                {
+                    break;
+                }
+
+                q.Remove(u);
+
+                List<int> neighbours = new List<int>();
+                foreach (int x in q)
+                {
+                    if (edges.Any(edge => (edge.Item1 == u && edge.Item2 == x) || (edge.Item2 == u && edge.Item1 == x)))
+                    {
+                        neighbours.Add(x);
+                    }
+                }
+
+                foreach (int v in neighbours)
+                {
+                    int alt = dist[u] + 1;
+                    if (alt < dist[v])
+                    {
+                        dist[v] = alt;
+                        prev[v] = u;
+                    }
+                }
+            }
+
+            // Format path
+            List<int> s = new List<int>();
+            int u2 = to;
+            if (prev[u2] != -1 || u2 == from)
+            {
+                while (u2 != from)
+                {
+                    s.Insert(0, u2);
+                    u2= prev[u2];
+                }
+            }
+
+            return s;
         }
 
         /// <summary>
@@ -104,10 +217,16 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.ArchitectureGrap
         private static void SetUp(int nbNodes)
         {
             // Initialise all path lengths to infinite
+            Paths = new List<int>[nbNodes, nbNodes];
             PathLength = new int[nbNodes, nbNodes];
             for (int row = 0; row < nbNodes; row++)
+            {
                 for (int Column = 0; Column < nbNodes; Column++)
+                {
                     PathLength[row, Column] = int.MaxValue;
+                    Paths[row, Column] = new List<int>();
+                } 
+            }            
             // Set the source node to the highest node ID
             Source = nbNodes;
         }

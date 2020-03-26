@@ -44,6 +44,7 @@ namespace QuantumCircuitTransformation.Data
         /// </summary>
         public static List<InitialMapping> AvailableInitialMappings = new List<InitialMapping>
         {
+            new RandomMapping(),
             new OwnAlgorithm(100, 10, 8500, 500),
             new SimulatedAnnealing(100, 1, 0.95, 100),
         };

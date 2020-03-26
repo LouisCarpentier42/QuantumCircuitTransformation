@@ -20,7 +20,6 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
         protected LogicalCircuit LogicalCircuit;
         protected Architecture Architecture;
         protected Mapping Mapping;
-        protected int NbGatesTransformed;
         protected PhysicalCircuit PhysicalCircuit;
 
         /// <summary>
@@ -38,7 +37,8 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
             LogicalCircuit = circuit;
             Architecture = architecture;
             Mapping = mapping;
-            NbGatesTransformed = 0;
+            PhysicalCircuit = new PhysicalCircuit(architecture);
+
             SetUp();
             Execute();
             return PhysicalCircuit;
@@ -66,24 +66,16 @@ namespace QuantumCircuitTransformation.Algorithms.TransformationAlgorithm
         public abstract string Parameters();
 
         /// <summary>
-        /// Checks whether or not the circuit is fully transformed
-        /// </summary>
-        /// <returns>
-        /// True if and only all gates in the logical circuit are transformed.
-        /// </returns>
-        protected bool CircuitIsTransformed()
-        {
-            return NbGatesTransformed >= LogicalCircuit.NbGates;
-        }
-
-        /// <summary>
         /// Adds the given swap to the physical circuit, according to 
-        /// the architecture.
+        /// the architecture. And adjusts the mapping accordingly.
         /// </summary>
-        /// <param name="swap"> The swap to add to the physical circuit. </param>
-        protected void AddSwapToCircuit(Swap swap)
+        /// <param name="q1"> The first qubit in the swap. </param>
+        /// <param name="q2"> The second qubit in the swap. </param>
+        protected void AddSwapToCircuit(int q1, int q2)
         {
+            Swap swap = new Swap(q1, q2);
             Architecture.AddSwapGates(PhysicalCircuit, swap);
+            Mapping.Swap(q1, q2);
         }
     }
 }

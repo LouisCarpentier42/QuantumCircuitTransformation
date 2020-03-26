@@ -62,7 +62,10 @@ namespace QuantumCircuitTransformation.QuantumCircuitComponents.Circuit
             {
                 Gate gate = InitialiseGate(file[i]);
                 if (gate != null)
+                {
                     gates.Add(gate);
+                }
+                    
             }
             file = null;
             GC.Collect();

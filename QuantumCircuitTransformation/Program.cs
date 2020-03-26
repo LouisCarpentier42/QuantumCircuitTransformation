@@ -104,18 +104,25 @@ namespace QuantumCircuitTransformation
             ConsoleLayout.Header("Test environment");
 
 
-            List<int> x = new List<int> { 1, 2, 3, 4, 5, 6 };
-            List<int> y = new List<int>(x);
+
+            //LoadAllAvailableBenchmarks();
 
 
-            y[2] = 100000;
+            CircuitGenerator.ReadFromFile("test.qasm");
+
+
+            //List<int> x = new List<int> { 1, 2, 3, 4, 5, 6 };
+            //List<int> y = new List<int>(x);
+
+
+            //y[2] = 100000;
             
 
 
-            foreach (var i in x)
-                Console.WriteLine(i);
-            foreach (var i in y)
-                Console.WriteLine(i);
+            //foreach (var i in x)
+            //    Console.WriteLine(i);
+            //foreach (var i in y)
+            //    Console.WriteLine(i);
 
 
             //string fileName = "hwb7_59";
@@ -782,7 +789,7 @@ namespace QuantumCircuitTransformation
                     {
                         lCircuit = CircuitGenerator.ReadFromFile(Benchmarks.LoadedBenchmarks[i].Name);
                         ws.Cells["A" + (i + 2)].Value = Benchmarks.LoadedBenchmarks[i].Name;
-                        ws.Cells["B" + i + 2].Value = lCircuit.NbGates;
+                        ws.Cells["B" + (i + 2)].Value = lCircuit.NbGates;
 
                         Console.WriteLine(Benchmarks.LoadedBenchmarks[i].Name);
 
@@ -806,9 +813,9 @@ namespace QuantumCircuitTransformation
                                 nbGatesPhysical += pCircuit.NbGates;
                             }
                         }
-                        ws.Cells["C" + i + 2].Value = timeInitialMapping/nbRep;
-                        ws.Cells["D" + i + 2].Value = timeTransforamtion / nbRep;
-                        ws.Cells["E" + i + 2].Value = nbGatesPhysical/nbRep - lCircuit.NbGates;
+                        ws.Cells["C" + (i + 2)].Value = timeInitialMapping/nbRep;
+                        ws.Cells["D" + (i + 2)].Value = timeTransforamtion / nbRep;
+                        ws.Cells["E" + (i + 2)].Value = nbGatesPhysical/nbRep - lCircuit.NbGates;
                     }
                 }
 
